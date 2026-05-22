@@ -1,0 +1,20 @@
+# CODEOWNERS — auto-assignation reviewers
+
+# Tout sauf cas spécifiques : Mohamed
+*                               @MohamedMosbahi
+
+# Documents réglementaires (validation ORIAS bloquante avant merge)
+/lib/documents/templates/       @MohamedMosbahi
+/app/admin/dossiers/[id]/generate-doc/  @MohamedMosbahi
+/app/api/documents/             @MohamedMosbahi
+
+# Conformité (Raqîb / criblage)
+/lib/compliance/                @MohamedMosbahi
+/lib/agents/raqib/              @MohamedMosbahi
+
+# Migrations DB
+/supabase/migrations/           @MohamedMosbahi
+
+# Secrets / config
+/.env.example                   @MohamedMosbahi
+/.github/                       @MohamedMosbahi

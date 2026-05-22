@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Type-check / Lint / Test / Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    env:
+      # Vars factices pour permettre au build de passer en CI sans
+      # exposer les secrets prod. Les valeurs réelles sont injectées
+      # par Vercel à la prod / preview.
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy
+      SUPABASE_SERVICE_ROLE_KEY: dummy
+      ANTHROPIC_API_KEY: dummy
+      ANTHROPIC_MODEL: claude-sonnet-4-6
+      AMANA_DEFAULT_CONSEILLER_ID: 00000000-0000-0000-0000-000000000000
+      AMANA_INTERNAL_SECRET: dummy
+      AMANA_BASE_URL: http://localhost:3000
+      NEXT_PUBLIC_ORIAS_NUM: 25009552
+      NEXT_PUBLIC_APP_URL: https://amana-patrimoine.fr
+      YOUSIGN_API_KEY: dummy
+      YOUSIGN_BASE_URL: https://api-sandbox.yousign.app
+      YOUSIGN_WEBHOOK_SECRET: dummy
+      RESEND_API_KEY: dummy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test -- --run
+
+      - name: Build
+        run: npm run build

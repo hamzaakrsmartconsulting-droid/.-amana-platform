@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMANA Patrimoine — Design System v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #3a4d39;
+    --forest-dark: #2a3829;
+    --forest-mid: #4d6349;
+    --gold: #c9a55a;
+    --gold-light: #d9bb7a;
+    --gold-pale: #f0e4c4;
+    --cream: #f8f4ec;
+    --cream-dark: #ede8de;
+    --white: #ffffff;
+    --text-dark: #2a3829;
+    --text-mid: #5a6a59;
+    --text-light: #8a9a89;
+    --border: #ddd5c8;
+    --border-light: #ede8de;
+    --success: #4caf50;
+    --success-bg: #e8f5e9;
+    --error: #c0392b;
+    --error-bg: #fde8e8;
+    --warning: #e67e22;
+    --warning-bg: #fef5e7;
+    --shadow-sm: 0 1px 4px rgba(42,56,41,0.06);
+    --shadow-md: 0 4px 16px rgba(42,56,41,0.08);
+    --shadow-lg: 0 8px 32px rgba(42,56,41,0.12);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ─── NAV ─── */
+  .ds-nav {
+    background: var(--forest-dark);
+    position: sticky; top: 0; z-index: 100;
+    padding: 0 32px;
+    display: flex; align-items: center; gap: 0;
+    border-bottom: 1px solid rgba(201,165,90,0.2);
+  }
+  .ds-nav-logo {
+    padding: 16px 0; margin-right: 48px;
+    text-decoration: none; display: flex; flex-direction: column; align-items: flex-start;
+  }
+  .ds-nav-logo img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+  }
+  .ds-nav-logo .tagline {
+    font-size: 8px; color: var(--gold); letter-spacing: 0.3em;
+    text-transform: uppercase; font-weight: 500; margin-top: 2px;
+    display: none;
+  }
+  .ds-nav-link {
+    padding: 20px 16px; font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.5); text-decoration: none;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .ds-nav-link:hover, .ds-nav-link.active {
+    color: var(--gold); border-bottom-color: var(--gold);
+  }
+
+  /* ─── LAYOUT ─── */
+  .ds-section {
+    max-width: 1200px; margin: 0 auto; padding: 64px 32px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .ds-section:last-child { border-bottom: none; }
+  .ds-section-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 36px; font-weight: 400; color: var(--forest);
+    margin-bottom: 8px; letter-spacing: 0.02em;
+  }
+  .ds-section-sub {
+    font-size: 14px; color: var(--text-light); margin-bottom: 48px;
+    letter-spacing: 0.02em;
+  }
+  .ds-grid { display: grid; gap: 24px; }
+  .ds-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .ds-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .ds-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  /* ─── COLOR SYSTEM ─── */
+  .color-chip {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .color-chip-swatch {
+    height: 80px;
+  }
+  .color-chip-info {
+    background: white; padding: 12px 14px;
+    border-top: 1px solid var(--border-light);
+  }
+  .color-chip-name { font-size: 12px; font-weight: 600; color: var(--text-dark); letter-spacing: 0.05em; }
+  .color-chip-hex { font-size: 11px; color: var(--text-light); font-family: monospace; margin-top: 2px; }
+  .color-chip-desc { font-size: 10px; color: var(--text-light); margin-top: 4px; line-height: 1.4; }
+
+  /* ─── TYPOGRAPHY ─── */
+  .typo-row { padding: 24px 0; border-bottom: 1px solid var(--border-light); }
+  .typo-row:last-child { border-bottom: none; }
+  .typo-meta { font-size: 11px; color: var(--text-light); font-family: monospace; margin-bottom: 8px; }
+
+  /* ─── COMPONENTS ─── */
+  .comp-label {
+    font-size: 11px; font-weight: 600; color: var(--text-light);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;
+  }
+  .comp-group { margin-bottom: 48px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 12px 24px; border-radius: var(--radius-sm);
+    font-family: 'Inter', system-ui; font-size: 14px; font-weight: 600;
+    letter-spacing: 0.04em; cursor: pointer; border: none;
+    text-decoration: none; transition: all 0.15s;
+  }
+  .btn-primary { background: var(--forest); color: white; }
+  .btn-primary:hover { background: var(--forest-dark); }
+  .btn-secondary { background: transparent; color: var(--forest); border: 1.5px solid var(--forest); }
+  .btn-secondary:hover { background: var(--forest); color: white; }
+  .btn-gold { background: var(--gold); color: white; }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-ghost { background: transparent; color: var(--text-mid); border: 1.5px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--forest); color: var(--forest); }
+  .btn-sm { padding: 8px 16px; font-size: 12px; border-radius: 6px; }
+  .btn-lg { padding: 15px 32px; font-size: 15px; border-radius: var(--radius-md); }
+  .btn-full { width: 100%; display: flex; }
+
+  /* Cards */
+  .card {
+    background: white; border-radius: var(--radius-lg);
+    border: 1px solid var(--border); padding: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-dark {
+    background: var(--forest); border-radius: var(--radius-lg);
+    border: none; padding: 28px;
+  }
+  .card-gold-border {
+    background: white; border-radius: var(--radius-lg);
+    border: 1px solid var(--gold-pale); padding: 28px;
+    box-shadow: 0 2px 12px rgba(201,165,90,0.1);
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+  }
+  .badge-success { background: var(--success-bg); color: #2e7d32; }
+  .badge-warning { background: var(--warning-bg); color: #b35900; }
+  .badge-gold { background: var(--gold-pale); color: #8a6520; }
+  .badge-forest { background: rgba(58,77,57,0.1); color: var(--forest); }
+  .badge-halal { background: #e0f2e9; color: #1b6b3a; font-weight: 700; }
+
+  /* Inputs */
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--text-mid); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 7px;
+  }
+  .form-input {
+    width: 100%; padding: 13px 16px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 15px;
+    background: var(--cream); color: var(--text-dark);
+    font-family: 'Inter', system-ui; outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .form-input:focus {
+    border-color: var(--forest);
+    box-shadow: 0 0 0 3px rgba(58,77,57,0.08);
+  }
+  .form-input::placeholder { color: var(--text-light); }
+  .form-select {
+    width: 100%; padding: 13px 16px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 15px;
+    background: var(--cream); color: var(--text-dark);
+    font-family: 'Inter', system-ui; appearance: none; outline: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a9a89' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center;
+  }
+  .form-textarea {
+    width: 100%; padding: 13px 16px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 14px;
+    background: var(--cream); color: var(--text-dark);
+    font-family: 'Inter', system-ui; outline: none; resize: vertical;
+    transition: border-color 0.15s;
+  }
+  .form-textarea:focus { border-color: var(--forest); }
+
+  /* Stepper */
+  .stepper { display: flex; align-items: flex-start; gap: 0; }
+  .step-item { display: flex; align-items: flex-start; flex: 1; }
+  .step-item:last-child { flex: none; }
+  .step-col { display: flex; flex-direction: column; align-items: center; }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+    font-family: 'Inter', system-ui;
+  }
+  .step-dot-done { background: var(--success); color: white; }
+  .step-dot-active { background: var(--forest); color: white; box-shadow: 0 0 0 4px rgba(58,77,57,0.15); }
+  .step-dot-pending { background: var(--cream-dark); color: var(--text-light); border: 1.5px solid var(--border); }
+  .step-label { font-size: 11px; color: var(--text-mid); margin-top: 8px; white-space: nowrap; font-weight: 500; text-align: center; }
+  .step-label-active { color: var(--forest); font-weight: 700; }
+  .step-connector {
+    flex: 1; height: 2px; margin: 15px 8px 0;
+    background: var(--border-light);
+  }
+  .step-connector-done { background: var(--success); }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 4px; background: var(--border-light); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--gold); border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* Status */
+  .status-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0; border-bottom: 1px solid var(--border-light);
+  }
+  .status-row:last-child { border-bottom: none; }
+
+  /* Product card */
+  .product-card {
+    background: white; border-radius: var(--radius-lg);
+    border: 1px solid var(--border); overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .product-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .product-card-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border-light); }
+  .product-card-body { padding: 16px 20px; }
+  .product-card-footer { padding: 12px 20px 16px; background: var(--cream); }
+  .product-stat { display: flex; flex-direction: column; }
+  .product-stat-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
+  .product-stat-value { font-size: 16px; font-weight: 600; color: var(--forest); font-family: 'Cormorant Garamond', Georgia, serif; margin-top: 2px; }
+  .product-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+  /* ─── PAGE PREVIEWS ─── */
+  .page-preview {
+    border-radius: var(--radius-lg); overflow: hidden;
+    border: 1px solid var(--border); box-shadow: var(--shadow-md);
+    font-size: 0.75em;
+  }
+  .preview-header {
+    background: var(--forest); padding: 12px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .preview-content { background: var(--cream); min-height: 320px; padding: 20px; }
+  .preview-nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+
+  /* Divider */
+  .divider { border: none; border-top: 1px solid var(--border-light); margin: 32px 0; }
+
+  /* Olive SVG mark */
+  .olive-mark { opacity: 0.15; position: absolute; pointer-events: none; }
+
+  /* Spacing tokens */
+  .space-demo { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .space-block { background: var(--gold-pale); border: 1px solid var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 4px 8px; border-radius: 4px; }
+  .space-val { font-size: 10px; color: var(--text-mid); font-family: monospace; white-space: nowrap; }
+
+  /* Shadow tokens */
+  .shadow-demo { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+  .shadow-block { width: 100px; height: 64px; background: white; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-light); }
+
+  /* Mobile note */
+  .mobile-note {
+    background: var(--forest); color: rgba(255,255,255,0.6);
+    padding: 10px 16px; font-size: 12px; border-radius: var(--radius-sm);
+    margin-bottom: 32px;
+  }
+
+  /* ─── AUTH PAGE PREVIEW ─── */
+  .auth-preview {
+    display: flex; height: 460px; border-radius: var(--radius-lg); overflow: hidden;
+    border: 1px solid var(--border); box-shadow: var(--shadow-md);
+  }
+  .auth-left {
+    width: 42%; background: var(--forest); padding: 36px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .auth-right {
+    flex: 1; background: var(--cream); padding: 36px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .auth-tab-bar {
+    display: flex; border-bottom: 1.5px solid var(--border); margin-bottom: 28px;
+  }
+  .auth-tab {
+    flex: 1; padding: 10px 0; font-size: 13px; font-weight: 600;
+    color: var(--forest); border-bottom: 2px solid var(--forest);
+    margin-bottom: -1.5px; text-align: center;
+  }
+  .auth-tab-inactive {
+    flex: 1; padding: 10px 0; font-size: 13px; color: var(--text-light);
+    text-align: center;
+  }
+
+  /* ─── DASHBOARD PREVIEW ─── */
+  .dash-preview {
+    border-radius: var(--radius-lg); overflow: hidden;
+    border: 1px solid var(--border); box-shadow: var(--shadow-md);
+  }
+  .dash-hero {
+    background: var(--forest); padding: 28px;
+    position: relative; overflow: hidden;
+  }
+  .dash-body { background: var(--cream); padding: 20px; }
+  .wealth-card {
+    background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-mid) 100%);
+    border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px;
+    border: 1px solid rgba(201,165,90,0.25);
+    position: relative; overflow: hidden;
+  }
+  .wealth-amount {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 40px; font-weight: 500; color: white;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .wealth-label { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; }
+  .wealth-accent {
+    position: absolute; right: -20px; bottom: -20px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(201,165,90,0.08);
+  }
+
+  /* ─── CATALOGUE PREVIEW ─── */
+  .cat-preview { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+  .cat-header { background: var(--forest); padding: 16px 24px; }
+  .cat-body { background: var(--cream); padding: 20px; }
+  .filter-chips { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .chip {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    cursor: pointer; border: 1.5px solid transparent;
+  }
+  .chip-active { background: var(--forest); color: white; border-color: var(--forest); }
+  .chip-inactive { background: white; color: var(--text-mid); border-color: var(--border); }
+  .chip-inactive:hover { border-color: var(--forest); color: var(--forest); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .ds-grid-2, .ds-grid-3, .ds-grid-4 { grid-template-columns: 1fr; }
+    .ds-nav { padding: 0 16px; }
+    .ds-nav-link { display: none; }
+    .ds-section { padding: 40px 20px; }
+    .auth-left { display: none; }
+    .auth-right { padding: 24px; }
+    .auth-preview { height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="ds-nav">
+  <a href="#" class="ds-nav-logo">
+    <img src="../sprint4/amana-logo-header.png" alt="AMANA Patrimoine">
+    <span class="tagline">Design System v4</span>
+  </a>
+  <a href="#colors" class="ds-nav-link">Couleurs</a>
+  <a href="#typography" class="ds-nav-link">Typographie</a>
+  <a href="#components" class="ds-nav-link">Composants</a>
+  <a href="#pages" class="ds-nav-link">Pages</a>
+  <a href="#tokens" class="ds-nav-link">Tokens</a>
+</nav>
+
+<!-- HERO -->
+<div style="background: var(--forest); padding: 64px 32px 56px; text-align: center; position: relative; overflow: hidden;">
+  <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <img src="../sprint4/amana-logo-header.png" alt="AMANA Patrimoine"
+      style="height: 140px; width: auto; object-fit: contain; display: block;">
+  </div>
+  <div style="font-size: 11px; color: var(--gold); letter-spacing: 0.4em; text-transform: uppercase; font-weight: 500; margin-bottom: 20px; position: relative;">DESIGN SYSTEM v4</div>
+  <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: rgba(255,255,255,0.55); font-style: italic; position: relative;">
+    Confiance. Clarté. Excellence.
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────── -->
+<!-- COLORS -->
+<!-- ─────────────────────────────────────────────── -->
+<section class="ds-section" id="colors">
+  <h2 class="ds-section-title">Palette de couleurs</h2>
+  <p class="ds-section-sub">6 couleurs fondamentales · Signification sémantique stricte</p>
+
+  <!-- Primary -->
+  <p class="comp-label">Couleurs primaires</p>
+  <div class="ds-grid ds-grid-4" style="margin-bottom: 40px;">
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #2a3829;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Forest Dark</div>
+        <div class="color-chip-hex">#2a3829</div>
+        <div class="color-chip-desc">Headers, overlays, emphase forte</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #3a4d39;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Forest — Primaire</div>
+        <div class="color-chip-hex">#3a4d39</div>
+        <div class="color-chip-desc">CTA principal, nav, titres de section</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #4d6349;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Forest Mid</div>
+        <div class="color-chip-hex">#4d6349</div>
+        <div class="color-chip-desc">Hover states, gradients secondaires</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: rgba(58,77,57,0.08); border: 1px solid #ddd5c8;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Forest Ghost</div>
+        <div class="color-chip-hex">rgba(58,77,57,0.08)</div>
+        <div class="color-chip-desc">Backgrounds de cards légères, tags</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gold -->
+  <p class="comp-label">Accent doré — Marque & CTA secondaires</p>
+  <div class="ds-grid ds-grid-4" style="margin-bottom: 40px;">
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #c9a55a;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Gold — Accent</div>
+        <div class="color-chip-hex">#c9a55a</div>
+        <div class="color-chip-desc">Logo, CTA doré, underlines actives</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #d9bb7a;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Gold Light</div>
+        <div class="color-chip-hex">#d9bb7a</div>
+        <div class="color-chip-desc">Hover du bouton gold</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #f0e4c4; border: 1px solid #ddd5c8;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Gold Pale</div>
+        <div class="color-chip-hex">#f0e4c4</div>
+        <div class="color-chip-desc">Badges gold, highlights discrets</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #f8f4ec; border: 1px solid #ddd5c8;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Cream</div>
+        <div class="color-chip-hex">#f8f4ec</div>
+        <div class="color-chip-desc">Background pages, inputs, sections claires</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Semantic -->
+  <p class="comp-label">Couleurs sémantiques</p>
+  <div class="ds-grid ds-grid-4">
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #4caf50;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Success</div>
+        <div class="color-chip-hex">#4caf50</div>
+        <div class="color-chip-desc">Étapes complètes, validations</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #e67e22;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Warning</div>
+        <div class="color-chip-hex">#e67e22</div>
+        <div class="color-chip-desc">Actions requises, délais</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #c0392b;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Error</div>
+        <div class="color-chip-hex">#c0392b</div>
+        <div class="color-chip-desc">Erreurs, champs invalides</div>
+      </div>
+    </div>
+    <div class="color-chip">
+      <div class="color-chip-swatch" style="background: #1b6b3a;"></div>
+      <div class="color-chip-info">
+        <div class="color-chip-name">Halal Green</div>
+        <div class="color-chip-hex">#1b6b3a</div>
+        <div class="color-chip-desc">Badge halal certifié uniquement</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────── -->
+<!-- TYPOGRAPHY -->
+<!-- ─────────────────────────────────────────────── -->
+<section class="ds-section" id="typography">
+  <h2 class="ds-section-title">Typographie</h2>
+  <p class="ds-section-sub">Cormorant Garamond — Display & Serif · Inter — Interface & Body</p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 48px;">
+    <div>
+      <p class="comp-label">Cormorant Garamond — Caractère</p>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 52px; font-weight: 400; color: var(--forest); line-height: 1; margin-bottom: 8px;">Aa</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: var(--text-mid); font-style: italic; margin-bottom: 16px;">« La confiance est un capital. »</div>
+      <div style="font-size: 12px; color: var(--text-light); line-height: 1.8;">
+        A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br>
+        a b c d e f g h i j k l m n o p q r s t u v w x y z<br>
+        0 1 2 3 4 5 6 7 8 9 , . : ; ! ? ( ) [ ] € %
+      </div>
+    </div>
+    <div>
+      <p class="comp-label">Inter — Interface</p>
+      <div style="font-family: 'Inter', system-ui; font-size: 52px; font-weight: 300; color: var(--forest); line-height: 1; margin-bottom: 8px;">Aa</div>
+      <div style="font-family: 'Inter', system-ui; font-size: 14px; color: var(--text-mid); margin-bottom: 16px; font-weight: 400;">Gestion de patrimoine islamique</div>
+      <div style="font-family: 'Inter', system-ui; font-size: 12px; color: var(--text-light); line-height: 1.8;">
+        A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br>
+        a b c d e f g h i j k l m n o p q r s t u v w x y z<br>
+        0 1 2 3 4 5 6 7 8 9 , . : ; ! ? ( ) [ ] € %
+      </div>
+    </div>
+  </div>
+
+  <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 40px;">
+    <div class="typo-row">
+      <div class="typo-meta">Cormorant Garamond 600 · 44px · letter-spacing: 0.02em</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 44px; font-weight: 600; color: var(--forest); letter-spacing: 0.02em; line-height: 1.1;">AMANA Patrimoine</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-meta">Cormorant Garamond 400 · 32px — Titre de page</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 32px; font-weight: 400; color: var(--forest); line-height: 1.2;">Bienvenue dans votre espace patrimonial</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-meta">Cormorant Garamond 400 italic · 22px — Sous-titre élégant</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-style: italic; color: var(--text-mid); line-height: 1.4;">Votre patrimoine mérite une attention particulière</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-meta">Inter 600 · 13px uppercase · letter-spacing: 0.12em — Label</div>
+      <div style="font-family: 'Inter', system-ui; font-size: 13px; font-weight: 600; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.12em;">Profil investisseur · MIF2</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-meta">Inter 400 · 15px — Corps de texte standard</div>
+      <div style="font-family: 'Inter', system-ui; font-size: 15px; color: var(--text-dark); line-height: 1.7; max-width: 560px;">AMANA Patrimoine est un cabinet de conseil en gestion de patrimoine spécialisé dans les solutions financières conformes aux principes islamiques. Nous accompagnons nos clients avec rigueur, transparence et bienveillance.</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-meta">Cormorant Garamond 500 · 20px — Titre de section / Card</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 500; color: var(--forest);">Montant de souscription</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-meta">Inter 400 · 13px — Texte secondaire / Description</div>
+      <div style="font-family: 'Inter', system-ui; font-size: 13px; color: var(--text-light); line-height: 1.6;">Rendement indicatif brut annualisé · Données 2024</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-meta">Cormorant Garamond 600 · 36px — Chiffre financier</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 36px; font-weight: 600; color: var(--gold);">285 000 €</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────── -->
+<!-- COMPONENTS -->
+<!-- ─────────────────────────────────────────────── -->
+<section class="ds-section" id="components">
+  <h2 class="ds-section-title">Composants</h2>
+  <p class="ds-section-sub">Bibliothèque exhaustive · Mobile-first</p>
+
+  <!-- HEADER COMPONENT -->
+  <div class="comp-group">
+    <p class="comp-label">Header — Navigation principale</p>
+    <div style="border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+      <div style="background: var(--forest); padding: 0 24px; display: flex; justify-content: space-between; align-items: center; height: 64px;">
+        <div>
+          <a style="font-size: 12px; color: rgba(255,255,255,0.5); text-decoration: none;">← Catalogue</a>
+        </div>
+        <div style="line-height: 0;">
+          <img src="../sprint4/amana-logo-header.png" alt="AMANA Patrimoine"
+            style="height: 64px; width: auto; object-fit: contain; display: block;">
+        </div>
+        <div>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: white; font-family: 'Inter', system-ui; cursor: pointer;">M</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="comp-group">
+    <p class="comp-label">Boutons — Hiérarchie d'action</p>
+    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 32px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+        <button class="btn btn-primary">Souscrire →</button>
+        <button class="btn btn-secondary">Consulter le dossier</button>
+        <button class="btn btn-gold">Signature électronique →</button>
+        <button class="btn btn-ghost">Télécharger</button>
+      </div>
+      <hr class="divider">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <button class="btn btn-primary btn-sm">Filtrer</button>
+        <button class="btn btn-secondary btn-sm">← Retour</button>
+        <button class="btn btn-primary btn-lg">Continuer → Documents</button>
+        <button class="btn btn-primary" style="opacity: 0.5; cursor: not-allowed;">Désactivé</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BADGES -->
+  <div class="comp-group">
+    <p class="comp-label">Badges & étiquettes</p>
+    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 32px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+      <span class="badge badge-success">✓ Complété</span>
+      <span class="badge badge-warning">À compléter</span>
+      <span class="badge badge-gold">En cours de traitement</span>
+      <span class="badge badge-forest">SCPI</span>
+      <span class="badge badge-forest">Assurance-vie</span>
+      <span class="badge badge-halal">✓ Halal certifié</span>
+      <span class="badge" style="background: #e8eaf6; color: #3949ab;">PER</span>
+      <span class="badge" style="background: #fce4ec; color: #c62828;">Profil prudent</span>
+    </div>
+  </div>
+
+  <!-- STEPPER -->
+  <div class="comp-group">
+    <p class="comp-label">Stepper — Tunnel de progression</p>
+    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 32px 40px;">
+      <div class="stepper" style="margin-bottom: 24px;">
+        <div class="step-item">
+          <div class="step-col">
+            <div class="step-dot step-dot-done">✓</div>
+            <div class="step-label">KYC</div>
+          </div>
+          <div class="step-connector step-connector-done"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-col">
+            <div class="step-dot step-dot-done">✓</div>
+            <div class="step-label">MIF2</div>
+          </div>
+          <div class="step-connector step-connector-done"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-col">
+            <div class="step-dot step-dot-active">3</div>
+            <div class="step-label step-label-active">Montant</div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-item">
+          <div class="step-col">
+            <div class="step-dot step-dot-pending">4</div>
+            <div class="step-label">Documents</div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-item" style="flex: none;">
+          <div class="step-col">
+            <div class="step-dot step-dot-pending">5</div>
+            <div class="step-label">Signature</div>
+          </div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 40%;"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-light); font-family: 'Inter', system-ui;">
+        <span>2 étapes complètes</span>
+        <span>~10 min restantes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="comp-group">
+    <p class="comp-label">Cards — Variantes</p>
+    <div class="ds-grid ds-grid-3">
+      <!-- Standard card -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: var(--forest); font-weight: 500;">Profil MIF2</div>
+          <span class="badge badge-success">✓ Complété</span>
+        </div>
+        <p style="font-size: 13px; color: var(--text-light); margin-bottom: 20px; line-height: 1.6;">Questionnaire de profilage investisseur conforme à la directive MIF2.</p>
+        <a class="btn btn-ghost btn-sm">Consulter</a>
+      </div>
+      <!-- Dark card -->
+      <div class="card-dark">
+        <div style="font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; margin-bottom: 8px;">Patrimoine total</div>
+        <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 36px; color: white; font-weight: 500; line-height: 1; margin-bottom: 4px;">285 000 €</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 20px;">Valorisation au 27 avr. 2026</div>
+        <div style="width: 36px; height: 1.5px; background: var(--gold);"></div>
+      </div>
+      <!-- Gold border card -->
+      <div class="card-gold-border">
+        <div style="font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 8px;">NCap Éducation Santé</div>
+        <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; color: var(--forest); margin-bottom: 12px; font-weight: 500;">SCPI · Diversifiée</div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <span class="badge badge-halal">✓ Halal</span>
+          <span class="badge badge-forest">SCPI</span>
+        </div>
+        <div style="font-size: 22px; font-family: 'Cormorant Garamond', Georgia, serif; color: var(--gold); font-weight: 600;">4,8 – 6,2%</div>
+        <div style="font-size: 11px; color: var(--text-light); margin-top: 2px;">Rendement indicatif annuel</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMS -->
+  <div class="comp-group">
+    <p class="comp-label">Formulaires — Champs de saisie</p>
+    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 32px; max-width: 600px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 0;">
+        <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input class="form-input" placeholder="Mohamed" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom</label>
+          <input class="form-input" placeholder="Mosbahi" type="text">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" placeholder="votre@email.fr" type="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Montant (€)</label>
+        <input class="form-input" placeholder="min. 5 000 €" type="number" style="border-color: var(--forest); box-shadow: 0 0 0 3px rgba(58,77,57,0.08);">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Profil investisseur</label>
+        <select class="form-select">
+          <option>Prudent</option>
+          <option selected>Équilibré</option>
+          <option>Dynamique</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Commentaire (facultatif)</label>
+        <textarea class="form-textarea" rows="3" placeholder="Contexte, objectifs, contraintes…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS LIST -->
+  <div class="comp-group">
+    <p class="comp-label">Checklist d'onboarding</p>
+    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 0 28px; max-width: 560px;">
+      <div class="status-row">
+        <div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; color: var(--forest); margin-bottom: 2px;">Vérification d'identité</div>
+          <div style="font-size: 12px; color: var(--text-light);">Formulaire KYC — état civil, patrimoine</div>
+        </div>
+        <span class="badge badge-success">✓ Complété</span>
+      </div>
+      <div class="status-row">
+        <div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; color: var(--forest); margin-bottom: 2px;">Profilage MIF2</div>
+          <div style="font-size: 12px; color: var(--text-light);">Questionnaire investisseur</div>
+        </div>
+        <span class="badge badge-success">✓ Complété</span>
+      </div>
+      <div class="status-row">
+        <div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; color: var(--forest); margin-bottom: 2px;">Document d'entrée en relation</div>
+          <div style="font-size: 12px; color: var(--text-light);">DER — Acceptation des conditions</div>
+        </div>
+        <span class="badge badge-warning">À compléter</span>
+      </div>
+      <div class="status-row">
+        <div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; color: var(--text-light); margin-bottom: 2px;">Lettre de mission</div>
+          <div style="font-size: 12px; color: var(--text-light);">Signature de la convention honoraires</div>
+        </div>
+        <span class="badge" style="background: var(--cream-dark); color: var(--text-light);">Bloqué</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT CARDS -->
+  <div class="comp-group">
+    <p class="comp-label">Cards produit — Catalogue</p>
+    <div class="ds-grid ds-grid-3">
+      <div class="product-card">
+        <div class="product-card-header">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <span class="badge badge-forest" style="font-size: 10px;">SCPI</span>
+            <span class="badge badge-halal">✓ Halal</span>
+          </div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; color: var(--forest); font-weight: 500; margin-bottom: 2px;">NCap Éducation Santé</div>
+          <div style="font-size: 12px; color: var(--text-light);">Norma Invest · Diversifié</div>
+        </div>
+        <div class="product-card-body">
+          <div class="product-stats-grid">
+            <div class="product-stat">
+              <span class="product-stat-label">Rendement</span>
+              <span class="product-stat-value">4,8–6,2%</span>
+            </div>
+            <div class="product-stat">
+              <span class="product-stat-label">Ticket min.</span>
+              <span class="product-stat-value">5 000 €</span>
+            </div>
+            <div class="product-stat">
+              <span class="product-stat-label">Liquidité</span>
+              <span class="product-stat-value">Faible</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-card-footer">
+          <a class="btn btn-primary btn-sm btn-full" style="justify-content: center;">Souscrire →</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-card-header">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <span class="badge badge-forest" style="font-size: 10px;">Assurance-vie</span>
+            <span class="badge badge-halal">✓ Halal</span>
+          </div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; color: var(--forest); font-weight: 500; margin-bottom: 2px;">Sécurité Islamique Plus</div>
+          <div style="font-size: 12px; color: var(--text-light);">Intencial · UC + Fonds euros</div>
+        </div>
+        <div class="product-card-body">
+          <div class="product-stats-grid">
+            <div class="product-stat">
+              <span class="product-stat-label">Rendement</span>
+              <span class="product-stat-value">2,5–5,0%</span>
+            </div>
+            <div class="product-stat">
+              <span class="product-stat-label">Ticket min.</span>
+              <span class="product-stat-value">1 000 €</span>
+            </div>
+            <div class="product-stat">
+              <span class="product-stat-label">Liquidité</span>
+              <span class="product-stat-value">Élevée</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-card-footer">
+          <a class="btn btn-primary btn-sm btn-full" style="justify-content: center;">Souscrire →</a>
+        </div>
+      </div>
+
+      <div class="product-card" style="opacity: 0.65; cursor: default;">
+        <div class="product-card-header">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <span class="badge badge-forest" style="font-size: 10px;">PER</span>
+            <span class="badge" style="background: #eee; color: #888; font-size: 10px;">Bientôt</span>
+          </div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; color: var(--forest); font-weight: 500; margin-bottom: 2px;">Retraite Halal Invest</div>
+          <div style="font-size: 12px; color: var(--text-light);">En cours de référencement</div>
+        </div>
+        <div class="product-card-body">
+          <div class="product-stats-grid">
+            <div class="product-stat">
+              <span class="product-stat-label">Rendement</span>
+              <span class="product-stat-value">—</span>
+            </div>
+            <div class="product-stat">
+              <span class="product-stat-label">Ticket min.</span>
+              <span class="product-stat-value">—</span>
+            </div>
+            <div class="product-stat">
+              <span class="product-stat-label">Liquidité</span>
+              <span class="product-stat-value">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="product-card-footer">
+          <a class="btn btn-ghost btn-sm btn-full" style="justify-content: center; opacity: 0.5;">Prochainement</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────── -->
+<!-- PAGE PREVIEWS -->
+<!-- ─────────────────────────────────────────────── -->
+<section class="ds-section" id="pages">
+  <h2 class="ds-section-title">Aperçus des pages</h2>
+  <p class="ds-section-sub">Compositions complètes · Rendu final en production</p>
+
+  <!-- AUTH PAGE -->
+  <div class="comp-group">
+    <p class="comp-label">Page de connexion — Écran partagé</p>
+    <div class="auth-preview">
+      <!-- Left — Brand panel -->
+      <div class="auth-left">
+        <div style="line-height: 0;">
+          <img src="../sprint4/amana-logo-header.png" alt="AMANA Patrimoine"
+            style="height: 96px; width: auto; object-fit: contain; display: block;">
+        </div>
+        <div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; color: rgba(255,255,255,0.85); font-style: italic; line-height: 1.5; margin-bottom: 16px; max-width: 240px;">
+            « La confiance est le fondement de toute richesse durable. »
+          </div>
+          <div style="width: 32px; height: 1.5px; background: var(--gold); margin-bottom: 12px;"></div>
+          <div style="font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; text-transform: uppercase;">GESTION DE PATRIMOINE ISLAMIQUE</div>
+        </div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.2);">ORIAS N° 24XXXXXXXXX</div>
+      </div>
+      <!-- Right — Form -->
+      <div class="auth-right">
+        <div style="max-width: 340px; width: 100%;">
+          <div class="auth-tab-bar">
+            <div class="auth-tab">Connexion</div>
+            <div class="auth-tab-inactive">Créer un compte</div>
+          </div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; color: var(--forest); font-weight: 400; margin-bottom: 24px;">Bienvenue</div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" type="email" placeholder="votre@email.fr">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mot de passe</label>
+            <input class="form-input" type="password" placeholder="••••••••">
+          </div>
+          <button class="btn btn-primary btn-full" style="margin-top: 8px;">Se connecter</button>
+          <div style="text-align: center; margin-top: 16px;">
+            <a style="font-size: 12px; color: var(--text-light); cursor: pointer;">Mot de passe oublié ?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div class="comp-group">
+    <p class="comp-label">Dashboard — Espace patrimonial</p>
+    <div class="dash-preview">
+      <!-- Header -->
+      <div style="background: var(--forest); padding: 0 24px; display: flex; justify-content: space-between; align-items: center; height: 64px;">
+        <div></div>
+        <div style="line-height: 0;">
+          <img src="../sprint4/amana-logo-header.png" alt="AMANA Patrimoine"
+            style="height: 64px; width: auto; object-fit: contain; display: block;">
+        </div>
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: white;">M</div>
+      </div>
+      <!-- Hero greeting -->
+      <div style="background: var(--forest); padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <div style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; margin-bottom: 4px;">Lundi 27 avril 2026</div>
+        <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; color: white; font-weight: 400; margin-bottom: 2px;">Bonjour, Mohamed</div>
+        <div style="font-size: 13px; color: rgba(255,255,255,0.45);">Votre espace patrimonial est à jour.</div>
+      </div>
+      <!-- Body -->
+      <div class="dash-body">
+        <!-- Wealth summary -->
+        <div class="wealth-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+              <div class="wealth-label">Patrimoine en gestion</div>
+              <div class="wealth-amount">0 €</div>
+              <div style="font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px;">Aucun investissement actif</div>
+            </div>
+            <a class="btn btn-gold btn-sm" style="white-space: nowrap;">Découvrir le catalogue →</a>
+          </div>
+          <div class="wealth-accent"></div>
+        </div>
+        <!-- Status cards grid -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+          <div class="card" style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; color: var(--forest);">Dossier KYC</div>
+              <span class="badge badge-success" style="font-size: 10px;">✓</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-light);">Identité vérifiée</div>
+          </div>
+          <div class="card" style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; color: var(--forest);">Profil MIF2</div>
+              <span class="badge badge-success" style="font-size: 10px;">✓</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-light);">Équilibré · Score 14</div>
+          </div>
+          <div class="card" style="padding: 20px; border-color: var(--gold-pale);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; color: var(--forest);">DER</div>
+              <span class="badge badge-warning" style="font-size: 10px;">À signer</span>
+            </div>
+            <a class="btn btn-primary btn-sm" style="font-size: 11px; padding: 6px 14px;">Compléter →</a>
+          </div>
+          <div class="card" style="padding: 20px; opacity: 0.5;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; color: var(--forest);">Lettre mission</div>
+              <span class="badge" style="background: var(--cream-dark); color: var(--text-light); font-size: 10px;">Bloqué</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-light);">Après le DER</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATALOGUE PAGE -->
+  <div class="comp-group">
+    <p class="comp-label">Catalogue — Découverte des produits</p>
+    <div class="cat-preview">
+      <div class="cat-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; color: white; font-weight: 400;">Notre catalogue</div>
+          <div style="font-size: 11px; color: rgba(255,255,255,0.4);">6 produits disponibles</div>
+        </div>
+      </div>
+      <div class="cat-body">
+        <div class="filter-chips">
+          <span class="chip chip-active">Tous</span>
+          <span class="chip chip-inactive">SCPI</span>
+          <span class="chip chip-inactive">Assurance-vie</span>
+          <span class="chip chip-inactive">PER</span>
+          <span class="chip chip-inactive">Immobilier</span>
+          <span class="chip chip-inactive">✓ Halal</span>
+        </div>
+        <div class="ds-grid ds-grid-2">
+          <div class="product-card">
+            <div class="product-card-header" style="padding: 16px 16px 12px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span class="badge badge-forest" style="font-size: 10px;">SCPI</span>
+                <span class="badge badge-halal" style="font-size: 10px;">✓ Halal</span>
+              </div>
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; color: var(--forest); font-weight: 500;">NCap Éducation Santé</div>
+              <div style="font-size: 11px; color: var(--text-light);">Norma Invest</div>
+            </div>
+            <div class="product-card-body" style="padding: 12px 16px;">
+              <div class="product-stats-grid">
+                <div class="product-stat"><span class="product-stat-label">Rdt</span><span class="product-stat-value" style="font-size: 15px;">4,8–6,2%</span></div>
+                <div class="product-stat"><span class="product-stat-label">Min.</span><span class="product-stat-value" style="font-size: 15px;">5 000 €</span></div>
+                <div class="product-stat"><span class="product-stat-label">Risque</span><span class="product-stat-value" style="font-size: 15px;">SRI 3</span></div>
+              </div>
+            </div>
+            <div class="product-card-footer" style="padding: 10px 16px 14px;">
+              <a class="btn btn-primary btn-sm btn-full" style="justify-content: center; font-size: 12px;">Souscrire →</a>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-card-header" style="padding: 16px 16px 12px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span class="badge badge-forest" style="font-size: 10px;">Assurance-vie</span>
+                <span class="badge badge-halal" style="font-size: 10px;">✓ Halal</span>
+              </div>
+              <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; color: var(--forest); font-weight: 500;">Sécurité Islamique Plus</div>
+              <div style="font-size: 11px; color: var(--text-light);">Intencial</div>
+            </div>
+            <div class="product-card-body" style="padding: 12px 16px;">
+              <div class="product-stats-grid">
+                <div class="product-stat"><span class="product-stat-label">Rdt</span><span class="product-stat-value" style="font-size: 15px;">2,5–5%</span></div>
+                <div class="product-stat"><span class="product-stat-label">Min.</span><span class="product-stat-value" style="font-size: 15px;">1 000 €</span></div>
+                <div class="product-stat"><span class="product-stat-label">Risque</span><span class="product-stat-value" style="font-size: 15px;">SRI 2</span></div>
+              </div>
+            </div>
+            <div class="product-card-footer" style="padding: 10px 16px 14px;">
+              <a class="btn btn-primary btn-sm btn-full" style="justify-content: center; font-size: 12px;">Souscrire →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────── -->
+<!-- TOKENS -->
+<!-- ─────────────────────────────────────────────── -->
+<section class="ds-section" id="tokens">
+  <h2 class="ds-section-title">Tokens de design</h2>
+  <p class="ds-section-sub">Variables CSS · Cohérence système</p>
+
+  <!-- Spacing -->
+  <div class="comp-group">
+    <p class="comp-label">Espacement</p>
+    <div class="space-demo">
+      <div class="space-block" style="height: 4px; width: 32px;"><span class="space-val">4px — xs</span></div>
+      <div class="space-block" style="height: 8px; width: 40px;"><span class="space-val">8px — sm</span></div>
+      <div class="space-block" style="height: 12px; width: 48px;"><span class="space-val">12px</span></div>
+      <div class="space-block" style="height: 16px; width: 56px;"><span class="space-val">16px — md</span></div>
+      <div class="space-block" style="height: 20px; width: 60px;"><span class="space-val">20px</span></div>
+      <div class="space-block" style="height: 24px; width: 68px;"><span class="space-val">24px — lg</span></div>
+      <div class="space-block" style="height: 28px; width: 72px;"><span class="space-val">28px</span></div>
+      <div class="space-block" style="height: 32px; width: 80px;"><span class="space-val">32px — xl</span></div>
+      <div class="space-block" style="height: 48px; width: 88px;"><span class="space-val">48px — 2xl</span></div>
+      <div class="space-block" style="height: 64px; width: 96px;"><span class="space-val">64px — 3xl</span></div>
+    </div>
+  </div>
+
+  <!-- Border radius -->
+  <div class="comp-group">
+    <p class="comp-label">Border radius</p>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 56px; height: 56px; background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 6px;"></div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">6px — sm</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 56px; height: 56px; background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 8px;"></div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">8px — btn</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 56px; height: 56px; background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 12px;"></div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">12px — md</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 56px; height: 56px; background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 16px;"></div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">16px — card</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 56px; height: 56px; background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 24px;"></div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">24px — xl</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 56px; height: 56px; background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 50%;"></div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">50% — avatar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shadows -->
+  <div class="comp-group">
+    <p class="comp-label">Ombres</p>
+    <div class="shadow-demo">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div class="shadow-block" style="box-shadow: 0 1px 4px rgba(42,56,41,0.06);">sm</div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">0 1px 4px rgba(…,.06)</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div class="shadow-block" style="box-shadow: 0 4px 16px rgba(42,56,41,0.08);">md</div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">0 4px 16px rgba(…,.08)</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div class="shadow-block" style="box-shadow: 0 8px 32px rgba(42,56,41,0.12);">lg</div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">0 8px 32px rgba(…,.12)</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div class="shadow-block" style="box-shadow: 0 0 0 3px rgba(58,77,57,0.15);">focus</div>
+        <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">ring focus</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSS Variables reference -->
+  <div class="comp-group">
+    <p class="comp-label">Variables CSS — Référence complète</p>
+    <div style="background: var(--forest-dark); border-radius: var(--radius-lg); padding: 28px; overflow-x: auto;">
+      <pre style="font-family: 'Courier New', monospace; font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.8; margin: 0;"><span style="color: var(--gold);">:root {</span>
+  /* Couleurs primaires */
+  --forest:      <span style="color: #4caf50;">#3a4d39</span>;
+  --forest-dark: <span style="color: #4caf50;">#2a3829</span>;
+  --forest-mid:  <span style="color: #4caf50;">#4d6349</span>;
+
+  /* Accent */
+  --gold:        <span style="color: #c9a55a;">#c9a55a</span>;
+  --gold-light:  <span style="color: #d9bb7a;">#d9bb7a</span>;
+  --gold-pale:   <span style="color: #f0e4c4;">#f0e4c4</span>;
+
+  /* Neutres */
+  --cream:       <span style="color: #f8f4ec;">#f8f4ec</span>;
+  --cream-dark:  <span style="color: #ede8de;">#ede8de</span>;
+  --border:      <span style="color: #ddd5c8;">#ddd5c8</span>;
+  --text-dark:   <span style="color: #2a3829;">#2a3829</span>;
+  --text-mid:    <span style="color: #5a6a59;">#5a6a59</span>;
+  --text-light:  <span style="color: #8a9a89;">#8a9a89</span>;
+
+  /* Typographie */
+  --font-serif:  'Cormorant Garamond', Georgia, serif;
+  --font-sans:   'Inter', system-ui, sans-serif;
+
+  /* Radii */
+  --r-sm: 6px;  --r-md: 12px;
+  --r-lg: 16px; --r-xl: 24px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 4px rgba(42,56,41,0.06);
+  --shadow-md: 0 4px 16px rgba(42,56,41,0.08);
+  --shadow-lg: 0 8px 32px rgba(42,56,41,0.12);
+<span style="color: var(--gold);">}</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div style="background: var(--forest-dark); padding: 40px 32px; text-align: center;">
+  <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+    <img src="../sprint4/amana-logo-header.png" alt="AMANA Patrimoine"
+      style="height: 80px; width: auto; object-fit: contain; display: block;">
+  </div>
+  <div style="font-size: 10px; color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; margin-bottom: 16px;">Design System v4 · Sprint 4</div>
+  <div style="font-size: 12px; color: rgba(255,255,255,0.25);">Cormorant Garamond + Inter · FOREST #3a4d39 · GOLD #c9a55a · CREAM #f8f4ec</div>
+</div>
+
+<script>
+  // Smooth scroll + active nav links
+  document.querySelectorAll('.ds-nav-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      document.querySelectorAll('.ds-nav-link').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Intersection observer for nav highlighting
+  const sections = document.querySelectorAll('.ds-section');
+  const navLinks = document.querySelectorAll('.ds-nav-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+
+  // Hover effects on product cards (already handled by CSS)
+  // Filter chips demo
+  document.querySelectorAll('.chip-inactive').forEach(chip => {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.chip').forEach(c => {
+        c.classList.remove('chip-active');
+        c.classList.add('chip-inactive');
+      });
+      this.classList.remove('chip-inactive');
+      this.classList.add('chip-active');
+    });
+  });
+</script>
+</body>
+</html>
