@@ -175,7 +175,7 @@ export async function POST(
     entity_id: dossierId,
     metadata: {
       dossier_id: dossierId,
-      gates_created: gatesToCreate,
+      gates_created: [gateType],
       timestamp: now,
       fields_prefilled: Object.keys(raInputsDraft),
     },
@@ -183,7 +183,7 @@ export async function POST(
 
   return NextResponse.json({
     ok: true,
-    gates_created: gatesToCreate,
+    gates_created: [gateType],
     inputs_prefilled: true,
     message: 'Inputs RA sections 1-6 pré-remplis. Gates V4/V5/V6 créées en attente de validation Mohamed.',
   })

@@ -542,8 +542,8 @@ export async function triggerPostDocumentSigned(params: {
       result.actions_taken.push('Transition → actif')
       result.next_stage = 'actif'
 
-      // Alerte conseiller : dossier prêt pour envoi assureur
-      await supabase.from('compliance_alerts').insert({
+      // Alerte conseiller : dossier prêt pour envoi assureur (non bloquant)
+      const { error: alertErr } = await supabase.from('compliance_alerts').insert({
         conseiller_id: dossier.conseiller_id,
         dossier_id: params.dossierId,
         severity: 'info',
@@ -552,7 +552,10 @@ export async function triggerPostDocumentSigned(params: {
         description:
           'Le bulletin de souscription a été signé par le client via Yousign. ' +
           'Procéder à l\'envoi du dossier complet à l\'assureur partenaire.',
-      }).catch(() => {/* non bloquant */})
+      })
+      if (alertErr) {
+        console.warn('[auto-trigger] compliance_alert insert (non bloquant):', alertErr.message)
+      }
 
       result.actions_taken.push('Alerte conseiller : envoi assureur à effectuer')
     }

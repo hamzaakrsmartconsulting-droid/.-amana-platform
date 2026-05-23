@@ -69,9 +69,10 @@ export async function POST(
 
   // Verrou validation admin (LM / RA / Bilan) avant Yousign
   for (const doc of docs) {
+    const docType = doc.type as string
     const gateType =
-      doc.type === 'lm' || doc.type === 'ra' || doc.type === 'bilan'
-        ? GATE_BY_DOCUMENT_TYPE[doc.type]
+      docType === 'lm' || docType === 'ra' || docType === 'bilan'
+        ? GATE_BY_DOCUMENT_TYPE[docType as 'lm' | 'ra' | 'bilan']
         : undefined
     if (!gateType) continue
 
