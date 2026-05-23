@@ -14,6 +14,7 @@ import { sendEmail, emailKycSoumisAdmin } from '@/lib/email'
 import { getClientAppBaseUrl } from '@/lib/app-url'
 import { transitionDossierStageService } from '@/lib/workflow/workflow-service'
 import type { PipelineStage } from '@/lib/workflow/pipeline-stages'
+import { getDefaultConseillerId } from '@/lib/dossiers/assistant-scope'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -102,6 +103,26 @@ export async function POST() {
         })
         if (!tr.ok) {
           console.error('[profile/submit] transition criblage→kyc_attente échouée :', tr.error)
+        }
+      }
+    } else {
+      const conseillerId = getDefaultConseillerId()
+      if (conseillerId) {
+        const { data: created } = await admin
+          .from('dossiers')
+          .insert({
+            conseiller_id: conseillerId,
+            prenom: kyc.prenom ?? 'Client',
+            nom: kyc.nom ?? 'AMANA',
+            email_client: emailClient,
+            statut: 'prospect',
+            pipeline_stage: 'kyc_attente',
+            notes: 'Créé automatiquement à la soumission KYC (sans dossier onboarding).',
+          })
+          .select('id')
+          .single()
+        if (created?.id) {
+          dossierId = created.id
         }
       }
     }

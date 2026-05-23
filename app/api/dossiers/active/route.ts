@@ -11,11 +11,16 @@ import {
   getDossier,
   buildActiveDossierCookie,
 } from '@/lib/dossiers/dossier-service'
+import { dossierBelongsToAssistantScope } from '@/lib/dossiers/assistant-scope'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-async function checkAuth(): Promise<{ authorized: boolean; userId?: string }> {
+async function checkAuth(): Promise<{
+  authorized: boolean
+  userId?: string
+  role?: string
+}> {
   const cookieStore = await cookies()
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,7 +36,16 @@ async function checkAuth(): Promise<{ authorized: boolean; userId?: string }> {
   )
   const { data: { user }, error } = await supabase.auth.getUser()
   if (error || !user) return { authorized: false }
-  return { authorized: true, userId: user.id }
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .maybeSingle()
+  return {
+    authorized: true,
+    userId: user.id,
+    role: profile?.role ?? 'client',
+  }
 }
 
 export async function GET() {
@@ -52,7 +66,10 @@ export async function GET() {
   }
 
   const dossier = await getDossier(activeId)
-  if (!dossier || dossier.conseiller_id !== auth.userId) {
+  if (
+    !dossier ||
+    !dossierBelongsToAssistantScope(dossier.conseiller_id, auth.userId, auth.role ?? 'client')
+  ) {
     // Le cookie pointe vers un dossier qui n'existe plus ou n'appartient pas au user
     // → on retourne 'sandbox' (le client devrait clear le cookie via POST {dossier_id: null})
     return new Response(
@@ -91,7 +108,10 @@ export async function POST(request: NextRequest) {
   // Si on essaie d'activer un dossier précis, vérifier qu'il appartient au user
   if (dossierId !== null) {
     const dossier = await getDossier(dossierId)
-    if (!dossier || dossier.conseiller_id !== auth.userId) {
+    if (
+      !dossier ||
+      !dossierBelongsToAssistantScope(dossier.conseiller_id, auth.userId, auth.role ?? 'client')
+    ) {
       return new Response(
         JSON.stringify({ error: 'Dossier introuvable ou accès refusé' }),
         { status: 403, headers: { 'Content-Type': 'application/json' } }

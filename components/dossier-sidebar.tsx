@@ -60,11 +60,22 @@ export default function DossierSidebar() {
         fetch('/api/dossiers/active'),
       ])
       if (!resD.ok) throw new Error(`Erreur listing : ${resD.status}`)
-      const d = (await resD.json()) as { dossiers: Dossier[] }
+      const d = (await resD.json()) as {
+        dossiers: Dossier[]
+        suggest_activate_dossier_id?: string | null
+      }
       setDossiers(d.dossiers ?? [])
+
+      let activeFromApi: string | null = null
       if (resA.ok) {
         const a = (await resA.json()) as ActiveResponse
-        setActiveId(a.active?.id ?? null)
+        activeFromApi = a.active?.id ?? null
+        setActiveId(activeFromApi)
+      }
+
+      const suggestId = d.suggest_activate_dossier_id
+      if (suggestId && !activeFromApi) {
+        await selectDossier(suggestId)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur inconnue')
