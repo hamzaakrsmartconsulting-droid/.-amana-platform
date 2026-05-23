@@ -152,19 +152,25 @@ export async function triggerPostFinalizeOnboarding(params: {
             .from('amana-documents')
             .download(derResult.doc.storage_path)
 
-          // Générer un magic-link (invite link) valide pour ce client
+          // Magic link : 1 clic depuis le mail DER → session + dashboard client
           const baseUrl = getClientAppBaseUrl()
-          const { data: linkData } = await supabase.auth.admin.generateLink({
-            type: 'magiclink',
-            email: dossier.email_client,
-            options: {
-              // /auth/callback échange le code et redirige vers /onboarding (client)
-              redirectTo: `${baseUrl}/auth/callback?next=/dashboard`,
-            },
-          })
+          const postLoginPath = '/dashboard'
+          const redirectTo = `${baseUrl}/auth/callback?next=${encodeURIComponent(postLoginPath)}`
+          const { data: linkData, error: linkErr } =
+            await supabase.auth.admin.generateLink({
+              type: 'magiclink',
+              email: dossier.email_client,
+              options: { redirectTo },
+            })
+          if (linkErr) {
+            console.error('[auto-trigger] generateLink magiclink', linkErr)
+            result.errors.push(
+              `Magic link : ${linkErr.message ?? 'génération échouée'}`,
+            )
+          }
           const magicLink =
             linkData?.properties?.action_link ??
-            `${baseUrl}/auth`
+            `${baseUrl}/auth?next=${encodeURIComponent(postLoginPath)}`
 
           if (fileBlob) {
             const pdfBuffer = Buffer.from(await fileBlob.arrayBuffer())

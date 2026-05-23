@@ -165,7 +165,7 @@ export function emailDerRemis(prenom: string, nom: string, magicLink: string) {
   qui décrit notre cabinet, nos services et nos modalités de rémunération.
 </p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 24px;">
-  Cliquez sur le bouton ci-dessous pour accéder à votre espace sécurisé et démarrer votre parcours KYC :
+  Cliquez sur le bouton ci-dessous pour accéder à votre espace client et compléter votre dossier :
 </p>
 <a href="${magicLink}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Accéder à mon espace AMANA →</a>
 <p style="color:#6b7f6a;font-size:13px;margin:28px 0 8px;">Ce lien est valable 24 heures. Si vous ne l'avez pas demandé, ignorez cet email.</p>
