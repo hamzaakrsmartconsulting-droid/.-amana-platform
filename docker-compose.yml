@@ -1,10 +1,12 @@
 # =============================================================================
 # AMANA Patrimoine - Stack production EC2
 #
-# Usage :
-#   docker compose --env-file .env.production build
-#   docker compose --env-file .env.production up -d
+# Usage EC2 (OBLIGATOIRE : --env-file pour inliner NEXT_PUBLIC_* au build) :
+#   docker compose --env-file .env.production build --no-cache amana
+#   docker compose --env-file .env.production up -d amana
 #   docker compose logs -f amana
+#
+# Sans --env-file, NEXT_PUBLIC_* sont vides → build ou runtime cassés.
 # =============================================================================
 
 services:
@@ -13,6 +15,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      env_file:
+        - .env.production
       args:
         # NEXT_PUBLIC_* inlinés au build (sinon undefined côté client).
         NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
