@@ -9,16 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --forest: #3a4d39;
-    --forest-dark: #2a3829;
-    --forest-mid: #4d6349;
+    --forest: #444b3f;
+    --forest-dark: #353b32;
+    --forest-mid: #5a6354;
     --gold: #c9a55a;
     --gold-light: #d9bb7a;
     --gold-pale: #f0e4c4;
     --cream: #f8f4ec;
     --cream-dark: #ede8de;
     --white: #ffffff;
-    --text-dark: #2a3829;
+    --text-dark: #353b32;
     --text-mid: #5a6a59;
     --text-light: #8a9a89;
     --border: #ddd5c8;
@@ -29,9 +29,9 @@
     --error-bg: #fde8e8;
     --warning: #e67e22;
     --warning-bg: #fef5e7;
-    --shadow-sm: 0 1px 4px rgba(42,56,41,0.06);
-    --shadow-md: 0 4px 16px rgba(42,56,41,0.08);
-    --shadow-lg: 0 8px 32px rgba(42,56,41,0.12);
+    --shadow-sm: 0 1px 4px rgba(68,75,63,0.06);
+    --shadow-md: 0 4px 16px rgba(68,75,63,0.08);
+    --shadow-lg: 0 8px 32px rgba(68,75,63,0.12);
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
@@ -176,7 +176,7 @@
   .badge-success { background: var(--success-bg); color: #2e7d32; }
   .badge-warning { background: var(--warning-bg); color: #b35900; }
   .badge-gold { background: var(--gold-pale); color: #8a6520; }
-  .badge-forest { background: rgba(58,77,57,0.1); color: var(--forest); }
+  .badge-forest { background: rgba(68,75,63,0.1); color: var(--forest); }
   .badge-halal { background: #e0f2e9; color: #1b6b3a; font-weight: 700; }
 
   /* Inputs */
@@ -195,7 +195,7 @@
   }
   .form-input:focus {
     border-color: var(--forest);
-    box-shadow: 0 0 0 3px rgba(58,77,57,0.08);
+    box-shadow: 0 0 0 3px rgba(68,75,63,0.08);
   }
   .form-input::placeholder { color: var(--text-light); }
   .form-select {
@@ -227,7 +227,7 @@
     font-family: 'Inter', system-ui;
   }
   .step-dot-done { background: var(--success); color: white; }
-  .step-dot-active { background: var(--forest); color: white; box-shadow: 0 0 0 4px rgba(58,77,57,0.15); }
+  .step-dot-active { background: var(--forest); color: white; box-shadow: 0 0 0 4px rgba(68,75,63,0.15); }
   .step-dot-pending { background: var(--cream-dark); color: var(--text-light); border: 1.5px solid var(--border); }
   .step-label { font-size: 11px; color: var(--text-mid); margin-top: 8px; white-space: nowrap; font-weight: 500; text-align: center; }
   .step-label-active { color: var(--forest); font-weight: 700; }
@@ -421,34 +421,34 @@
   <p class="comp-label">Couleurs primaires</p>
   <div class="ds-grid ds-grid-4" style="margin-bottom: 40px;">
     <div class="color-chip">
-      <div class="color-chip-swatch" style="background: #2a3829;"></div>
+      <div class="color-chip-swatch" style="background: #353b32;"></div>
       <div class="color-chip-info">
         <div class="color-chip-name">Forest Dark</div>
-        <div class="color-chip-hex">#2a3829</div>
+        <div class="color-chip-hex">#353b32</div>
         <div class="color-chip-desc">Headers, overlays, emphase forte</div>
       </div>
     </div>
     <div class="color-chip">
-      <div class="color-chip-swatch" style="background: #3a4d39;"></div>
+      <div class="color-chip-swatch" style="background: #444b3f;"></div>
       <div class="color-chip-info">
         <div class="color-chip-name">Forest — Primaire</div>
-        <div class="color-chip-hex">#3a4d39</div>
+        <div class="color-chip-hex">#444b3f</div>
         <div class="color-chip-desc">CTA principal, nav, titres de section</div>
       </div>
     </div>
     <div class="color-chip">
-      <div class="color-chip-swatch" style="background: #4d6349;"></div>
+      <div class="color-chip-swatch" style="background: #5a6354;"></div>
       <div class="color-chip-info">
         <div class="color-chip-name">Forest Mid</div>
-        <div class="color-chip-hex">#4d6349</div>
+        <div class="color-chip-hex">#5a6354</div>
         <div class="color-chip-desc">Hover states, gradients secondaires</div>
       </div>
     </div>
     <div class="color-chip">
-      <div class="color-chip-swatch" style="background: rgba(58,77,57,0.08); border: 1px solid #ddd5c8;"></div>
+      <div class="color-chip-swatch" style="background: rgba(68,75,63,0.08); border: 1px solid #ddd5c8;"></div>
       <div class="color-chip-info">
         <div class="color-chip-name">Forest Ghost</div>
-        <div class="color-chip-hex">rgba(58,77,57,0.08)</div>
+        <div class="color-chip-hex">rgba(68,75,63,0.08)</div>
         <div class="color-chip-desc">Backgrounds de cards légères, tags</div>
       </div>
     </div>
@@ -760,7 +760,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Montant (€)</label>
-        <input class="form-input" placeholder="min. 5 000 €" type="number" style="border-color: var(--forest); box-shadow: 0 0 0 3px rgba(58,77,57,0.08);">
+        <input class="form-input" placeholder="min. 5 000 €" type="number" style="border-color: var(--forest); box-shadow: 0 0 0 3px rgba(68,75,63,0.08);">
       </div>
       <div class="form-group">
         <label class="form-label">Profil investisseur</label>
@@ -1154,19 +1154,19 @@
     <p class="comp-label">Ombres</p>
     <div class="shadow-demo">
       <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-        <div class="shadow-block" style="box-shadow: 0 1px 4px rgba(42,56,41,0.06);">sm</div>
+        <div class="shadow-block" style="box-shadow: 0 1px 4px rgba(68,75,63,0.06);">sm</div>
         <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">0 1px 4px rgba(…,.06)</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-        <div class="shadow-block" style="box-shadow: 0 4px 16px rgba(42,56,41,0.08);">md</div>
+        <div class="shadow-block" style="box-shadow: 0 4px 16px rgba(68,75,63,0.08);">md</div>
         <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">0 4px 16px rgba(…,.08)</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-        <div class="shadow-block" style="box-shadow: 0 8px 32px rgba(42,56,41,0.12);">lg</div>
+        <div class="shadow-block" style="box-shadow: 0 8px 32px rgba(68,75,63,0.12);">lg</div>
         <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">0 8px 32px rgba(…,.12)</span>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-        <div class="shadow-block" style="box-shadow: 0 0 0 3px rgba(58,77,57,0.15);">focus</div>
+        <div class="shadow-block" style="box-shadow: 0 0 0 3px rgba(68,75,63,0.15);">focus</div>
         <span style="font-size: 10px; color: var(--text-light); font-family: monospace;">ring focus</span>
       </div>
     </div>
@@ -1178,9 +1178,9 @@
     <div style="background: var(--forest-dark); border-radius: var(--radius-lg); padding: 28px; overflow-x: auto;">
       <pre style="font-family: 'Courier New', monospace; font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.8; margin: 0;"><span style="color: var(--gold);">:root {</span>
   /* Couleurs primaires */
-  --forest:      <span style="color: #4caf50;">#3a4d39</span>;
-  --forest-dark: <span style="color: #4caf50;">#2a3829</span>;
-  --forest-mid:  <span style="color: #4caf50;">#4d6349</span>;
+  --forest:      <span style="color: #4caf50;">#444b3f</span>;
+  --forest-dark: <span style="color: #4caf50;">#353b32</span>;
+  --forest-mid:  <span style="color: #4caf50;">#5a6354</span>;
 
   /* Accent */
   --gold:        <span style="color: #c9a55a;">#c9a55a</span>;
@@ -1191,7 +1191,7 @@
   --cream:       <span style="color: #f8f4ec;">#f8f4ec</span>;
   --cream-dark:  <span style="color: #ede8de;">#ede8de</span>;
   --border:      <span style="color: #ddd5c8;">#ddd5c8</span>;
-  --text-dark:   <span style="color: #2a3829;">#2a3829</span>;
+  --text-dark:   <span style="color: #353b32;">#353b32</span>;
   --text-mid:    <span style="color: #5a6a59;">#5a6a59</span>;
   --text-light:  <span style="color: #8a9a89;">#8a9a89</span>;
 
@@ -1204,9 +1204,9 @@
   --r-lg: 16px; --r-xl: 24px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 4px rgba(42,56,41,0.06);
-  --shadow-md: 0 4px 16px rgba(42,56,41,0.08);
-  --shadow-lg: 0 8px 32px rgba(42,56,41,0.12);
+  --shadow-sm: 0 1px 4px rgba(68,75,63,0.06);
+  --shadow-md: 0 4px 16px rgba(68,75,63,0.08);
+  --shadow-lg: 0 8px 32px rgba(68,75,63,0.12);
 <span style="color: var(--gold);">}</span></pre>
     </div>
   </div>
@@ -1219,7 +1219,7 @@
       style="height: 80px; width: auto; object-fit: contain; display: block;">
   </div>
   <div style="font-size: 10px; color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; margin-bottom: 16px;">Design System v4 · Sprint 4</div>
-  <div style="font-size: 12px; color: rgba(255,255,255,0.25);">Cormorant Garamond + Inter · FOREST #3a4d39 · GOLD #c9a55a · CREAM #f8f4ec</div>
+  <div style="font-size: 12px; color: rgba(255,255,255,0.25);">Cormorant Garamond + Inter · FOREST #444b3f · GOLD #c9a55a · CREAM #f8f4ec</div>
 </div>
 
 <script>

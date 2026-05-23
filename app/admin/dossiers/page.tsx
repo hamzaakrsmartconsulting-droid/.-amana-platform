@@ -8,8 +8,8 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
-const DARK = '#2a3829'
+const FOREST = '#444b3f'
+const DARK = '#353b32'
 const GREY = '#666666'
 const GREY_LIGHT = '#e5e5e5'
 

@@ -55,8 +55,11 @@ const COLUMN_STAGE_KEYS: Record<string, string[]> = {
   lm_envoyee: ['lm_envoyee', 'der_envoye', 'der_signe', 'bilan_genere', 'lm_signee'],
 }
 
-/** Étapes de la colonne LM/RA/KYC/Bilan — pas de validation ni déplacement depuis le Kanban. */
-const LM_RA_KANBAN_COLUMN_STAGES = new Set(COLUMN_STAGE_KEYS.lm_envoyee)
+/** Colonne KYC complet + LM/RA : pas de boutons docs ni déplacement manuel sur le Kanban. */
+const KANBAN_READONLY_CARD_STAGES = new Set([
+  'kyc_complet',
+  ...(COLUMN_STAGE_KEYS.lm_envoyee ?? []),
+])
 
 const STAGES_SIDE: Array<{ key: string; label: string; color: string }> = [
   { key: 'bloque', label: 'Bloqué', color: '#dc2626' },
@@ -372,14 +375,14 @@ function DossierCard({
   const daysSince = Math.floor(
     (Date.now() - dateUpdated.getTime()) / (1000 * 60 * 60 * 24)
   )
-  const inLmRaColumn = LM_RA_KANBAN_COLUMN_STAGES.has(dossier.pipeline_stage)
-  const quickDocs = inLmRaColumn
+  const kanbanReadonly = KANBAN_READONLY_CARD_STAGES.has(dossier.pipeline_stage)
+  const quickDocs = kanbanReadonly
     ? []
     : (STAGE_QUICK_DOC[dossier.pipeline_stage] ?? [])
   const isSouscription = dossier.pipeline_stage === 'souscription'
   const stageLabel =
     PIPELINE_STAGE_LABEL[stage] ?? dossier.pipeline_stage
-  const showManualMove = !inLmRaColumn && manualTargets.length > 0
+  const showManualMove = !kanbanReadonly && manualTargets.length > 0
 
   async function transitionTo(
     e: MouseEvent,
@@ -522,9 +525,11 @@ function DossierCard({
           </div>
         </div>
       )}
-      {inLmRaColumn && (
+      {kanbanReadonly && (
         <p className="border-t border-amana-grey-light px-2 py-1.5 text-[10px] text-amana-grey">
-          Docs, validations et Yousign : fiche dossier + menu Validations
+          {stage === 'kyc_complet'
+            ? 'Générer DER/LM/RA, valider et envoyer Yousign : fiche dossier + Validations'
+            : 'Docs, validations et Yousign : fiche dossier + menu Validations'}
         </p>
       )}
     </div>

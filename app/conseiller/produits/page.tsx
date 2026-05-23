@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -33,7 +33,7 @@ export default async function ProduitsPage() {
     <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column' }}>
 
       {/* Header */}
-      <div style={{ background: '#2b3a2a', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#353b32', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <a href="/" style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em', textDecoration: 'none' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </a>
@@ -55,7 +55,7 @@ export default async function ProduitsPage() {
         {/* Titre + bouton nouveau */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
           <div>
-            <p style={{ fontSize: '13px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>CMS</p>
+            <p style={{ fontSize: '13px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>CMS</p>
             <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: FOREST, margin: '0' }}>Produits</h1>
           </div>
           <a href="/conseiller/produits/nouveau" style={{
@@ -68,7 +68,7 @@ export default async function ProduitsPage() {
 
         {/* Liste */}
         {!produits || produits.length === 0 ? (
-          <div style={{ background: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', color: '#6b7f6a' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', color: '#6d7368' }}>
             Aucun produit. Créez le premier.
           </div>
         ) : (
@@ -76,7 +76,7 @@ export default async function ProduitsPage() {
             {produits.map(p => (
               <div key={p.id} style={{
                 background: 'white', borderRadius: '14px', padding: '20px 28px',
-                boxShadow: '0 2px 8px rgba(58,77,57,0.06)',
+                boxShadow: '0 2px 8px rgba(68,75,63,0.06)',
                 display: 'flex', alignItems: 'center', gap: '20px',
                 opacity: p.actif === false ? 0.55 : 1,
               }}>
@@ -90,7 +90,7 @@ export default async function ProduitsPage() {
                 {/* Type badge */}
                 <div style={{
                   padding: '4px 10px', borderRadius: '12px', background: CREAM,
-                  fontSize: '11px', fontWeight: 600, color: '#6b7f6a',
+                  fontSize: '11px', fontWeight: 600, color: '#6d7368',
                   textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap',
                 }}>
                   {TYPE_LABEL[p.type] ?? p.type}
@@ -100,7 +100,7 @@ export default async function ProduitsPage() {
                 <div style={{ flex: 2, minWidth: '200px' }}>
                   <div style={{ fontWeight: 600, color: FOREST, fontSize: '15px' }}>{p.nom}</div>
                   {p.gestionnaire && (
-                    <div style={{ fontSize: '13px', color: '#6b7f6a', marginTop: '2px' }}>{p.gestionnaire}</div>
+                    <div style={{ fontSize: '13px', color: '#6d7368', marginTop: '2px' }}>{p.gestionnaire}</div>
                   )}
                 </div>
 
@@ -114,7 +114,7 @@ export default async function ProduitsPage() {
                     </div>
                   )}
                   {p.ticket_min > 0 && (
-                    <div style={{ fontSize: '12px', color: '#6b7f6a', marginTop: '2px' }}>
+                    <div style={{ fontSize: '12px', color: '#6d7368', marginTop: '2px' }}>
                       min. {Number(p.ticket_min).toLocaleString('fr-FR')} €
                     </div>
                   )}
@@ -130,7 +130,7 @@ export default async function ProduitsPage() {
                   </a>
                   <form action={`/api/produits/${p.id}/toggle`} method="POST">
                     <button type="submit" style={{
-                      padding: '7px 16px', background: 'white', color: '#6b7f6a',
+                      padding: '7px 16px', background: 'white', color: '#6d7368',
                       border: '1px solid #e5e7eb', borderRadius: '6px', fontSize: '13px',
                       cursor: 'pointer', fontWeight: 500,
                     }}>

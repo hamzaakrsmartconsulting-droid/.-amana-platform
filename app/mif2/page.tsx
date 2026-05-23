@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 
@@ -67,7 +67,7 @@ function calculerScoreMif2(s: Mif2State): { score: number; profil: string } {
 const card: CSSProperties = {
   background: 'white', borderRadius: 16, padding: 48,
   maxWidth: 640, width: '100%',
-  boxShadow: '0 4px 40px rgba(58,77,57,0.10)',
+  boxShadow: '0 4px 40px rgba(68,75,63,0.10)',
 }
 
 const btnPrimary: CSSProperties = {
@@ -142,7 +142,7 @@ function RadioCards({ options, value, onChange }: {
             padding: '14px 18px', borderRadius: 10, fontSize: 14,
             cursor: 'pointer', textAlign: 'left',
             border: value === o.value ? `2px solid ${FOREST}` : '1.5px solid #ddd5c8',
-            background: value === o.value ? 'rgba(58,77,57,0.05)' : 'white',
+            background: value === o.value ? 'rgba(68,75,63,0.05)' : 'white',
             color: FOREST, transition: 'all 0.12s',
             fontFamily: "'Inter', system-ui, sans-serif",
           }}
@@ -174,7 +174,7 @@ function CheckboxGrid({ options, value, onChange }: {
             padding: '12px 16px', borderRadius: 10, fontSize: 14,
             cursor: 'pointer', textAlign: 'left',
             border: value.includes(o.value) ? `2px solid ${FOREST}` : '1.5px solid #ddd5c8',
-            background: value.includes(o.value) ? 'rgba(58,77,57,0.05)' : 'white',
+            background: value.includes(o.value) ? 'rgba(68,75,63,0.05)' : 'white',
             color: FOREST, display: 'flex', alignItems: 'center', gap: 12,
             fontFamily: "'Inter', system-ui, sans-serif", transition: 'all 0.12s',
           }}
@@ -260,7 +260,7 @@ export default function Mif2Page() {
           <div style={{ ...card, textAlign: 'center', maxWidth: 480 }}>
             <div style={{
               width: 64, height: 64, borderRadius: '50%',
-              background: 'rgba(58,77,57,0.08)',
+              background: 'rgba(68,75,63,0.08)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 24px', fontSize: 28, color: FOREST,
             }}>✓</div>
@@ -269,14 +269,14 @@ export default function Mif2Page() {
             </h2>
             <div style={{
               display: 'inline-block', padding: '10px 24px',
-              borderRadius: 24, background: 'rgba(58,77,57,0.06)',
+              borderRadius: 24, background: 'rgba(68,75,63,0.06)',
               border: `1.5px solid ${p.color}`, marginBottom: 16,
             }}>
               <span style={{ fontSize: 14, color: p.color, fontWeight: 700, fontFamily: "'Inter', system-ui, sans-serif" }}>
                 Profil {p.label} — Score {score} / 25
               </span>
             </div>
-            <p style={{ fontSize: 13, color: '#6b7f6a', lineHeight: 1.7, marginBottom: 32, fontFamily: "'Inter', system-ui, sans-serif" }}>
+            <p style={{ fontSize: 13, color: '#6d7368', lineHeight: 1.7, marginBottom: 32, fontFamily: "'Inter', system-ui, sans-serif" }}>
               {p.desc}
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -375,7 +375,7 @@ export default function Mif2Page() {
           <div style={card}>
             <StepBadge step={3} label="Produits financiers" />
             <H>Quels produits financiers avez-vous déjà détenus ou utilisés ?</H>
-            <p style={{ color: '#6b7f6a', fontSize: 13, margin: '0 0 4px', fontFamily: "'Inter', system-ui, sans-serif" }}>
+            <p style={{ color: '#6d7368', fontSize: 13, margin: '0 0 4px', fontFamily: "'Inter', system-ui, sans-serif" }}>
               Sélectionnez tout ce qui s'applique.
             </p>
             <CheckboxGrid
@@ -437,7 +437,7 @@ export default function Mif2Page() {
           <div style={card}>
             <StepBadge step={6} label="Compréhension du risque" />
             <H>Comment évaluez-vous votre compréhension des risques financiers ?</H>
-            <p style={{ color: '#6b7f6a', fontSize: 13, margin: '0 0 20px', lineHeight: 1.6, fontFamily: "'Inter', system-ui, sans-serif" }}>
+            <p style={{ color: '#6d7368', fontSize: 13, margin: '0 0 20px', lineHeight: 1.6, fontFamily: "'Inter', system-ui, sans-serif" }}>
               Évaluation honnête de votre capacité à appréhender les risques liés aux investissements.
             </p>
 
@@ -457,7 +457,7 @@ export default function Mif2Page() {
               <span>Très faible</span><span>Excellent</span>
             </div>
 
-            <div style={{ background: 'rgba(58,77,57,0.05)', borderRadius: 10, padding: 16, fontSize: 13, color: '#4a5e49', lineHeight: 1.7, fontFamily: "'Inter', system-ui, sans-serif" }}>
+            <div style={{ background: 'rgba(68,75,63,0.05)', borderRadius: 10, padding: 16, fontSize: 13, color: '#4a5e49', lineHeight: 1.7, fontFamily: "'Inter', system-ui, sans-serif" }}>
               <div style={{ fontWeight: 700, marginBottom: 8, color: FOREST }}>À ce niveau, je comprends que :</div>
               {s.comprehension_risque >= 1 && <div>• La valeur d'un investissement peut baisser et je peux perdre une partie de mon capital</div>}
               {s.comprehension_risque >= 2 && <div>• La diversification réduit les risques mais ne les élimine pas</div>}
@@ -475,7 +475,7 @@ export default function Mif2Page() {
           <div style={card}>
             <StepBadge step={7} label="Connaissance des produits" />
             <H>Votre connaissance des produits proposés par AMANA</H>
-            <p style={{ color: '#6b7f6a', fontSize: 13, margin: '0 0 20px', fontFamily: "'Inter', system-ui, sans-serif", lineHeight: 1.6 }}>
+            <p style={{ color: '#6d7368', fontSize: 13, margin: '0 0 20px', fontFamily: "'Inter', system-ui, sans-serif", lineHeight: 1.6 }}>
               Évaluez votre niveau de connaissance pour chaque famille de produits.
             </p>
 

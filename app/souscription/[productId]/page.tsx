@@ -5,10 +5,10 @@ import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import AmanaHeader, { UserAvatar } from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
-const DARK   = '#2a3829'
+const DARK   = '#353b32'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -62,7 +62,7 @@ const HORIZON: Record<string, string> = {
 
 const card = {
   background: 'white', borderRadius: 16,
-  boxShadow: '0 2px 20px rgba(42,56,41,0.07)',
+  boxShadow: '0 2px 20px rgba(68,75,63,0.07)',
   border: '1px solid #e8e0d0',
 }
 
@@ -265,14 +265,14 @@ export default function SouscriptionPage() {
           <div style={{ ...card, padding: 48, maxWidth: 520, width: '100%', textAlign: 'center' }}>
             <div style={{
               width: 64, height: 64, borderRadius: '50%',
-              background: 'rgba(58,77,57,0.1)',
+              background: 'rgba(68,75,63,0.1)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 24px', fontSize: 28, color: FOREST,
             }}>✓</div>
             <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 30, color: FOREST, fontWeight: 400, margin: '0 0 12px' }}>
               Demande enregistrée
             </h2>
-            <p style={{ fontSize: 14, color: '#6b7f6a', lineHeight: 1.8, marginBottom: 8, fontFamily: "'Inter', system-ui, sans-serif" }}>
+            <p style={{ fontSize: 14, color: '#6d7368', lineHeight: 1.8, marginBottom: 8, fontFamily: "'Inter', system-ui, sans-serif" }}>
               Votre demande de souscription à <strong style={{ color: FOREST }}>{product.nom}</strong> pour{' '}
               <strong style={{ color: FOREST }}>{montantNum.toLocaleString('fr-FR')} €</strong> a bien été enregistrée.
             </p>
@@ -321,7 +321,7 @@ export default function SouscriptionPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: CREAM, fontFamily: "'Inter', system-ui, sans-serif" }}>
-      <style>{`input:focus { border-color: ${FOREST} !important; box-shadow: 0 0 0 3px rgba(58,77,57,0.1) !important; }`}</style>
+      <style>{`input:focus { border-color: ${FOREST} !important; box-shadow: 0 0 0 3px rgba(68,75,63,0.1) !important; }`}</style>
 
       <AmanaHeader
         backHref="/catalogue"
@@ -473,7 +473,7 @@ export default function SouscriptionPage() {
 
               {/* Simulation rapide */}
               {ticketOk && montantNum > 0 && product.rendement_max && (
-                <div style={{ background: 'rgba(58,77,57,0.05)', borderRadius: 8, padding: '12px 14px', marginBottom: 20 }}>
+                <div style={{ background: 'rgba(68,75,63,0.05)', borderRadius: 8, padding: '12px 14px', marginBottom: 20 }}>
                   <div style={{ fontSize: 11, color: '#6a7a69', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
                     Estimation indicative / an
                   </div>
@@ -514,7 +514,7 @@ export default function SouscriptionPage() {
                 disabled={!canSubmit}
                 style={{
                   width: '100%', padding: '14px',
-                  background: canSubmit ? FOREST : '#b0bdb0',
+                  background: canSubmit ? FOREST : '#a8ada6',
                   color: 'white', border: 'none', borderRadius: 10,
                   fontSize: 15, fontWeight: 600,
                   cursor: canSubmit ? 'pointer' : 'not-allowed',

@@ -207,7 +207,7 @@ export default function AdminProjectDetailPage() {
           </div>
           <span
             className="rounded-full px-3 py-1 text-xs font-semibold"
-            style={{ background: '#3a4d39', color: 'white' }}
+            style={{ background: '#444b3f', color: 'white' }}
           >
             {stageLabel}
           </span>

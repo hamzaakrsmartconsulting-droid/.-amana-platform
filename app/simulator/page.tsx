@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
-const HEADER_BG = '#2b3a2a'
+const HEADER_BG = '#353b32'
 
 type SimState = {
   step: number
@@ -51,7 +51,7 @@ const cardStyle: CSSProperties = {
   padding: '48px',
   maxWidth: '640px',
   width: '100%',
-  boxShadow: '0 4px 40px rgba(58,77,57,0.10)',
+  boxShadow: '0 4px 40px rgba(68,75,63,0.10)',
   position: 'relative',
 }
 
@@ -90,7 +90,7 @@ const labelStyle: CSSProperties = {
   display: 'block',
   fontSize: '12px',
   fontWeight: 500,
-  color: '#6b7f6a',
+  color: '#6d7368',
   textTransform: 'uppercase',
   letterSpacing: '0.05em',
   marginBottom: '4px',
@@ -218,7 +218,7 @@ export default function SimulatorPage() {
             >
               Quels sont vos objectifs patrimoniaux ?
             </h2>
-            <p style={{ color: '#6b7f6a', fontSize: '14px', margin: '0 0 32px' }}>
+            <p style={{ color: '#6d7368', fontSize: '14px', margin: '0 0 32px' }}>
               Sélectionnez tout ce qui vous correspond.
             </p>
             <div
@@ -527,7 +527,7 @@ export default function SimulatorPage() {
             >
               Votre taux marginal d&apos;imposition
             </h2>
-            <p style={{ color: '#6b7f6a', fontSize: '14px', margin: '0 0 32px' }}>
+            <p style={{ color: '#6d7368', fontSize: '14px', margin: '0 0 32px' }}>
               Utilisé pour optimiser votre allocation.
             </p>
             <div
@@ -602,7 +602,7 @@ export default function SimulatorPage() {
             >
               Recommandation personnalisée
             </h2>
-            <p style={{ color: '#6b7f6a', fontSize: '14px', margin: '0 0 16px' }}>
+            <p style={{ color: '#6d7368', fontSize: '14px', margin: '0 0 16px' }}>
               Finance islamique · Conformité éthique
             </p>
 
@@ -628,7 +628,7 @@ export default function SimulatorPage() {
                 }).format(cashback.montant)}
               </strong>
               {cashback.pct === 0 && (
-                <span style={{ color: '#6b7f6a', display: 'block', marginTop: '8px' }}>
+                <span style={{ color: '#6d7368', display: 'block', marginTop: '8px' }}>
                   Règle : 2 produits = 1% du SCPI · 3 produits = 2% du SCPI.
                 </span>
               )}
@@ -639,7 +639,7 @@ export default function SimulatorPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
                     <div style={{ fontWeight: 500, color: FOREST, marginBottom: '4px' }}>Assurance-vie</div>
-                    <div style={{ fontSize: '12px', color: '#6b7f6a' }}>
+                    <div style={{ fontSize: '12px', color: '#6d7368' }}>
                       Enveloppe long terme, allocation conforme
                     </div>
                   </div>
@@ -647,7 +647,7 @@ export default function SimulatorPage() {
                     style={{
                       fontSize: '11px',
                       padding: '3px 10px',
-                      background: 'rgba(58,77,57,0.08)',
+                      background: 'rgba(68,75,63,0.08)',
                       borderRadius: '20px',
                       color: FOREST,
                     }}
@@ -672,7 +672,7 @@ export default function SimulatorPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
                     <div style={{ fontWeight: 500, color: FOREST, marginBottom: '4px' }}>SCPI</div>
-                    <div style={{ fontSize: '12px', color: '#6b7f6a' }}>
+                    <div style={{ fontSize: '12px', color: '#6d7368' }}>
                       Immobilier de rendement, sélection conforme
                     </div>
                   </div>
@@ -680,7 +680,7 @@ export default function SimulatorPage() {
                     style={{
                       fontSize: '11px',
                       padding: '3px 10px',
-                      background: 'rgba(58,77,57,0.08)',
+                      background: 'rgba(68,75,63,0.08)',
                       borderRadius: '20px',
                       color: FOREST,
                     }}
@@ -707,7 +707,7 @@ export default function SimulatorPage() {
                     <div style={{ fontWeight: 500, color: FOREST, marginBottom: '4px' }}>
                       Compte-titres (CTO)
                     </div>
-                    <div style={{ fontSize: '12px', color: '#6b7f6a' }}>
+                    <div style={{ fontSize: '12px', color: '#6d7368' }}>
                       Actions éligibles, filtre éthique
                     </div>
                   </div>
@@ -715,7 +715,7 @@ export default function SimulatorPage() {
                     style={{
                       fontSize: '11px',
                       padding: '3px 10px',
-                      background: 'rgba(58,77,57,0.08)',
+                      background: 'rgba(68,75,63,0.08)',
                       borderRadius: '20px',
                       color: FOREST,
                     }}

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -16,7 +16,7 @@ const TYPE_LABEL: Record<string, string> = {
 }
 
 const TYPE_COLOR: Record<string, string> = {
-  assurance_vie: '#3a4d39',
+  assurance_vie: '#444b3f',
   scpi:          '#c9a55a',
   cto:           '#1e40af',
   immobilier:    '#92400e',
@@ -27,10 +27,10 @@ const TYPE_COLOR: Record<string, string> = {
 
 function StatCard({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {
   return (
-    <div style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)' }}>
-      <div style={{ fontSize: '11px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>{label}</div>
+    <div style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)' }}>
+      <div style={{ fontSize: '11px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>{label}</div>
       <div style={{ fontFamily: 'Georgia, serif', fontSize: '26px', color: color ?? FOREST, fontWeight: 600 }}>{value}</div>
-      {sub && <div style={{ fontSize: '12px', color: '#6b7f6a', marginTop: '4px' }}>{sub}</div>}
+      {sub && <div style={{ fontSize: '12px', color: '#6d7368', marginTop: '4px' }}>{sub}</div>}
     </div>
   )
 }
@@ -65,7 +65,7 @@ export default async function ReportingPage() {
     { key: 'en_cours', label: 'En cours',  color: '#1e40af' },
     { key: 'soumis',   label: 'Soumis',    color: '#92400e' },
     { key: 'signe',    label: 'Signés',    color: '#065f46' },
-    { key: 'actif',    label: 'Actifs',    color: '#3a4d39' },
+    { key: 'actif',    label: 'Actifs',    color: '#444b3f' },
     { key: 'cloture',  label: 'Clôturés',  color: '#6b7280' },
   ].map(f => ({ ...f, count: proj.filter(p => p.statut === f.key).length }))
 
@@ -88,7 +88,7 @@ export default async function ReportingPage() {
     <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column' }}>
 
       {/* Header */}
-      <div style={{ background: '#2b3a2a', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#353b32', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <a href="/" style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em', textDecoration: 'none' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </a>
@@ -108,7 +108,7 @@ export default async function ReportingPage() {
 
         {/* Titre */}
         <div style={{ marginBottom: '40px' }}>
-          <p style={{ fontSize: '13px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Tableau de bord</p>
+          <p style={{ fontSize: '13px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Tableau de bord</p>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: FOREST, margin: '0' }}>
             Reporting
           </h1>
@@ -125,7 +125,7 @@ export default async function ReportingPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
 
           {/* Pipeline funnel */}
-          <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)' }}>
             <div style={{ fontSize: '13px', fontWeight: 600, color: FOREST, marginBottom: '24px' }}>Pipeline projets</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {funnel.map(f => (
@@ -149,10 +149,10 @@ export default async function ReportingPage() {
           </div>
 
           {/* Répartition AUM par produit */}
-          <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)' }}>
             <div style={{ fontSize: '13px', fontWeight: 600, color: FOREST, marginBottom: '24px' }}>AUM actif par produit</div>
             {byType.length === 0 ? (
-              <div style={{ color: '#6b7f6a', fontSize: '13px', textAlign: 'center', paddingTop: '32px' }}>
+              <div style={{ color: '#6d7368', fontSize: '13px', textAlign: 'center', paddingTop: '32px' }}>
                 Aucun projet actif
               </div>
             ) : (
@@ -182,13 +182,13 @@ export default async function ReportingPage() {
 
         {/* Derniers projets actifs */}
         {recents.length > 0 && (
-          <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)' }}>
             <div style={{ fontSize: '13px', fontWeight: 600, color: FOREST, marginBottom: '20px' }}>Projets actifs récents</div>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #f0ebe0' }}>
                   {['Produit', 'Montant', 'Activé le'].map(h => (
-                    <th key={h} style={{ textAlign: 'left', padding: '8px 0', fontSize: '11px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500 }}>{h}</th>
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 0', fontSize: '11px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -201,7 +201,7 @@ export default async function ReportingPage() {
                     <td style={{ padding: '12px 0', fontFamily: 'Georgia, serif', fontSize: '15px', color: FOREST }}>
                       {Number(p.montant).toLocaleString('fr-FR')} €
                     </td>
-                    <td style={{ padding: '12px 0', fontSize: '13px', color: '#6b7f6a' }}>
+                    <td style={{ padding: '12px 0', fontSize: '13px', color: '#6d7368' }}>
                       {new Date(p.updated_at).toLocaleDateString('fr-FR')}
                     </td>
                   </tr>

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { profileDisplayName } from '@/lib/profiles/display-name'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 
 const ROLES = ['client', 'conseiller', 'admin'] as const

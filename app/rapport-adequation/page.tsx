@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -112,7 +112,7 @@ const row: React.CSSProperties = {
   marginBottom: '8px', fontSize: '13px',
 }
 
-const rowLabel: React.CSSProperties = { color: '#6b7f6a', flexShrink: 0, marginRight: '12px' }
+const rowLabel: React.CSSProperties = { color: '#6d7368', flexShrink: 0, marginRight: '12px' }
 const rowValue: React.CSSProperties = { color: FOREST, fontWeight: 500, textAlign: 'right' as const }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -205,7 +205,7 @@ export default function RapportAdequationPage() {
 
   const produits = evaluerAdequation(kyc!, mif2!)
   const today = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
-  const profilColor = { debutant: '#c9a55a', averti: '#3a6e8a', expert: '#3a4d39' }[mif2!.profil_mif2] ?? FOREST
+  const profilColor = { debutant: '#c9a55a', averti: '#3a6e8a', expert: '#444b3f' }[mif2!.profil_mif2] ?? FOREST
 
   return (
     <>
@@ -221,7 +221,7 @@ export default function RapportAdequationPage() {
       <div style={{ minHeight: '100vh', background: CREAM }}>
 
         {/* Header */}
-        <div className="no-print" style={{ background: '#2b3a2a', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="no-print" style={{ background: '#353b32', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <a href="/" style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em', textDecoration: 'none' }}>
             AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
           </a>
@@ -254,7 +254,7 @@ export default function RapportAdequationPage() {
         <div style={{ padding: '40px 24px', display: 'flex', justifyContent: 'center' }}>
           <div
             className="rapport-container"
-            style={{ background: 'white', borderRadius: '16px', padding: '56px', maxWidth: '800px', width: '100%', boxShadow: '0 4px 40px rgba(58,77,57,0.10)' }}
+            style={{ background: 'white', borderRadius: '16px', padding: '56px', maxWidth: '800px', width: '100%', boxShadow: '0 4px 40px rgba(68,75,63,0.10)' }}
           >
 
             {/* En-tête rapport */}
@@ -263,7 +263,7 @@ export default function RapportAdequationPage() {
                 <div style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: FOREST, letterSpacing: '0.06em', marginBottom: '4px' }}>
                   AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
                 </div>
-                <div style={{ fontSize: '11px', color: '#6b7f6a', letterSpacing: '0.05em' }}>
+                <div style={{ fontSize: '11px', color: '#6d7368', letterSpacing: '0.05em' }}>
                   CGPI — Conseil en Gestion de Patrimoine Indépendant
                 </div>
               </div>
@@ -271,7 +271,7 @@ export default function RapportAdequationPage() {
                 <div style={{ fontSize: '11px', color: GOLD, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Rapport d'Adéquation
                 </div>
-                <div style={{ fontSize: '12px', color: '#6b7f6a' }}>Établi le {today}</div>
+                <div style={{ fontSize: '12px', color: '#6d7368' }}>Établi le {today}</div>
                 <div style={{ fontSize: '11px', color: '#9aab9a', marginTop: '2px' }}>Document confidentiel — Directive MIF2</div>
               </div>
             </div>
@@ -282,7 +282,7 @@ export default function RapportAdequationPage() {
                 <div style={{ fontSize: '18px', fontWeight: 600, color: FOREST, fontFamily: 'Georgia, serif' }}>
                   {kyc!.civilite} {kyc!.prenom} {kyc!.nom}
                 </div>
-                <div style={{ fontSize: '12px', color: '#6b7f6a', marginTop: '4px' }}>
+                <div style={{ fontSize: '12px', color: '#6d7368', marginTop: '4px' }}>
                   {kyc!.adresse} — {kyc!.code_postal} {kyc!.ville}
                 </div>
               </div>
@@ -365,7 +365,7 @@ export default function RapportAdequationPage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                       <div>
                         <div style={{ fontWeight: 600, color: FOREST, fontSize: '14px' }}>{p.nom}</div>
-                        <div style={{ fontSize: '12px', color: '#6b7f6a' }}>{p.sous_titre}</div>
+                        <div style={{ fontSize: '12px', color: '#6d7368' }}>{p.sous_titre}</div>
                       </div>
                       <div style={{ display: 'flex', gap: '6px', flexShrink: 0, marginLeft: '12px' }}>
                         <span style={{
@@ -384,7 +384,7 @@ export default function RapportAdequationPage() {
                     <div style={{ fontSize: '12px', color: p.adequat ? '#4a5e49' : '#c0392b', marginBottom: '8px' }}>
                       {p.raison}
                     </div>
-                    <div style={{ display: 'flex', gap: '20px', fontSize: '11px', color: '#6b7f6a' }}>
+                    <div style={{ display: 'flex', gap: '20px', fontSize: '11px', color: '#6d7368' }}>
                       <span>Risque : {p.risque}</span>
                       <span>Rendement cible : {p.rendement}</span>
                     </div>
@@ -396,7 +396,7 @@ export default function RapportAdequationPage() {
             {/* 5. Avertissements réglementaires */}
             <div style={{ ...section, borderBottom: 'none', paddingBottom: 0 }}>
               <div style={sectionTitle}>5. Avertissements et mentions légales</div>
-              <div style={{ fontSize: '11px', color: '#6b7f6a', lineHeight: 1.7 }}>
+              <div style={{ fontSize: '11px', color: '#6d7368', lineHeight: 1.7 }}>
                 <p style={{ margin: '0 0 8px' }}>
                   Ce rapport d'adéquation a été établi conformément aux exigences de la Directive 2014/65/UE (MIF2) et de son règlement délégué (UE) 2017/565 sur la base des informations communiquées par le client. Il ne constitue pas un conseil en investissement au sens de l'article L541-1 du Code monétaire et financier.
                 </p>
@@ -413,7 +413,7 @@ export default function RapportAdequationPage() {
             <div style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
               {['Le Conseiller AMANA', `${kyc!.civilite} ${kyc!.prenom} ${kyc!.nom}`].map((name, i) => (
                 <div key={i} style={{ borderTop: '1px solid #d4c9a8', paddingTop: '12px' }}>
-                  <div style={{ fontSize: '11px', color: '#6b7f6a', marginBottom: '40px' }}>{name}</div>
+                  <div style={{ fontSize: '11px', color: '#6d7368', marginBottom: '40px' }}>{name}</div>
                   <div style={{ fontSize: '11px', color: '#9aab9a' }}>Signature et date</div>
                 </div>
               ))}

@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
-const DARK   = '#2a3829'
+const DARK   = '#353b32'
 
 const Logo = () => (
   <img
@@ -45,7 +45,7 @@ export default function AuthResetPage() {
 
   return (
     <>
-      <style>{`input:focus { border-color: ${FOREST} !important; box-shadow: 0 0 0 3px rgba(58,77,57,0.1) !important; }`}</style>
+      <style>{`input:focus { border-color: ${FOREST} !important; box-shadow: 0 0 0 3px rgba(68,75,63,0.1) !important; }`}</style>
 
       <div style={{ minHeight: '100vh', display: 'flex', background: CREAM }}>
 
@@ -94,7 +94,7 @@ export default function AuthResetPage() {
                 <h1 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 30, color: FOREST, fontWeight: 400, margin: '0 0 8px' }}>
                   Mot de passe oublié
                 </h1>
-                <p style={{ fontSize: 14, color: '#6b7f6a', margin: '0 0 32px', lineHeight: 1.6, fontFamily: "'Inter', system-ui, sans-serif" }}>
+                <p style={{ fontSize: 14, color: '#6d7368', margin: '0 0 32px', lineHeight: 1.6, fontFamily: "'Inter', system-ui, sans-serif" }}>
                   Saisissez votre adresse email. Nous vous enverrons un lien pour réinitialiser votre mot de passe.
                 </p>
 
@@ -146,14 +146,14 @@ export default function AuthResetPage() {
               <div style={{ textAlign: 'center' }}>
                 <div style={{
                   width: 64, height: 64, borderRadius: '50%',
-                  background: 'rgba(58,77,57,0.1)',
+                  background: 'rgba(68,75,63,0.1)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   margin: '0 auto 24px', fontSize: 28, color: FOREST,
                 }}>✉</div>
                 <h1 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 28, color: FOREST, fontWeight: 400, margin: '0 0 12px' }}>
                   Email envoyé
                 </h1>
-                <p style={{ fontSize: 14, color: '#6b7f6a', lineHeight: 1.8, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>
+                <p style={{ fontSize: 14, color: '#6d7368', lineHeight: 1.8, marginBottom: 12, fontFamily: "'Inter', system-ui, sans-serif" }}>
                   Si un compte existe pour <strong style={{ color: FOREST }}>{email}</strong>,<br />
                   vous recevrez un lien de réinitialisation sous quelques minutes.
                 </p>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 
-const FOREST = '#2C4A3E'
+const FOREST = '#444b3f'
 const GOLD = '#C9A84C'
 const CREAM = '#FAF7F2'
 

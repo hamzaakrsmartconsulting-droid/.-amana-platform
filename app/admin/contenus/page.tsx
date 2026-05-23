@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader, { UserAvatar } from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 
@@ -137,7 +137,7 @@ export default function AdminContenusPage() {
                 onClick={() => { setSelected(p.id); setPreview(false) }}
                 style={{
                   width: '100%', textAlign: 'left', padding: '13px 16px',
-                  background: selected === p.id ? 'rgba(58,77,57,0.06)' : 'transparent',
+                  background: selected === p.id ? 'rgba(68,75,63,0.06)' : 'transparent',
                   border: 'none', borderBottom: '1px solid #f0ece4',
                   cursor: 'pointer', fontSize: 13, color: selected === p.id ? FOREST : '#5a6a59',
                   fontWeight: selected === p.id ? 600 : 400,

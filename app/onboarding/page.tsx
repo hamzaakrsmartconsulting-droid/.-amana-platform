@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 
@@ -195,7 +195,7 @@ export default function OnboardingPage() {
                   fontSize: 11, fontWeight: 800,
                   background: s.done ? '#4caf50' : i === currentIdx ? FOREST : '#ddd5c8',
                   color: s.done || i === currentIdx ? 'white' : '#8a9a89',
-                  boxShadow: i === currentIdx ? `0 0 0 4px rgba(58,77,57,0.15)` : 'none',
+                  boxShadow: i === currentIdx ? `0 0 0 4px rgba(68,75,63,0.15)` : 'none',
                   transition: 'all 0.2s',
                 }}>
                   {s.done ? '✓' : i + 1}
@@ -225,7 +225,7 @@ export default function OnboardingPage() {
           <div style={{
             background: 'white', borderRadius: 18, padding: '32px 28px',
             border: `1px solid #ddd5c8`,
-            boxShadow: '0 4px 24px rgba(42,56,41,0.08)',
+            boxShadow: '0 4px 24px rgba(68,75,63,0.08)',
             marginBottom: 20,
           }}>
             <div style={{

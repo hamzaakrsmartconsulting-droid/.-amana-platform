@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -38,7 +38,7 @@ const EMPTY: Form = {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-      <label style={{ fontSize: '12px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500 }}>
+      <label style={{ fontSize: '12px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500 }}>
         {label}
       </label>
       {children}
@@ -126,7 +126,7 @@ export default function ProduitFormPage() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7f6a' }}>
+    <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6d7368' }}>
       Chargement…
     </div>
   )
@@ -135,7 +135,7 @@ export default function ProduitFormPage() {
     <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column' }}>
 
       {/* Header */}
-      <div style={{ background: '#2b3a2a', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#353b32', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <a href="/" style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em', textDecoration: 'none' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </a>
@@ -151,7 +151,7 @@ export default function ProduitFormPage() {
         {/* Titre */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '40px' }}>
           <div>
-            <a href="/conseiller/produits" style={{ fontSize: '13px', color: '#6b7f6a', textDecoration: 'none' }}>← Produits</a>
+            <a href="/conseiller/produits" style={{ fontSize: '13px', color: '#6d7368', textDecoration: 'none' }}>← Produits</a>
             <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '28px', color: FOREST, margin: '8px 0 0' }}>
               {isNew ? 'Nouveau produit' : 'Modifier le produit'}
             </h1>
@@ -168,7 +168,7 @@ export default function ProduitFormPage() {
         </div>
 
         {/* Formulaire */}
-        <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ background: 'white', borderRadius: '16px', padding: '32px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
             <Field label="Type de produit">

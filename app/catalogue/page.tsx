@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader, { UserAvatar } from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 
@@ -56,7 +56,7 @@ function ProductCard({ p }: { p: Product }) {
         background: 'white', borderRadius: 16,
         border: hovered ? `1px solid ${GOLD}` : '1px solid #e8e0d0',
         overflow: 'hidden',
-        boxShadow: hovered ? '0 8px 32px rgba(42,56,41,0.12)' : '0 1px 4px rgba(42,56,41,0.05)',
+        boxShadow: hovered ? '0 8px 32px rgba(68,75,63,0.12)' : '0 1px 4px rgba(68,75,63,0.05)',
         transform: hovered ? 'translateY(-2px)' : 'none',
         transition: 'all 0.18s ease',
         display: 'flex', flexDirection: 'column',
@@ -66,7 +66,7 @@ function ProductCard({ p }: { p: Product }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
           <span style={{
             fontSize: 10, padding: '3px 9px', borderRadius: 20,
-            background: 'rgba(58,77,57,0.08)', color: FOREST,
+            background: 'rgba(68,75,63,0.08)', color: FOREST,
             fontWeight: 700, letterSpacing: '0.06em',
             fontFamily: "'Inter', system-ui, sans-serif",
           }}>

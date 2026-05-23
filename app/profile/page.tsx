@@ -11,10 +11,10 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
-const DARK   = '#2a3829'
+const DARK   = '#353b32'
 
 // ─── types ────────────────────────────────────────────────────────────────────
 
@@ -828,10 +828,10 @@ export default function ProfilePage() {
         {/* ── PANNEAU DE SOUMISSION ── */}
         {submitted ? (
           <div style={{
-            background: 'linear-gradient(135deg, #2a3829 0%, #4d6349 100%)',
+            background: 'linear-gradient(135deg, #353b32 0%, #5a6354 100%)',
             borderRadius: 14, padding: '24px 28px', marginTop: 8,
             border: '1px solid rgba(201,165,90,0.25)',
-            boxShadow: '0 4px 24px rgba(42,56,41,0.12)',
+            boxShadow: '0 4px 24px rgba(68,75,63,0.12)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(201,165,90,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 20 }}>✓</div>

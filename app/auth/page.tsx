@@ -4,10 +4,10 @@ import { Suspense, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
-const DARK = '#2a3829'
+const DARK = '#353b32'
 
 const REDIRECT: Record<string, string> = {
   admin: '/admin',
@@ -341,7 +341,7 @@ function AuthPageInner() {
     <>
       <style>{`
         @media (max-width: 768px) { .auth-left{display:none!important} .auth-right{padding:32px 24px!important} .auth-wrap{display:block!important} }
-        input:focus { border-color: ${FOREST}!important; box-shadow: 0 0 0 3px rgba(58,77,57,0.1)!important; }
+        input:focus { border-color: ${FOREST}!important; box-shadow: 0 0 0 3px rgba(68,75,63,0.1)!important; }
       `}</style>
       <div className="auth-wrap" style={{ minHeight: '100vh', display: 'flex', background: CREAM }}>
         <div

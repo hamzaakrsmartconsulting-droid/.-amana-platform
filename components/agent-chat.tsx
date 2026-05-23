@@ -20,10 +20,10 @@ import {
 } from 'react'
 import { useRouter } from 'next/navigation'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
-const DARK = '#2a3829'
+const DARK = '#353b32'
 const GREY = '#666666'
 const GREY_LIGHT = '#e5e5e5'
 const WHITE = '#ffffff'
@@ -285,7 +285,7 @@ export default function AgentChat({
     borderBottomLeftRadius: role === 'assistant' ? 4 : 14,
   })
   const typing: CSSProperties = { display: 'inline-flex', gap: 4, padding: '10px 14px', background: WHITE, border: `1px solid ${GREY_LIGHT}`, borderRadius: 14, borderBottomLeftRadius: 4 }
-  const tag: CSSProperties = { display: 'inline-block', fontSize: 11, fontWeight: 500, color: agentColor, background: 'rgba(58, 77, 57, 0.1)', padding: '2px 8px', borderRadius: 999, marginBottom: 4 }
+  const tag: CSSProperties = { display: 'inline-block', fontSize: 11, fontWeight: 500, color: agentColor, background: 'rgba(68, 75, 63, 0.1)', padding: '2px 8px', borderRadius: 999, marginBottom: 4 }
   const errorBox: CSSProperties = { background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', padding: '10px 14px', borderRadius: 8, fontSize: 13, margin: '0 0 10px' }
   const inputArea: CSSProperties = { borderTop: `1px solid ${GREY_LIGHT}`, padding: 12, background: WHITE }
   const form: CSSProperties = { display: 'flex', gap: 8, alignItems: 'flex-end' }

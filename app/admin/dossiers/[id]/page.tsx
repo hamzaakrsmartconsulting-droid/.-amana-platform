@@ -10,9 +10,9 @@ import { useEffect, useState, type CSSProperties } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
-const DARK = '#2a3829'
+const DARK = '#353b32'
 const GREY = '#666666'
 const GREY_LIGHT = '#e5e5e5'
 const RED = '#b91c1c'
@@ -787,7 +787,7 @@ export default function AdminDossierDetailPage() {
                         padding: '11px 24px',
                         fontSize: 13,
                         background: canSendYousign && !sending ? FOREST : '#9ca3af',
-                        boxShadow: canSendYousign && !sending ? '0 2px 8px rgba(58,77,57,0.25)' : 'none',
+                        boxShadow: canSendYousign && !sending ? '0 2px 8px rgba(68,75,63,0.25)' : 'none',
                         opacity: 1,
                         cursor: sending || !canSendYousign ? 'not-allowed' : 'pointer',
                       }}

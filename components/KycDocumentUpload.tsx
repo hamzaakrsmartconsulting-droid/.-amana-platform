@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 
 const GOLD = '#c9a55a'
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 
 type Props = {
   type: 'identite' | 'justificatif'
@@ -45,7 +45,7 @@ export default function KycDocumentUpload({ type, label, inputName, defaultPath 
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <label style={{ fontSize: '13px', color: '#6b7f6a', fontWeight: 500 }}>{label}</label>
+      <label style={{ fontSize: '13px', color: '#6d7368', fontWeight: 500 }}>{label}</label>
 
       {/* Input caché pour le formulaire */}
       <input type="hidden" name={inputName} value={path} />
@@ -81,7 +81,7 @@ export default function KycDocumentUpload({ type, label, inputName, defaultPath 
         />
 
         {loading ? (
-          <div style={{ color: '#6b7f6a', fontSize: '14px' }}>
+          <div style={{ color: '#6d7368', fontSize: '14px' }}>
             <div style={{ marginBottom: '8px', fontSize: '20px' }}>⏳</div>
             Envoi en cours…
           </div>
@@ -89,7 +89,7 @@ export default function KycDocumentUpload({ type, label, inputName, defaultPath 
           <div>
             <div style={{ fontSize: '20px', marginBottom: '8px' }}>✅</div>
             <div style={{ fontSize: '13px', color: '#065f46', fontWeight: 500 }}>{fileName || 'Document enregistré'}</div>
-            <div style={{ fontSize: '11px', color: '#6b7f6a', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', color: '#6d7368', marginTop: '4px' }}>
               Cliquer pour remplacer
             </div>
           </div>
@@ -99,7 +99,7 @@ export default function KycDocumentUpload({ type, label, inputName, defaultPath 
             <div style={{ fontSize: '14px', color: FOREST, fontWeight: 500, marginBottom: '4px' }}>
               Glisser-déposer ou cliquer
             </div>
-            <div style={{ fontSize: '12px', color: '#6b7f6a' }}>JPG, PNG, PDF — max 10 Mo</div>
+            <div style={{ fontSize: '12px', color: '#6d7368' }}>JPG, PNG, PDF — max 10 Mo</div>
           </div>
         )}
       </div>

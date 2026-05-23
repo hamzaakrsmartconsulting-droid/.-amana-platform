@@ -13,9 +13,9 @@ import {
 import { AMANA_LOGO_BASE64 } from '@/lib/documents/logo-base64'
 import { AMANA_CONSEILLER_INFO } from '@/lib/documents/amana-conseiller-info'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
-const DARK = '#2a3829'
+const DARK = '#353b32'
 const GREY = '#666666'
 const CREAM = '#f8f4ec'
 const GREY_LIGHT = '#d1d4cf'

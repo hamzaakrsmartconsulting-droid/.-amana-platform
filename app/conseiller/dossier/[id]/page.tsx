@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import NouveauProjetForm from '@/components/NouveauProjetForm'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -115,7 +115,7 @@ export default async function DossierDetailPage({ params }: { params: Promise<{ 
 
   const row = (label: string, val: string | null) => val ? (
     <div style={{ display: 'flex', gap: '16px', padding: '12px 0', borderBottom: '1px solid #f0ebe0' }}>
-      <div style={{ width: '180px', fontSize: '12px', color: '#6b7f6a', textTransform: 'uppercase' as const, letterSpacing: '0.06em', flexShrink: 0, paddingTop: '2px' }}>
+      <div style={{ width: '180px', fontSize: '12px', color: '#6d7368', textTransform: 'uppercase' as const, letterSpacing: '0.06em', flexShrink: 0, paddingTop: '2px' }}>
         {label}
       </div>
       <div style={{ fontSize: '15px', color: FOREST }}>{val}</div>
@@ -123,8 +123,8 @@ export default async function DossierDetailPage({ params }: { params: Promise<{ 
   ) : null
 
   const section = (title: string, children: React.ReactNode) => (
-    <div style={{ background: 'white', borderRadius: '16px', padding: '28px 32px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)', marginBottom: '20px' }}>
-      <p style={{ fontSize: '12px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+    <div style={{ background: 'white', borderRadius: '16px', padding: '28px 32px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)', marginBottom: '20px' }}>
+      <p style={{ fontSize: '12px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
         {title}
       </p>
       {children}
@@ -135,7 +135,7 @@ export default async function DossierDetailPage({ params }: { params: Promise<{ 
     <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column' }}>
 
       {/* Header */}
-      <div style={{ background: '#2b3a2a', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#353b32', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <a href="/" style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em', textDecoration: 'none' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </a>
@@ -156,7 +156,7 @@ export default async function DossierDetailPage({ params }: { params: Promise<{ 
         {/* En-tete */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <p style={{ fontSize: '13px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
+            <p style={{ fontSize: '13px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
               Dossier client
             </p>
             <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: FOREST, margin: '0' }}>
@@ -201,8 +201,8 @@ export default async function DossierDetailPage({ params }: { params: Promise<{ 
 
         {/* Simulation */}
         {sim && (
-          <div style={{ background: 'white', borderRadius: '16px', padding: '28px 32px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)', marginBottom: '20px' }}>
-            <p style={{ fontSize: '12px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '28px 32px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)', marginBottom: '20px' }}>
+            <p style={{ fontSize: '12px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
               Simulation patrimoniale
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
@@ -212,14 +212,14 @@ export default async function DossierDetailPage({ params }: { params: Promise<{ 
                 { label: 'CTO', val: sim.montant_cto },
               ].map(p => (
                 <div key={p.label} style={{ textAlign: 'center', padding: '16px', background: CREAM, borderRadius: '10px' }}>
-                  <div style={{ fontSize: '11px', color: '#6b7f6a', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: '8px' }}>{p.label}</div>
+                  <div style={{ fontSize: '11px', color: '#6d7368', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: '8px' }}>{p.label}</div>
                   <div style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: FOREST }}>
                     {p.val > 0 ? `${p.val.toLocaleString('fr-FR')} EUR` : '-'}
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ fontSize: '13px', color: '#6b7f6a' }}>
+            <div style={{ fontSize: '13px', color: '#6d7368' }}>
               Total : {total.toLocaleString('fr-FR')} EUR &middot; TMI {sim.tmi}%
             </div>
           </div>
@@ -236,7 +236,7 @@ export default async function DossierDetailPage({ params }: { params: Promise<{ 
                     <div style={{ fontWeight: 600, color: FOREST, fontSize: '15px' }}>
                       {TYPE_LABEL[p.type] ?? p.type}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#6b7f6a', marginTop: '2px' }}>
+                    <div style={{ fontSize: '12px', color: '#6d7368', marginTop: '2px' }}>
                       {new Date(p.created_at).toLocaleDateString('fr-FR')}
                       {p.metadata?.notes && ` · ${p.metadata.notes}`}
                     </div>

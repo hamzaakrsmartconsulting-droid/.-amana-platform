@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 
@@ -111,7 +111,7 @@ export default function AdminProduitsPage() {
   const input: React.CSSProperties = {
     width: '100%', padding: '9px 12px',
     border: '1.5px solid #ddd5c8', borderRadius: 8,
-    fontSize: 13, color: '#2a3829', background: '#fafaf8',
+    fontSize: 13, color: '#353b32', background: '#fafaf8',
     outline: 'none', boxSizing: 'border-box',
     fontFamily: "'Inter', system-ui, sans-serif",
   }

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import FooterLegal from '@/components/footer-legal'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -105,7 +105,7 @@ export default function LettreMissionPage() {
   return (
     <div style={{ minHeight: '100vh', background: CREAM, fontFamily: 'system-ui, sans-serif' }}>
       <div style={{
-        background: '#2b3a2a',
+        background: '#353b32',
         padding: '0 40px',
         height: '64px',
         display: 'flex',

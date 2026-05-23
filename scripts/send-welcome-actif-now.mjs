@@ -37,15 +37,15 @@ const base = (content) =>
 <body style="margin:0;padding:0;background:#f8f4ec;font-family:system-ui,sans-serif;">
 <table width="100%"><tr><td align="center" style="padding:40px 16px;">
 <table width="600" style="background:white;border-radius:16px;">
-<tr><td style="background:#2b3a2a;padding:24px 40px;"><span style="font-family:Georgia,serif;color:#f8f4ec;">AMANA <span style="color:#c9a55a;">PATRIMOINE</span></span></td></tr>
+<tr><td style="background:#353b32;padding:24px 40px;"><span style="font-family:Georgia,serif;color:#f8f4ec;">AMANA <span style="color:#c9a55a;">PATRIMOINE</span></span></td></tr>
 <tr><td style="padding:40px;">${content}</td></tr>
 </table></td></tr></table></body></html>`
 
 const html = base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;">Bienvenue, ${prenom} !</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;">Bienvenue, ${prenom} !</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;">Votre souscription a bien été enregistrée. Votre dossier est désormais <strong>actif</strong> chez AMANA Patrimoine.</p>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:14px 32px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-weight:600;">Accéder à mon espace →</a>
-<p style="color:#6b7f6a;font-size:13px;margin-top:28px;">AMANA Patrimoine — ORIAS n° 25009552</p>
+<p style="color:#6d7368;font-size:13px;margin-top:28px;">AMANA Patrimoine — ORIAS n° 25009552</p>
 `)
 
 const transport = nodemailer.createTransport({

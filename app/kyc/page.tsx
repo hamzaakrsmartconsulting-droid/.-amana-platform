@@ -6,10 +6,10 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
-const DARK   = '#2a3829'
+const DARK   = '#353b32'
 
 const TOTAL_STEPS = 7
 
@@ -97,7 +97,7 @@ const init: KycState = {
 const card: CSSProperties = {
   background: 'white', borderRadius: 16, padding: 48,
   maxWidth: 640, width: '100%',
-  boxShadow: '0 4px 40px rgba(58,77,57,0.10)',
+  boxShadow: '0 4px 40px rgba(68,75,63,0.10)',
 }
 
 const btnPrimary: CSSProperties = {
@@ -185,7 +185,7 @@ function H({ children }: { children: React.ReactNode }) {
 function Sub({ children }: { children: React.ReactNode }) {
   return (
     <p style={{
-      color: '#6b7f6a', fontSize: 14, margin: '0 0 24px',
+      color: '#6d7368', fontSize: 14, margin: '0 0 24px',
       fontFamily: "'Inter', system-ui, sans-serif", lineHeight: 1.6,
     }}>
       {children}
@@ -476,7 +476,7 @@ export default function KycPage() {
           <div style={{ ...card, textAlign: 'center', maxWidth: 480 }}>
             <div style={{
               width: 64, height: 64, borderRadius: '50%',
-              background: 'rgba(58,77,57,0.1)', display: 'flex',
+              background: 'rgba(68,75,63,0.1)', display: 'flex',
               alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 24px', fontSize: 28, color: FOREST,
             }}>✓</div>
@@ -486,7 +486,7 @@ export default function KycPage() {
             }}>
               Dossier soumis
             </h2>
-            <p style={{ color: '#6b7f6a', fontSize: 14, marginBottom: 32, lineHeight: 1.7, fontFamily: "'Inter', system-ui, sans-serif" }}>
+            <p style={{ color: '#6d7368', fontSize: 14, marginBottom: 32, lineHeight: 1.7, fontFamily: "'Inter', system-ui, sans-serif" }}>
               Votre dossier KYC est en cours de vérification.<br />
               Vous recevrez une confirmation sous 24–48h.
             </p>
@@ -509,7 +509,7 @@ export default function KycPage() {
   return (
     <div style={{ minHeight: '100vh', background: CREAM, fontFamily: "'Inter', system-ui, sans-serif" }}>
       <style>{`
-        input:focus, select:focus { border-color: ${FOREST} !important; box-shadow: 0 0 0 3px rgba(58,77,57,0.1) !important; outline: none; }
+        input:focus, select:focus { border-color: ${FOREST} !important; box-shadow: 0 0 0 3px rgba(68,75,63,0.1) !important; outline: none; }
         @media (max-width: 640px) { .kyc-card { padding: 32px 20px !important; } .kyc-grid2 { grid-template-columns: 1fr !important; } }
       `}</style>
 

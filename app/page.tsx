@@ -1,4 +1,4 @@
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -7,7 +7,7 @@ export default function Home() {
     <div style={{ minHeight: '100vh', background: CREAM, fontFamily: 'system-ui, sans-serif' }}>
 
       {/* Header */}
-      <div style={{ background: '#2b3a2a', padding: '0 52px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
+      <div style={{ background: '#353b32', padding: '0 52px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
         <span style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </span>
@@ -55,7 +55,7 @@ export default function Home() {
       </div>
 
       {/* Chiffres cles */}
-      <div style={{ background: '#2b3a2a', padding: '56px 24px' }}>
+      <div style={{ background: '#353b32', padding: '56px 24px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0', textAlign: 'center' }}>
           {[
             { val: '100%', label: 'Produits certifiés halal' },
@@ -72,7 +72,7 @@ export default function Home() {
 
       {/* Solutions */}
       <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '80px 24px' }}>
-        <p style={{ fontSize: '13px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px', textAlign: 'center' }}>Nos solutions</p>
+        <p style={{ fontSize: '13px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px', textAlign: 'center' }}>Nos solutions</p>
         <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', color: FOREST, textAlign: 'center', margin: '0 0 48px' }}>
           Des produits sélectionnés pour vous
         </h2>
@@ -100,16 +100,16 @@ export default function Home() {
               tag: 'CTO',
             },
           ].map((s, i) => (
-            <div key={i} style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 16px rgba(58,77,57,0.07)' }}>
+            <div key={i} style={{ background: 'white', borderRadius: '16px', padding: '28px', boxShadow: '0 2px 16px rgba(68,75,63,0.07)' }}>
               <div style={{ fontSize: '32px', marginBottom: '16px' }}>{s.icon}</div>
-              <div style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '12px', background: CREAM, color: '#6b7f6a', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>
+              <div style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '12px', background: CREAM, color: '#6d7368', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>
                 {s.tag}
               </div>
               <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: FOREST, margin: '0 0 10px' }}>{s.titre}</h3>
               <p style={{ fontSize: '14px', color: '#4b5563', lineHeight: '1.6', margin: '0 0 20px' }}>{s.desc}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <div style={{ fontSize: '11px', color: '#6b7f6a', marginBottom: '2px' }}>Rendement indicatif</div>
+                  <div style={{ fontSize: '11px', color: '#6d7368', marginBottom: '2px' }}>Rendement indicatif</div>
                   <div style={{ fontFamily: 'Georgia, serif', fontSize: '18px', color: FOREST, fontWeight: 600 }}>{s.rendement}</div>
                 </div>
                 <a href="/catalogue" style={{ fontSize: '13px', color: GOLD, textDecoration: 'none', fontWeight: 500 }}>
@@ -129,7 +129,7 @@ export default function Home() {
       {/* Comment ca marche */}
       <div style={{ background: 'white', padding: '80px 24px' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <p style={{ fontSize: '13px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px', textAlign: 'center' }}>Processus</p>
+          <p style={{ fontSize: '13px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px', textAlign: 'center' }}>Processus</p>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', color: FOREST, textAlign: 'center', margin: '0 0 48px' }}>
             Simple, rapide, conforme
           </h2>
@@ -143,7 +143,7 @@ export default function Home() {
               <div key={i} style={{ padding: '0 20px', borderRight: i < 3 ? '1px solid #f0ebe0' : 'none', textAlign: 'center' }}>
                 <div style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: GOLD, fontWeight: 600, marginBottom: '12px' }}>{s.num}</div>
                 <h4 style={{ fontWeight: 600, color: FOREST, fontSize: '15px', marginBottom: '8px' }}>{s.titre}</h4>
-                <p style={{ fontSize: '13px', color: '#6b7f6a', lineHeight: '1.6' }}>{s.desc}</p>
+                <p style={{ fontSize: '13px', color: '#6d7368', lineHeight: '1.6' }}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -168,7 +168,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div style={{ background: '#1a2519', padding: '32px 52px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+      <div style={{ background: '#353b32', padding: '32px 52px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <span style={{ fontFamily: 'Georgia, serif', fontSize: '16px', color: 'rgba(248,244,236,0.5)', letterSpacing: '0.06em' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </span>

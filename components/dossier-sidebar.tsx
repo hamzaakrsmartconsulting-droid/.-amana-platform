@@ -12,10 +12,10 @@
 
 import { useState, useEffect, useCallback, type CSSProperties } from 'react'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
-const DARK = '#2a3829'
+const DARK = '#353b32'
 const GREY = '#666666'
 const GREY_LIGHT = '#e5e5e5'
 const RED = '#b91c1c'
@@ -225,7 +225,7 @@ export default function DossierSidebar() {
     position: 'relative',
   }
   const activeItem: CSSProperties = {
-    background: 'rgba(58,77,57,0.08)',
+    background: 'rgba(68,75,63,0.08)',
     borderColor: FOREST,
   }
   const itemContent: CSSProperties = { flex: 1 }

@@ -143,10 +143,10 @@ function base(content: string) {
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f8f4ec;font-family:system-ui,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:40px 16px;">
-<table width="600" cellpadding="0" cellspacing="0" style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(58,77,57,0.08);">
-<tr><td style="background:#2b3a2a;padding:24px 40px;"><span style="font-family:Georgia,serif;font-size:18px;color:#f8f4ec;letter-spacing:0.06em;">AMANA <span style="color:#c9a55a;">PATRIMOINE</span></span></td></tr>
+<table width="600" cellpadding="0" cellspacing="0" style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(68,75,63,0.08);">
+<tr><td style="background:#353b32;padding:24px 40px;"><span style="font-family:Georgia,serif;font-size:18px;color:#f8f4ec;letter-spacing:0.06em;">AMANA <span style="color:#c9a55a;">PATRIMOINE</span></span></td></tr>
 <tr><td style="padding:40px;">${content}</td></tr>
-<tr><td style="background:#f8f4ec;padding:20px 40px;border-top:1px solid #e8dfc8;"><p style="margin:0;font-size:12px;color:#6b7f6a;">AMANA Patrimoine — Cabinet de conseil en gestion de patrimoine islamique<br>Cet email a été envoyé automatiquement.</p></td></tr>
+<tr><td style="background:#f8f4ec;padding:20px 40px;border-top:1px solid #e8dfc8;"><p style="margin:0;font-size:12px;color:#6d7368;">AMANA Patrimoine — Cabinet de conseil en gestion de patrimoine islamique<br>Cet email a été envoyé automatiquement.</p></td></tr>
 </table></td></tr></table></body></html>`
 }
 
@@ -157,7 +157,7 @@ export function emailDerRemis(prenom: string, nom: string, magicLink: string) {
   return {
     subject: 'Bienvenue chez AMANA Patrimoine — Votre Document d\'Entrée en Relation',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Bienvenue, ${prenom} !</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Bienvenue, ${prenom} !</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 16px;">Merci de votre confiance. Votre espace AMANA Patrimoine est prêt.</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 16px;">
   Conformément à la réglementation (article L.541-8-1 CMF), vous trouverez en <strong>pièce jointe</strong>
@@ -168,8 +168,8 @@ export function emailDerRemis(prenom: string, nom: string, magicLink: string) {
   Cliquez sur le bouton ci-dessous pour accéder à votre espace client et compléter votre dossier :
 </p>
 <a href="${magicLink}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Accéder à mon espace AMANA →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 8px;">Ce lien est valable 24 heures. Si vous ne l'avez pas demandé, ignorez cet email.</p>
-<p style="color:#6b7f6a;font-size:13px;margin:0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 8px;">Ce lien est valable 24 heures. Si vous ne l'avez pas demandé, ignorez cet email.</p>
+<p style="color:#6d7368;font-size:13px;margin:0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.<br>
   Membre ANACOFI, activité sous le contrôle de l'AMF et de l'ACPR.
 </p>
@@ -180,7 +180,7 @@ export function emailDerRemis(prenom: string, nom: string, magicLink: string) {
 export function emailKycValide(prenom: string) {
   return {
     subject: 'Votre dossier KYC a été validé — AMANA Patrimoine',
-    html: base(`<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre dossier a été validé ✓</h2>
+    html: base(`<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre dossier a été validé ✓</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 24px;">Votre dossier KYC a été validé par votre conseiller AMANA. Vous pouvez désormais accéder au catalogue de produits halal.</p>
 <a href="${BASE_URL}/catalogue" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Découvrir le catalogue →</a>`),
@@ -200,18 +200,18 @@ export function emailKycValideEtPackPretASigner(
   return {
     subject: '[AMANA] Dossier validé — vos documents sont prêts à signer',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Bonne nouvelle, ${prenom} !</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Bonne nouvelle, ${prenom} !</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Votre dossier KYC a été validé par votre conseiller AMANA.</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 24px;">
   Votre pack réglementaire est prêt. Signez vos 3 documents en une seule session pour finaliser votre relation avec AMANA Patrimoine.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:8px;font-weight:600;">Documents à signer</td></tr>
-  <tr><td><ul style="margin:0;padding-left:20px;color:#3a4d39;font-size:14px;line-height:1.8;">${docList}</ul></td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:8px;font-weight:600;">Documents à signer</td></tr>
+  <tr><td><ul style="margin:0;padding-left:20px;color:#444b3f;font-size:14px;line-height:1.8;">${docList}</ul></td></tr>
 </table>
 <a href="${signingUrl}" style="display:inline-block;padding:14px 32px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;margin-bottom:8px;">Signer mes documents →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:16px 0 8px;">Ce lien est valable 30 jours. Vous recevrez également un email séparé de notre partenaire Yousign.</p>
-<p style="color:#6b7f6a;font-size:13px;margin:0;">
+<p style="color:#6d7368;font-size:13px;margin:16px 0 8px;">Ce lien est valable 30 jours. Vous recevrez également un email séparé de notre partenaire Yousign.</p>
+<p style="color:#6d7368;font-size:13px;margin:0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.<br>
   En cas de question, contactez votre conseiller par retour de cet email.
 </p>
@@ -222,10 +222,10 @@ export function emailKycValideEtPackPretASigner(
 export function emailKycRejete(prenom: string) {
   return {
     subject: 'Votre dossier KYC nécessite des compléments — AMANA Patrimoine',
-    html: base(`<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre dossier nécessite des compléments</h2>
+    html: base(`<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre dossier nécessite des compléments</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 24px;">Votre conseiller a identifié des informations à compléter. Connectez-vous pour prendre connaissance des détails.</p>
-<a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#3a4d39;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Accéder à mon espace →</a>`),
+<a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#444b3f;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Accéder à mon espace →</a>`),
   }
 }
 
@@ -233,17 +233,17 @@ export function emailKycSoumisAdmin(clientNom: string, dossierId: string, adminU
   return {
     subject: `[AMANA] KYC soumis — ${clientNom} est prêt pour validation`,
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:22px;margin:0 0 16px;">KYC soumis par un client</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:22px;margin:0 0 16px;">KYC soumis par un client</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 12px;">
-  Le client <strong style="color:#3a4d39;">${clientNom}</strong> vient de soumettre son dossier KYC complet.
+  Le client <strong style="color:#444b3f;">${clientNom}</strong> vient de soumettre son dossier KYC complet.
   Il est maintenant en attente de votre validation pour passer à l'étape <strong>KYC complet</strong>.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Dossier ID</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:14px;color:#3a4d39;">${dossierId}</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Dossier ID</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:14px;color:#444b3f;">${dossierId}</td></tr>
 </table>
 <a href="${adminUrl}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Valider le KYC →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:24px 0 0;">Retrouvez tous les KYC en attente sur <a href="${BASE_URL}/admin/validations" style="color:#3a4d39;">la page de validations admin</a>.</p>
+<p style="color:#6d7368;font-size:13px;margin:24px 0 0;">Retrouvez tous les KYC en attente sur <a href="${BASE_URL}/admin/validations" style="color:#444b3f;">la page de validations admin</a>.</p>
 `),
   }
 }
@@ -262,21 +262,21 @@ export function emailProjectSoumisAdmin(
   return {
     subject: `[AMANA] Nouvelle souscription — ${clientNom} · ${productNom}`,
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:22px;margin:0 0 16px;">Nouvelle souscription complémentaire</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:22px;margin:0 0 16px;">Nouvelle souscription complémentaire</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 12px;">
-  Le client <strong style="color:#3a4d39;">${clientNom}</strong> (déjà actif) vient de soumettre une nouvelle demande de souscription.
+  Le client <strong style="color:#444b3f;">${clientNom}</strong> (déjà actif) vient de soumettre une nouvelle demande de souscription.
   Elle apparaît dans le <strong>pipeline additionnel</strong> en étape <strong>Nouveau</strong> et attend la génération des documents (LM / RA / Bilan).
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 16px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Produit</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#3a4d39;font-weight:600;padding-bottom:10px;">${productNom}</td></tr>
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Montant</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#3a4d39;font-weight:600;padding-bottom:10px;">${montantEur.toLocaleString('fr-FR')} €</td></tr>
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Project ID</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:13px;color:#3a4d39;">${projectId}</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Produit</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#444b3f;font-weight:600;padding-bottom:10px;">${productNom}</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Montant</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#444b3f;font-weight:600;padding-bottom:10px;">${montantEur.toLocaleString('fr-FR')} €</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Project ID</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:13px;color:#444b3f;">${projectId}</td></tr>
 </table>
 <a href="${adminUrl}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Ouvrir le pipeline →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:24px 0 0;">Toutes les souscriptions en cours sont visibles sur <a href="${BASE_URL}/admin/pipeline" style="color:#3a4d39;">la page Pipeline admin</a>.</p>
+<p style="color:#6d7368;font-size:13px;margin:24px 0 0;">Toutes les souscriptions en cours sont visibles sur <a href="${BASE_URL}/admin/pipeline" style="color:#444b3f;">la page Pipeline admin</a>.</p>
 `),
   }
 }
@@ -285,16 +285,16 @@ export function emailValidationRequired(gateName: string, dossierNom: string, ur
   return {
     subject: `[AMANA] Action requise — ${gateName} · ${dossierNom}`,
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:22px;margin:0 0 16px;">Validation requise</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:22px;margin:0 0 16px;">Validation requise</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 12px;">
-  Le dossier <strong style="color:#3a4d39;">${dossierNom}</strong> nécessite votre validation pour continuer le parcours réglementaire.
+  Le dossier <strong style="color:#444b3f;">${dossierNom}</strong> nécessite votre validation pour continuer le parcours réglementaire.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Verrou à valider</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:16px;color:#3a4d39;font-weight:600;">${gateName}</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Verrou à valider</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:16px;color:#444b3f;font-weight:600;">${gateName}</td></tr>
 </table>
 <a href="${url}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Valider maintenant →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:24px 0 0;">Accédez à <a href="${BASE_URL}/admin/validations" style="color:#3a4d39;">la page de validations</a> pour tous les dossiers en attente.</p>
+<p style="color:#6d7368;font-size:13px;margin:24px 0 0;">Accédez à <a href="${BASE_URL}/admin/validations" style="color:#444b3f;">la page de validations</a> pour tous les dossiers en attente.</p>
 `),
   }
 }
@@ -305,22 +305,22 @@ export function emailDocumentPretASigner(prenom: string, nomDocument: string, si
   const ctaBlock = signingUrl
     ? `<a href="${signingUrl}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Signer le document →</a>`
     : `<a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Accéder à mon espace →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:12px 0 0;">Vous recevrez également un email séparé de Yousign contenant le lien de signature.</p>`
+<p style="color:#6d7368;font-size:13px;margin:12px 0 0;">Vous recevrez également un email séparé de Yousign contenant le lien de signature.</p>`
   return {
     subject: `[AMANA] Votre ${nomDocument} est prêt à signer`,
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Document prêt à signer</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Document prêt à signer</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Votre conseiller AMANA Patrimoine a préparé votre <strong>${nomDocument}</strong>
   et vous invite à en prendre connaissance puis à le signer électroniquement.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 28px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Document</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:16px;color:#3a4d39;font-weight:600;">${nomDocument}</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Document</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:16px;color:#444b3f;font-weight:600;">${nomDocument}</td></tr>
 </table>
 ${ctaBlock}
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.<br>
   En cas de question, contactez votre conseiller par retour de cet email.
 </p>
@@ -332,18 +332,18 @@ export function emailSignatureInvitation(prenom: string, nomDocument: string, si
   return {
     subject: `[AMANA] Votre document est prêt à signer — ${nomDocument}`,
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Document prêt à signer</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Document prêt à signer</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Votre conseiller AMANA Patrimoine a préparé un document nécessitant votre signature électronique.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 28px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Document à signer</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:16px;color:#3a4d39;font-weight:600;">${nomDocument}</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Document à signer</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:16px;color:#444b3f;font-weight:600;">${nomDocument}</td></tr>
 </table>
 <a href="${signingUrl}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Signer le document →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:24px 0 0;">Ce lien est valable 14 jours. Si vous ne l'avez pas demandé, contactez votre conseiller.</p>
-<p style="color:#6b7f6a;font-size:13px;margin:8px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:24px 0 0;">Ce lien est valable 14 jours. Si vous ne l'avez pas demandé, contactez votre conseiller.</p>
+<p style="color:#6d7368;font-size:13px;margin:8px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.
 </p>
 `),
@@ -354,7 +354,7 @@ export function emailSignatureConfirmation(prenom: string, nomDocument: string) 
   return {
     subject: `[AMANA] Document signé — ${nomDocument}`,
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Signature confirmée ✓</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Signature confirmée ✓</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Votre signature électronique pour le document <strong>${nomDocument}</strong> a bien été enregistrée.
@@ -363,7 +363,7 @@ export function emailSignatureConfirmation(prenom: string, nomDocument: string) 
   Votre conseiller AMANA a été notifié. La prochaine étape du parcours sera initiée sous peu.
 </p>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Voir mon espace →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.
 </p>
 `),
@@ -374,7 +374,7 @@ export function emailBilanPret(prenom: string) {
   return {
     subject: 'Votre Bilan Patrimonial est disponible — AMANA Patrimoine',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre Bilan Patrimonial est prêt</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre Bilan Patrimonial est prêt</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Votre conseiller AMANA a finalisé votre <strong>Bilan Patrimonial</strong>. Ce document analyse votre situation patrimoniale actuelle et constitue la base de nos recommandations d'investissement halal.
@@ -383,7 +383,7 @@ export function emailBilanPret(prenom: string) {
   Votre conseiller vous contactera prochainement pour vous présenter les conclusions de ce bilan et la prochaine étape de votre parcours.
 </p>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Accéder à mon espace →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.
 </p>
 `),
@@ -394,17 +394,17 @@ export function emailProfilRisquePret(prenom: string) {
   return {
     subject: 'Votre Profil de Risque Investisseur — AMANA Patrimoine',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre Profil de Risque Investisseur a été déterminé</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre Profil de Risque Investisseur a été déterminé</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Suite à l'analyse de vos réponses, votre <strong>Profil de Risque Investisseur</strong> a été établi par votre conseiller AMANA. Ce profil détermine l'univers des solutions halal adaptées à votre situation.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;">Prochaine étape</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#3a4d39;font-weight:600;">Lettre de Mission — engagement de conseil</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;">Prochaine étape</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#444b3f;font-weight:600;">Lettre de Mission — engagement de conseil</td></tr>
 </table>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Voir mon espace →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.
 </p>
 `),
@@ -415,13 +415,13 @@ export function emailReportingTrimestriel(prenom: string, trimestre: string, ann
   return {
     subject: `Reporting trimestre ${trimestre} ${annee} — AMANA Patrimoine`,
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre Reporting Trimestriel est disponible</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre Reporting Trimestriel est disponible</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Votre rapport de suivi <strong>Trimestre ${trimestre} ${annee}</strong> est disponible dans votre espace AMANA. Il retrace l'évolution de vos investissements halal sur la période.
 </p>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Consulter mon reporting →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.<br>
   Conformément à l'article 25 MIF II, ce reporting vous est adressé périodiquement.
 </p>
@@ -433,17 +433,17 @@ export function emailBilanAnnuel(prenom: string) {
   return {
     subject: 'Bilan annuel — Réévaluation de votre profil — AMANA Patrimoine',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre Bilan Annuel est disponible</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre Bilan Annuel est disponible</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   L'anniversaire de votre mission AMANA approche. Votre conseiller a préparé votre <strong>Bilan Annuel</strong> incluant la mise à jour de votre situation patrimoniale et, le cas échéant, de nouvelles recommandations d'adéquation.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Conformité</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:14px;color:#3a4d39;">Article 25 MIF II — Rapport périodique d'adéquation annuel</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Conformité</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:14px;color:#444b3f;">Article 25 MIF II — Rapport périodique d'adéquation annuel</td></tr>
 </table>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Consulter mon bilan annuel →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.
 </p>
 `),
@@ -459,18 +459,18 @@ export function emailPackReglementairePretASigner(
   return {
     subject: '[AMANA] Votre dossier réglementaire est prêt à signer',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre dossier réglementaire est prêt</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre dossier réglementaire est prêt</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Votre conseiller AMANA Patrimoine a préparé l'ensemble de votre dossier réglementaire. Vous pouvez désormais signer tous vos documents en une seule session.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:8px;font-weight:600;">Documents à signer</td></tr>
-  <tr><td><ul style="margin:0;padding-left:20px;color:#3a4d39;font-size:14px;line-height:1.8;">${docList}</ul></td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:8px;font-weight:600;">Documents à signer</td></tr>
+  <tr><td><ul style="margin:0;padding-left:20px;color:#444b3f;font-size:14px;line-height:1.8;">${docList}</ul></td></tr>
 </table>
 <a href="${signingUrl}" style="display:inline-block;padding:14px 32px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Signer mes documents →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:24px 0 8px;">Ce lien est valable 30 jours. Vous recevrez également un email de Yousign avec ce même lien.</p>
-<p style="color:#6b7f6a;font-size:13px;margin:0;">
+<p style="color:#6d7368;font-size:13px;margin:24px 0 8px;">Ce lien est valable 30 jours. Vous recevrez également un email de Yousign avec ce même lien.</p>
+<p style="color:#6d7368;font-size:13px;margin:0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.<br>
   En cas de question, contactez votre conseiller par retour de cet email.
 </p>
@@ -483,13 +483,13 @@ export function emailBienvenueClientActif(prenom: string) {
   return {
     subject: 'Bienvenue — Votre relation client AMANA Patrimoine est active',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Bienvenue, ${prenom} !</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Bienvenue, ${prenom} !</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 16px;">
   Votre souscription a bien été enregistrée. Votre dossier est désormais <strong>actif</strong> chez AMANA Patrimoine : vous êtes officiellement accompagné par notre équipe.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:8px;font-weight:600;">À partir de maintenant</td></tr>
-  <tr><td style="color:#3a4d39;font-size:14px;line-height:1.8;">
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:8px;font-weight:600;">À partir de maintenant</td></tr>
+  <tr><td style="color:#444b3f;font-size:14px;line-height:1.8;">
     <ul style="margin:0;padding-left:20px;">
       <li>Accédez à votre espace client pour suivre vos documents et votre parcours.</li>
       <li>Votre conseiller reste votre interlocuteur privilégié pour toute question.</li>
@@ -498,10 +498,10 @@ export function emailBienvenueClientActif(prenom: string) {
   </td></tr>
 </table>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:14px 32px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Accéder à mon espace →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 8px;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 8px;">
   Pour toute question, répondez à cet email ou contactez votre conseiller.
 </p>
-<p style="color:#6b7f6a;font-size:13px;margin:0;">
+<p style="color:#6d7368;font-size:13px;margin:0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.<br>
   Membre ANACOFI — activité sous le contrôle de l'AMF et de l'ACPR.
 </p>
@@ -513,17 +513,17 @@ export function emailPackReglementaireSigne(prenom: string) {
   return {
     subject: '[AMANA] Dossier réglementaire signé — Merci',
     html: base(`
-<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Signatures enregistrées ✓</h2>
+<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Signatures enregistrées ✓</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 8px;">Bonjour ${prenom},</p>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">
   Votre signature électronique a bien été enregistrée pour l'ensemble de votre dossier réglementaire (DER, Lettre de Mission, Rapport d'Adéquation).
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Prochaine étape</td></tr>
-  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#3a4d39;font-weight:600;">Votre conseiller va préparer la souscription aux solutions sélectionnées</td></tr>
+  <tr><td style="font-size:13px;color:#6d7368;padding-bottom:4px;">Prochaine étape</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#444b3f;font-weight:600;">Votre conseiller va préparer la souscription aux solutions sélectionnées</td></tr>
 </table>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Voir mon espace →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">
   AMANA Patrimoine est CIF/COA/COBSP enregistré à l'ORIAS sous le n° 25009552.
 </p>
 `),
@@ -533,13 +533,13 @@ export function emailPackReglementaireSigne(prenom: string) {
 export function emailProjetActif(prenom: string, nomProduit: string, montant: number) {
   return {
     subject: `Votre investissement ${nomProduit} est actif — AMANA Patrimoine`,
-    html: base(`<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Votre investissement est actif 🎉</h2>
+    html: base(`<h2 style="font-family:Georgia,serif;color:#444b3f;font-size:24px;margin:0 0 16px;">Votre investissement est actif 🎉</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 20px;">Bonjour ${prenom},</p>
 <table style="background:#f8f4ec;border-radius:12px;padding:20px 24px;margin:0 0 28px;width:100%;box-sizing:border-box;">
-<tr><td style="font-size:13px;color:#6b7f6a;">Produit</td><td style="font-family:Georgia,serif;font-size:16px;color:#3a4d39;text-align:right;font-weight:600;">${nomProduit}</td></tr>
-<tr><td style="font-size:13px;color:#6b7f6a;">Montant</td><td style="font-family:Georgia,serif;font-size:16px;color:#3a4d39;text-align:right;font-weight:600;">${montant.toLocaleString('fr-FR')} €</td></tr>
+<tr><td style="font-size:13px;color:#6d7368;">Produit</td><td style="font-family:Georgia,serif;font-size:16px;color:#444b3f;text-align:right;font-weight:600;">${nomProduit}</td></tr>
+<tr><td style="font-size:13px;color:#6d7368;">Montant</td><td style="font-family:Georgia,serif;font-size:16px;color:#444b3f;text-align:right;font-weight:600;">${montant.toLocaleString('fr-FR')} €</td></tr>
 </table>
 <a href="${BASE_URL}/dashboard" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Voir mon portefeuille →</a>
-<p style="color:#6b7f6a;font-size:13px;margin:28px 0 0;">Barak Allahu fik pour votre confiance.</p>`),
+<p style="color:#6d7368;font-size:13px;margin:28px 0 0;">Barak Allahu fik pour votre confiance.</p>`),
   }
 }

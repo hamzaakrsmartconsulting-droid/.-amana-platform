@@ -8,7 +8,7 @@ import AgentSwitcher from '@/components/agent-switcher'
 
 const CREAM = '#f8f4ec'
 const GREY = '#666666'
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 
 export const metadata = {
   title: 'Assistant Mizan Bilan · AMANA Patrimoine',

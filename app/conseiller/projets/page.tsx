@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import SignatureButton from '@/components/SignatureButton'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -52,7 +52,7 @@ export default async function ProjetsPage() {
     <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column' }}>
 
       {/* Header */}
-      <div style={{ background: '#2b3a2a', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#353b32', padding: '0 52px', height: '68px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <a href="/" style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em', textDecoration: 'none' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </a>
@@ -72,7 +72,7 @@ export default async function ProjetsPage() {
 
         {/* Titre */}
         <div style={{ marginBottom: '40px' }}>
-          <p style={{ fontSize: '13px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Pipeline</p>
+          <p style={{ fontSize: '13px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Pipeline</p>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: FOREST, margin: '0' }}>
             Projets patrimoniaux
           </h1>
@@ -80,21 +80,21 @@ export default async function ProjetsPage() {
 
         {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr) repeat(4, 1fr)', gap: '16px', marginBottom: '40px' }}>
-          <div style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)' }}>
-            <div style={{ fontSize: '11px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Total encours</div>
+          <div style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)' }}>
+            <div style={{ fontSize: '11px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Total encours</div>
             <div style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: FOREST, fontWeight: 600 }}>
               {totalMontant.toLocaleString('fr-FR')} <span style={{ fontSize: '13px' }}>EUR</span>
             </div>
           </div>
-          <div style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)' }}>
-            <div style={{ fontSize: '11px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Actifs</div>
+          <div style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)' }}>
+            <div style={{ fontSize: '11px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Actifs</div>
             <div style={{ fontFamily: 'Georgia, serif', fontSize: '22px', color: '#065f46', fontWeight: 600 }}>
               {totalActif.toLocaleString('fr-FR')} <span style={{ fontSize: '13px' }}>EUR</span>
             </div>
           </div>
           {STATS_CONF.map(s => (
-            <div key={s.key} style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(58,77,57,0.06)' }}>
-              <div style={{ fontSize: '11px', color: '#6b7f6a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>{s.label}</div>
+            <div key={s.key} style={{ background: 'white', borderRadius: '12px', padding: '20px 24px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)' }}>
+              <div style={{ fontSize: '11px', color: '#6d7368', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>{s.label}</div>
               <div style={{ fontFamily: 'Georgia, serif', fontSize: '32px', color: s.color, fontWeight: 600 }}>
                 {projects?.filter(p => p.statut === s.key).length ?? 0}
               </div>
@@ -104,7 +104,7 @@ export default async function ProjetsPage() {
 
         {/* Liste projets */}
         {!projects || projects.length === 0 ? (
-          <div style={{ background: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', color: '#6b7f6a' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '48px', textAlign: 'center', color: '#6d7368' }}>
             Aucun projet. Validez un dossier KYC et créez le premier projet.
           </div>
         ) : (
@@ -115,14 +115,14 @@ export default async function ProjetsPage() {
               const nomClient = client ? `${client.prenom} ${client.nom}` : '—'
 
               return (
-                <div key={p.id} style={{ background: 'white', borderRadius: '14px', padding: '20px 28px', boxShadow: '0 2px 8px rgba(58,77,57,0.06)', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+                <div key={p.id} style={{ background: 'white', borderRadius: '14px', padding: '20px 28px', boxShadow: '0 2px 8px rgba(68,75,63,0.06)', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
 
                   {/* Client + type */}
                   <div style={{ flex: 2, minWidth: '200px' }}>
                     <div style={{ fontWeight: 600, color: FOREST, fontSize: '15px', marginBottom: '3px' }}>
                       {nomClient}
                     </div>
-                    <div style={{ fontSize: '13px', color: '#6b7f6a' }}>
+                    <div style={{ fontSize: '13px', color: '#6d7368' }}>
                       {TYPE_LABEL[p.type] ?? p.type}
                       {client?.ville ? ` · ${client.ville}` : ''}
                     </div>
@@ -133,7 +133,7 @@ export default async function ProjetsPage() {
                     <div style={{ fontFamily: 'Georgia, serif', fontSize: '18px', color: FOREST }}>
                       {Number(p.montant).toLocaleString('fr-FR')} EUR
                     </div>
-                    <div style={{ fontSize: '11px', color: '#6b7f6a', marginTop: '2px' }}>
+                    <div style={{ fontSize: '11px', color: '#6d7368', marginTop: '2px' }}>
                       {new Date(p.created_at).toLocaleDateString('fr-FR')}
                     </div>
                   </div>

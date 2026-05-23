@@ -3,9 +3,9 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
-const DARK   = '#1e2e1d'
+const DARK   = '#353b32'
 
 const NAV = [
   {
@@ -185,13 +185,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           position: 'sticky', top: 0, zIndex: 40,
         }}>
-          <div style={{ fontSize: 13, color: '#8a9a89', fontFamily: "'Inter', system-ui, sans-serif" }}>
+          <div style={{ fontSize: 13, color: '#6d7368', fontFamily: "'Inter', system-ui, sans-serif" }}>
             {NAV.find(n => n.href === pathname || (n.href !== '/admin' && pathname.startsWith(n.href)))?.label ?? 'Admin'}
           </div>
           <div style={{
             fontSize: 11, color: FOREST, fontWeight: 600,
             fontFamily: "'Inter', system-ui, sans-serif",
-            background: 'rgba(58,77,57,0.06)', padding: '4px 10px', borderRadius: 20,
+            background: 'rgba(68,75,63,0.06)', padding: '4px 10px', borderRadius: 20,
             letterSpacing: '0.08em', textTransform: 'uppercase',
           }}>
             Admin

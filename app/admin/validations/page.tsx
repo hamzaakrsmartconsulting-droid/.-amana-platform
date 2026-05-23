@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 
 const GATE_LABEL: Record<string, string> = {
@@ -435,7 +435,7 @@ export default function AdminValidationsPage() {
 
             {/* ── Pièces justificatives KYC (V1 uniquement) ──────────────────── */}
             {review.gateType === 'kyc_validation' && (
-              <div style={{ background: '#0f1f0e', borderBottom: '1px solid #2a3a29', padding: '10px 16px' }}>
+              <div style={{ background: '#353b32', borderBottom: '1px solid #444b3f', padding: '10px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                   <span style={{ color: '#86efac', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
                     📎 Pièces justificatives client
@@ -570,7 +570,7 @@ export default function AdminValidationsPage() {
                 <div style={{ fontSize: 11, color: '#8a9a89', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase' }}>
                   Contexte
                 </div>
-                <div style={{ fontSize: 12, color: '#3a4d39', lineHeight: 1.6 }}>
+                <div style={{ fontSize: 12, color: '#444b3f', lineHeight: 1.6 }}>
                   {GATE_DESCRIPTION[review.gateType]}
                 </div>
                 <div style={{ fontSize: 11, color: '#aaa', marginTop: 8 }}>

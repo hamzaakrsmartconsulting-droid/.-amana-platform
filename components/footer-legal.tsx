@@ -2,11 +2,12 @@
 // Exemple: NEXT_PUBLIC_ORIAS_NUM=12345678
 const ORIAS_NUM = process.env.NEXT_PUBLIC_ORIAS_NUM ?? '00000000'
 const GOLD = '#c9a55a'
+const DARK = '#353b32'
 
 export default function FooterLegal() {
   return (
     <footer style={{
-      background: '#1a2519',
+      background: DARK,
       padding: '24px 40px',
       fontFamily: 'system-ui, sans-serif',
     }}>

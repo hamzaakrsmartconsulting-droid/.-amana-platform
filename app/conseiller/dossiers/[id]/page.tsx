@@ -9,7 +9,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 const GREY = '#666666'
@@ -233,7 +233,7 @@ export default function ConseillerDossierPage() {
               ].map(([label, val]) => (
                 <tr key={label}>
                   <td style={{ color: GREY, padding: '4px 0', width: '200px' }}>{label}</td>
-                  <td style={{ color: '#2a3829' }}>{val ?? '—'}</td>
+                  <td style={{ color: '#353b32' }}>{val ?? '—'}</td>
                 </tr>
               ))}
             </tbody>

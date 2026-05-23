@@ -34,7 +34,7 @@ export const getTenant = cache(async (): Promise<Tenant> => {
       id: '',
       slug: 'amana',
       name: 'Amana Patrimoine',
-      config: { primary_color: '#c9a55a', secondary_color: '#3a4d39' },
+      config: { primary_color: '#c9a55a', secondary_color: '#444b3f' },
     }
   }
 

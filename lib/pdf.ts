@@ -1,10 +1,10 @@
 import { PDFDocument, rgb, StandardFonts, PDFPage, PDFFont } from 'pdf-lib'
 
 // Couleurs AMANA
-const FOREST = rgb(0.227, 0.302, 0.224)   // #3a4d39
+const FOREST = rgb(0.267, 0.294, 0.247)   // #444b3f
 const GOLD   = rgb(0.788, 0.647, 0.353)   // #c9a55a
-const DARK   = rgb(0.169, 0.224, 0.165)   // #2b3a2a
-const GRAY   = rgb(0.42, 0.498, 0.416)    // #6b7f6a
+const DARK   = rgb(0.208, 0.231, 0.196)   // #353b32
+const GRAY   = rgb(0.427, 0.451, 0.408)   // #6d7368
 const LIGHT  = rgb(0.973, 0.957, 0.925)   // #f8f4ec
 const BLACK  = rgb(0.18, 0.18, 0.18)
 

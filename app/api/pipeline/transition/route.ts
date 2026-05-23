@@ -10,8 +10,9 @@ import {
   type TriggeredBy,
 } from '@/lib/workflow/workflow-service'
 
-/** Colonne Kanban LM/RA/KYC/Bilan — pas de déplacement manuel depuis le board. */
-const LM_RA_KANBAN_COLUMN_STAGES = new Set<PipelineStage>([
+/** KYC complet + colonne LM/RA — pas de déplacement manuel depuis le Kanban. */
+const KANBAN_READONLY_STAGES = new Set<PipelineStage>([
+  'kyc_complet',
   'lm_envoyee',
   'der_envoye',
   'der_signe',
@@ -81,12 +82,12 @@ export async function POST(request: NextRequest) {
       .eq('id', body.dossier_id)
       .maybeSingle()
     const current = dossier?.pipeline_stage as PipelineStage | undefined
-    if (current && LM_RA_KANBAN_COLUMN_STAGES.has(current)) {
+    if (current && KANBAN_READONLY_STAGES.has(current)) {
       return NextResponse.json(
         {
           ok: false,
           error:
-            'Déplacement Kanban désactivé pour la colonne LM/RA/KYC/Bilan. Utilisez la fiche dossier ou les transitions automatiques (Yousign, validations).',
+            'Déplacement Kanban désactivé (KYC complet / LM·RA). Utilisez la fiche dossier, Validations ou Yousign.',
         },
         { status: 403 },
       )

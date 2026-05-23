@@ -1,6 +1,6 @@
 'use client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 
 interface CoutProduit {

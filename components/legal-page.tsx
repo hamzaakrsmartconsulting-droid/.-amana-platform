@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import AmanaHeader, { UserAvatar } from '@/components/amana-header'
 import { useRouter } from 'next/navigation'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 

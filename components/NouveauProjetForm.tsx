@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { CSSProperties, ChangeEvent } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
 
@@ -23,7 +23,7 @@ const inp: CSSProperties = {
   borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box',
 }
 const lbl: CSSProperties = {
-  display: 'block', fontSize: '12px', fontWeight: 500, color: '#6b7f6a',
+  display: 'block', fontSize: '12px', fontWeight: 500, color: '#6d7368',
   textTransform: 'uppercase', letterSpacing: '0.05em',
   marginBottom: '6px', marginTop: '20px',
 }
@@ -116,7 +116,7 @@ export default function NouveauProjetForm({ kycId, userId, tenantId, conseillerN
             }}
           >
             <div style={{ fontWeight: 600, color: FOREST, fontSize: '14px', marginBottom: '2px' }}>{t.label}</div>
-            <div style={{ fontSize: '11px', color: '#6b7f6a' }}>{t.desc}</div>
+            <div style={{ fontSize: '11px', color: '#6d7368' }}>{t.desc}</div>
           </button>
         ))}
       </div>

@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader, { UserAvatar } from '@/components/amana-header'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 
@@ -41,7 +41,7 @@ function OnboardingCard({ card }: { card: StepCard }) {
       border: `1px solid ${card.status === 'incomplete' && card.cta ? '#e8d8a0' : '#e8e0d0'}`,
       boxShadow: card.status === 'incomplete' && card.cta
         ? '0 2px 16px rgba(201,165,90,0.12)'
-        : '0 1px 4px rgba(42,56,41,0.05)',
+        : '0 1px 4px rgba(68,75,63,0.05)',
       display: 'flex', flexDirection: 'column', gap: 12,
       opacity: isLocked ? 0.55 : 1,
     }}>
@@ -59,7 +59,7 @@ function OnboardingCard({ card }: { card: StepCard }) {
       </p>
       {card.detail && card.status === 'complete' && (
         <div style={{
-          fontSize: 12, color: '#4d6349', fontWeight: 600,
+          fontSize: 12, color: '#5a6354', fontWeight: 600,
           padding: '6px 12px', background: '#f0f6f0', borderRadius: 8,
           fontFamily: "'Inter', system-ui, sans-serif",
           display: 'inline-block', width: 'fit-content',
@@ -235,11 +235,11 @@ export default function DashboardPage() {
 
         {/* Wealth summary card */}
         <div style={{
-          background: `linear-gradient(135deg, #2a3829 0%, #4d6349 100%)`,
+          background: `linear-gradient(135deg, #353b32 0%, #5a6354 100%)`,
           borderRadius: 18, padding: '24px 28px',
           margin: '-20px 0 24px',
           border: '1px solid rgba(201,165,90,0.2)',
-          boxShadow: '0 8px 32px rgba(42,56,41,0.18)',
+          boxShadow: '0 8px 32px rgba(68,75,63,0.18)',
           position: 'relative', overflow: 'hidden',
         }}>
           {/* Gold orb */}
@@ -389,7 +389,7 @@ export default function DashboardPage() {
         {/* Conseiller CTA */}
         <div style={{
           marginTop: 8,
-          background: `linear-gradient(135deg, ${FOREST} 0%, #4d6349 100%)`,
+          background: `linear-gradient(135deg, ${FOREST} 0%, #5a6354 100%)`,
           borderRadius: 14, padding: '20px 24px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
         }}>

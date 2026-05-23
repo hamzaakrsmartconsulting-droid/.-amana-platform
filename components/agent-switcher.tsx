@@ -9,7 +9,7 @@
 import Link from 'next/link'
 import type { CSSProperties } from 'react'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 
 export type AgentTab = {
@@ -116,8 +116,8 @@ export default function AgentSwitcher({ activeId }: Props) {
           alignItems: 'center',
           gap: 8,
           padding: '8px 16px',
-          background: isActive ? agent.color : 'rgba(58, 77, 57, 0.08)',
-          color: isActive ? '#f8f4ec' : '#3a4d39',
+          background: isActive ? agent.color : 'rgba(68, 75, 63, 0.08)',
+          color: isActive ? '#f8f4ec' : '#444b3f',
           borderRadius: 999,
           fontSize: 13,
           fontWeight: 500,

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 
 interface Setting {
   key:       string
@@ -116,7 +116,7 @@ export default function AdminSettingsPage() {
                           width: '100%', padding: '10px 14px',
                           border: '1.5px solid #ddd5c8', borderRadius: 8,
                           fontSize: 13, fontFamily: "'Inter', system-ui, sans-serif",
-                          color: '#2a3829', background: '#fafaf8',
+                          color: '#353b32', background: '#fafaf8',
                           resize: 'vertical', outline: 'none',
                           boxSizing: 'border-box', lineHeight: 1.6,
                         }}
@@ -129,7 +129,7 @@ export default function AdminSettingsPage() {
                           width: '100%', padding: '10px 14px',
                           border: '1.5px solid #ddd5c8', borderRadius: 8,
                           fontSize: 13, fontFamily: "'Inter', system-ui, sans-serif",
-                          color: '#2a3829', background: '#fafaf8', outline: 'none',
+                          color: '#353b32', background: '#fafaf8', outline: 'none',
                           boxSizing: 'border-box',
                         }}
                       />

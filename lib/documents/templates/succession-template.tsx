@@ -37,9 +37,9 @@ import {
 import { AMANA_LOGO_BASE64 } from '@/lib/documents/logo-base64'
 import { AMANA_CONSEILLER_INFO } from '@/lib/documents/amana-conseiller-info'
 
-const FOREST = '#3a4d39'
+const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
-const DARK = '#2a3829'
+const DARK = '#353b32'
 const GREY = '#666666'
 const CREAM = '#f8f4ec'
 const GREY_LIGHT = '#d1d4cf'
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 
   notice: { backgroundColor: CREAM, padding: 12, borderLeftWidth: 3, borderLeftColor: GOLD, borderLeftStyle: 'solid', marginBottom: 14, fontSize: 9.5 },
   warningBox: { backgroundColor: '#fef3c7', padding: 10, borderLeftWidth: 3, borderLeftColor: '#d97706', borderLeftStyle: 'solid', marginBottom: 12, fontSize: 9.5, color: '#7c2d12' },
-  ecartPositif: { color: '#3a4d39' },
+  ecartPositif: { color: '#444b3f' },
   ecartNegatif: { color: '#b91c1c' },
 
   bigKpi: { backgroundColor: SOFT_GREY, padding: 12, marginBottom: 8, borderRadius: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
