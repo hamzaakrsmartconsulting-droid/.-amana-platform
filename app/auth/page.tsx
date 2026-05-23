@@ -52,6 +52,84 @@ function AuthPageInner() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [linkExpired, setLinkExpired] = useState(false)
+  const [magicLinkLoading, setMagicLinkLoading] = useState(false)
+
+  async function redirectAfterAuth() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return false
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    const role = profile?.role ?? 'client'
+    const nextParam = searchParams.get('next')
+    const dest =
+      role === 'client' && nextParam?.startsWith('/')
+        ? nextParam
+        : REDIRECT[role] ?? '/dashboard'
+
+    router.replace(dest)
+    return true
+  }
+
+  // Magic link Supabase : tokens dans #access_token (flow hash) → session + dashboard
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const hash = window.location.hash
+    if (!hash || hash.length < 2) return
+
+    const params = new URLSearchParams(hash.slice(1))
+
+    if (params.get('error')) return
+
+    const accessToken = params.get('access_token')
+    const refreshToken = params.get('refresh_token')
+    if (!accessToken || !refreshToken) return
+
+    let cancelled = false
+
+    ;(async () => {
+      setMagicLinkLoading(true)
+      setError('')
+      setLinkExpired(false)
+
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      })
+
+      window.history.replaceState(
+        null,
+        '',
+        window.location.pathname + window.location.search,
+      )
+
+      if (cancelled) return
+
+      if (sessionError) {
+        setError(sessionError.message)
+        setMagicLinkLoading(false)
+        return
+      }
+
+      const ok = await redirectAfterAuth()
+      if (!ok && !cancelled) {
+        setError('Connexion impossible. Utilisez votre email et mot de passe ci-dessous.')
+        setMagicLinkLoading(false)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on hash at mount
+  }, [])
 
   // Lire les erreurs transmises par /auth/callback ou Supabase dans l'URL
   useEffect(() => {
@@ -86,7 +164,6 @@ function AuthPageInner() {
           ? 'Votre lien de connexion a expiré (valable 24 h). Connectez-vous avec votre email et mot de passe ci-dessous.'
           : `Erreur d'authentification : ${hashError}`
         )
-        // Nettoyer le hash de l'URL
         window.history.replaceState(null, '', window.location.pathname + window.location.search)
       }
     }
@@ -106,26 +183,8 @@ function AuthPageInner() {
       setLoading(false)
       return
     }
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (user) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-      const role = profile?.role ?? 'client'
-      // Respecter le param `next` uniquement pour les clients (sécurité)
-      const nextParam = searchParams.get('next')
-      const dest =
-        role === 'client' && nextParam?.startsWith('/')
-          ? nextParam
-          : REDIRECT[role] ?? '/dashboard'
-      router.push(dest)
-      return
-    }
-    router.push('/dashboard')
+    const ok = await redirectAfterAuth()
+    if (!ok) router.push('/dashboard')
   }
 
   async function handleSignup() {
@@ -187,6 +246,37 @@ function AuthPageInner() {
     letterSpacing: '0.1em',
     marginBottom: 7,
     fontFamily: "'Inter', system-ui, sans-serif",
+  }
+
+  if (magicLinkLoading) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: CREAM,
+          flexDirection: 'column',
+          gap: 16,
+        }}
+      >
+        <div
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            border: `3px solid ${GOLD}`,
+            borderTopColor: 'transparent',
+            animation: 'spin 0.8s linear infinite',
+          }}
+        />
+        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+        <p style={{ color: FOREST, fontFamily: "'Inter', system-ui, sans-serif", fontSize: 15 }}>
+          Connexion à votre espace AMANA…
+        </p>
+      </div>
+    )
   }
 
   return (

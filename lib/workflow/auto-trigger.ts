@@ -168,9 +168,12 @@ export async function triggerPostFinalizeOnboarding(params: {
               `Magic link : ${linkErr.message ?? 'génération échouée'}`,
             )
           }
-          const magicLink =
-            linkData?.properties?.action_link ??
-            `${baseUrl}/auth?next=${encodeURIComponent(postLoginPath)}`
+          const fallbackAuthUrl = `${baseUrl}/auth?next=${encodeURIComponent(postLoginPath)}`
+          let magicLink = linkData?.properties?.action_link ?? fallbackAuthUrl
+          if (/0\.0\.0\.0|localhost|127\.0\.0\.1/i.test(magicLink)) {
+            console.error('[auto-trigger] magic link host invalide, repli /auth', magicLink)
+            magicLink = fallbackAuthUrl
+          }
 
           if (fileBlob) {
             const pdfBuffer = Buffer.from(await fileBlob.arrayBuffer())
