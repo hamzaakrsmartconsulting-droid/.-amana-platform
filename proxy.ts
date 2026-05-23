@@ -99,6 +99,8 @@ function redirect(request: NextRequest, to: string) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Exclut les assets Next, favicon, images statiques et /api/health
+    // (le healthcheck Docker tape /api/health toutes les 30s — pas besoin d'auth Supabase).
+    '/((?!_next/static|_next/image|favicon.ico|api/health|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

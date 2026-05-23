@@ -1,0 +1,62 @@
+# Dépendances / build (recréées dans l'image)
+node_modules
+.next
+out
+build
+coverage
+
+# Git / VCS
+.git
+.gitignore
+.gitattributes
+
+# Env files - jamais embarqués dans l'image, fournis au runtime via --env-file
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# IDE
+.vscode
+.idea
+.cursor
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs / repos internes
+*.md
+!README.md
+LYON_DEPLOY_KIT
+
+# Tests / artefacts QA
+tests
+playwright-report
+test-results
+e2e
+
+# Supabase local (Docker dev)
+supabase/.branches
+supabase/.temp
+supabase/.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vercel (on n'en a plus besoin sur EC2)
+.vercel
+
+# Docker meta - éviter le contexte récursif
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Backups & fichiers temporaires
+.remediation_backup_*/
+*.bak
+*.tmp
+
+# Fiches produit partenaires (volumineuses, hors repo en théorie)
+/*.pdf
