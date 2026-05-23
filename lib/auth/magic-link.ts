@@ -48,3 +48,38 @@ export function magicLinkLooksInvalid(actionLink: string): boolean {
     return false
   }
 }
+
+/**
+ * Lien hébergé sur notre domaine — évite la redirection Supabase vers Site URL (ex. 0.0.0.0).
+ * Le client appelle verifyOtp(token_hash) sur /auth.
+ */
+export function buildAppHostedMagicLink(
+  baseUrl: string,
+  hashedToken: string,
+  postLoginPath: string,
+): string {
+  const u = new URL(`${baseUrl.replace(/\/$/, '')}/auth`)
+  u.searchParams.set('token_hash', hashedToken)
+  u.searchParams.set('type', 'magiclink')
+  u.searchParams.set('next', postLoginPath)
+  return u.toString()
+}
+
+/** Lien du bouton mail DER : priorité au lien app (token_hash), sinon action_link Supabase assaini. */
+export function resolveDerEmailMagicLink(params: {
+  baseUrl: string
+  postLoginPath: string
+  hashedToken?: string | null
+  actionLink?: string | null
+}): string {
+  const { baseUrl, postLoginPath, hashedToken, actionLink } = params
+  const fallback = `${baseUrl.replace(/\/$/, '')}/auth?next=${encodeURIComponent(postLoginPath)}`
+
+  if (hashedToken) {
+    return buildAppHostedMagicLink(baseUrl, hashedToken, postLoginPath)
+  }
+  if (actionLink) {
+    return sanitizeSupabaseMagicLink(actionLink, baseUrl, postLoginPath)
+  }
+  return fallback
+}

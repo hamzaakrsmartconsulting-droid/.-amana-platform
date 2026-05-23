@@ -77,9 +77,67 @@ function AuthPageInner() {
     return true
   }
 
+  // Magic link mail DER : ?token_hash=…&type=magiclink (évite redirect Supabase → 0.0.0.0)
+  useEffect(() => {
+    const tokenHash = searchParams.get('token_hash')
+    const linkType = searchParams.get('type')
+    if (!tokenHash || linkType !== 'magiclink') return
+
+    let cancelled = false
+
+    ;(async () => {
+      setMagicLinkLoading(true)
+      setError('')
+      setLinkExpired(false)
+
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: 'magiclink',
+      })
+
+      if (typeof window !== 'undefined') {
+        const next = searchParams.get('next')
+        const cleanPath = window.location.pathname
+        window.history.replaceState(
+          null,
+          '',
+          next ? `${cleanPath}?next=${encodeURIComponent(next)}` : cleanPath,
+        )
+      }
+
+      if (cancelled) return
+
+      if (verifyError) {
+        const isExpired =
+          verifyError.message.toLowerCase().includes('expired') ||
+          verifyError.message.toLowerCase().includes('invalid')
+        setLinkExpired(isExpired)
+        setError(
+          isExpired
+            ? 'Votre lien de connexion a expiré (valable 24 h). Connectez-vous avec votre email et mot de passe ci-dessous.'
+            : verifyError.message,
+        )
+        setMagicLinkLoading(false)
+        return
+      }
+
+      const ok = await redirectAfterAuth()
+      if (!ok && !cancelled) {
+        setError('Connexion impossible. Utilisez votre email et mot de passe ci-dessous.')
+        setMagicLinkLoading(false)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [searchParams])
+
   // Magic link Supabase : tokens dans #access_token (flow hash) → session + dashboard
   useEffect(() => {
     if (typeof window === 'undefined') return
+
+    if (new URLSearchParams(window.location.search).get('token_hash')) return
 
     const hash = window.location.hash
     if (!hash || hash.length < 2) return

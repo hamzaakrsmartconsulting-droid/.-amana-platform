@@ -18,7 +18,7 @@ import {
 import { generateDerForDossierAdmin } from '@/lib/documents/generate-pdf'
 import { sendEmailWithAttachment, emailDerRemis } from '@/lib/email'
 import { getClientAppBaseUrl } from '@/lib/app-url'
-import { sanitizeSupabaseMagicLink } from '@/lib/auth/magic-link'
+import { resolveDerEmailMagicLink } from '@/lib/auth/magic-link'
 
 function svc() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -169,18 +169,16 @@ export async function triggerPostFinalizeOnboarding(params: {
               `Magic link : ${linkErr.message ?? 'génération échouée'}`,
             )
           }
-          const fallbackAuthUrl = `${baseUrl}/auth?next=${encodeURIComponent(postLoginPath)}`
-          const rawActionLink = linkData?.properties?.action_link ?? fallbackAuthUrl
-          const magicLink = sanitizeSupabaseMagicLink(
-            rawActionLink,
+          const magicLink = resolveDerEmailMagicLink({
             baseUrl,
             postLoginPath,
-          )
+            hashedToken: linkData?.properties?.hashed_token,
+            actionLink: linkData?.properties?.action_link,
+          })
           console.info('[auto-trigger] DER magic link', {
             baseUrl,
             redirectTo,
-            hadActionLink: Boolean(linkData?.properties?.action_link),
-            sanitized: magicLink !== rawActionLink,
+            mode: linkData?.properties?.hashed_token ? 'app-hosted' : 'supabase-verify',
           })
 
           if (fileBlob) {
