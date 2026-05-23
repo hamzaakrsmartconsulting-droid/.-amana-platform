@@ -253,7 +253,7 @@ export default function CataloguePage() {
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, marginBottom: 8 }}>
             Solutions d'investissement
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div className="catalogue-hero-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <h1 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 30, fontWeight: 400, color: 'white', margin: 0 }}>
               Notre catalogue
             </h1>
@@ -267,7 +267,7 @@ export default function CataloguePage() {
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '24px 16px 72px' }}>
 
         {!kyc && (
-          <div style={{
+          <div className="catalogue-kyc-banner" style={{
             background: 'white', border: '1px solid #e8d8a0', borderRadius: 12,
             padding: '16px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 14,
           }}>

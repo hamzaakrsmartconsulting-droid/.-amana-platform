@@ -37,7 +37,9 @@ type ActiveResponse = {
   mode: 'sandbox' | 'dossier'
 }
 
-export default function DossierSidebar() {
+type DossierSidebarProps = { onNavigate?: () => void }
+
+export default function DossierSidebar({ onNavigate }: DossierSidebarProps = {}) {
   const [dossiers, setDossiers] = useState<Dossier[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
@@ -334,7 +336,7 @@ export default function DossierSidebar() {
   }
 
   return (
-    <aside style={wrap}>
+    <aside className="dossier-sidebar" style={wrap}>
       <div style={{ marginBottom: 18 }}>
         <p style={sectionTitle}>Mode actif</p>
         <div

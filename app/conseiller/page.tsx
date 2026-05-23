@@ -185,8 +185,8 @@ export default function ConseillerPage() {
                 Aucun client trouvé.
               </div>
             ) : (
-              <div style={{ background: 'white', borderRadius: '14px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)', border: '1px solid #e8e0d0', overflow: 'hidden' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <div className="conseiller-table-wrap" style={{ background: 'white', borderRadius: '14px', boxShadow: '0 2px 12px rgba(68,75,63,0.06)', border: '1px solid #e8e0d0' }}>
+                <table className="conseiller-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
                     <tr style={{ background: '#f9f6ef', borderBottom: '1px solid #e8e0d0' }}>
                       {['Client', 'Email', 'Inscription', 'KYC', 'Profil MIF2', 'Score', 'Actions'].map(h => (

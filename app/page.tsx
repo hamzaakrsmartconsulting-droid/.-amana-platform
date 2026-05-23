@@ -7,15 +7,15 @@ export default function Home() {
     <div style={{ minHeight: '100vh', background: CREAM, fontFamily: 'system-ui, sans-serif' }}>
 
       {/* Header */}
-      <div style={{ background: '#353b32', padding: '0 52px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
+      <div className="home-nav" style={{ background: '#353b32', padding: '0 52px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
         <span style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em' }}>
           AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
         </span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+        <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <a href="/catalogue" style={{ color: 'rgba(248,244,236,0.7)', fontSize: '14px', textDecoration: 'none' }}>Nos produits</a>
           <a href="/onboard" style={{ color: 'rgba(248,244,236,0.7)', fontSize: '14px', textDecoration: 'none' }}>Simulateur</a>
           <a href="/login" style={{ color: 'rgba(248,244,236,0.7)', fontSize: '14px', textDecoration: 'none' }}>Connexion</a>
-          <a href="/register" style={{
+          <a className="home-nav-cta" href="/register" style={{
             padding: '9px 22px', background: GOLD, color: 'white',
             borderRadius: '8px', textDecoration: 'none', fontSize: '14px', fontWeight: 500,
           }}>
@@ -29,7 +29,7 @@ export default function Home() {
         <div style={{ display: 'inline-block', padding: '6px 16px', borderRadius: '20px', background: '#e8f5e9', color: FOREST, fontSize: '13px', fontWeight: 500, marginBottom: '28px', letterSpacing: '0.04em' }}>
           ✓ Certifié conforme à la charia
         </div>
-        <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '52px', color: FOREST, lineHeight: '1.2', margin: '0 0 24px', maxWidth: '720px', marginLeft: 'auto', marginRight: 'auto' }}>
+        <h1 className="home-hero" style={{ fontFamily: 'Georgia, serif', fontSize: '52px', color: FOREST, lineHeight: '1.2', margin: '0 0 24px', maxWidth: '720px', marginLeft: 'auto', marginRight: 'auto' }}>
           Faites croître votre patrimoine<br />
           <span style={{ color: GOLD }}>selon vos valeurs</span>
         </h1>
@@ -56,7 +56,7 @@ export default function Home() {
 
       {/* Chiffres cles */}
       <div style={{ background: '#353b32', padding: '56px 24px' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0', textAlign: 'center' }}>
+        <div className="home-stats" style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0', textAlign: 'center' }}>
           {[
             { val: '100%', label: 'Produits certifiés halal' },
             { val: '0%', label: 'Riba (intérêts) dans nos solutions' },
@@ -76,7 +76,7 @@ export default function Home() {
         <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', color: FOREST, textAlign: 'center', margin: '0 0 48px' }}>
           Des produits sélectionnés pour vous
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+        <div className="home-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
           {[
             {
               icon: '🏢',
@@ -133,7 +133,7 @@ export default function Home() {
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', color: FOREST, textAlign: 'center', margin: '0 0 48px' }}>
             Simple, rapide, conforme
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0' }}>
+          <div className="home-steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0' }}>
             {[
               { num: '01', titre: 'Simulation', desc: 'Renseignez votre situation en 6 étapes. Obtenez une allocation personnalisée.' },
               { num: '02', titre: 'KYC', desc: 'Complétez votre dossier réglementaire en ligne. Pièces justificatives incluses.' },

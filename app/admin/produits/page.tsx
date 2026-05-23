@@ -144,7 +144,7 @@ export default function AdminProduitsPage() {
   return (
     <div>
       {/* Titre + bouton */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div className="amana-page-header">
         <div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 28, color: FOREST, fontWeight: 400, margin: '0 0 4px' }}>
             Produits financiers
@@ -184,7 +184,7 @@ export default function AdminProduitsPage() {
             {editing.id ? 'Modifier le produit' : 'Nouveau produit'}
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+          <div className="amana-form-grid-2" style={{ marginBottom: 16 }}>
             <div>
               <label style={lbl}>Nom du produit *</label>
               <input
@@ -335,8 +335,8 @@ export default function AdminProduitsPage() {
       )}
 
       {/* Table produits */}
-      <div style={{ background: 'white', borderRadius: 14, boxShadow: '0 1px 3px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
-        <div style={{
+      <div className="amana-table-scroll" style={{ background: 'white', borderRadius: 14, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+        <div className="admin-products-header" style={{
           display: 'grid',
           gridTemplateColumns: '24px 1fr 110px 120px 90px 100px',
           padding: '12px 20px', borderBottom: '1px solid #f0ece4',
@@ -358,6 +358,7 @@ export default function AdminProduitsPage() {
         ) : produits.map((p, i) => (
           <div
             key={p.id}
+            className="admin-products-row"
             style={{
               display: 'grid',
               gridTemplateColumns: '24px 1fr 110px 120px 90px 100px',

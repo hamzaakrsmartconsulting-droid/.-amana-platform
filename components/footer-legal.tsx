@@ -11,7 +11,7 @@ export default function FooterLegal() {
       padding: '24px 40px',
       fontFamily: 'system-ui, sans-serif',
     }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <div className="footer-legal-inner" style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',

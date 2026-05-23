@@ -40,7 +40,7 @@ export default function AmanaHeader({
   }
 
   return (
-    <header style={{
+    <header className="amana-header" style={{
       background: FOREST,
       padding: '0 24px',
       display: 'flex',
@@ -55,13 +55,13 @@ export default function AmanaHeader({
       {/* Left */}
       <div style={{ minWidth: 80 }}>
         {backHref && (
-          <a href={backHref} style={{
+          <a href={backHref} className="amana-header-back" style={{
             fontSize: 12, color: 'rgba(255,255,255,0.45)',
             textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6,
             fontFamily: "'Inter', system-ui, sans-serif",
             fontWeight: 500, letterSpacing: '0.03em',
           }}>
-            ← {backLabel}
+            ← <span>{backLabel}</span>
           </a>
         )}
       </div>

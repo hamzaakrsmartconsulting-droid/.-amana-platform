@@ -349,7 +349,7 @@ export default function DashboardPage() {
               </span>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 32 }}>
+            <div className="dashboard-steps-grid" style={{ marginBottom: 32 }}>
               {cards.map(card => <OnboardingCard key={card.id} card={card} />)}
             </div>
           </>

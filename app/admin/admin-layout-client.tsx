@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -86,6 +87,11 @@ const NAV = [
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router   = useRouter()
+  const [navOpen, setNavOpen] = useState(false)
+
+  useEffect(() => {
+    setNavOpen(false)
+  }, [pathname])
 
   async function handleLogout() {
     const supabase = createClient()
@@ -94,17 +100,19 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     router.refresh()
   }
 
-  return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f3ef' }}>
+  const pageLabel = NAV.find(n => n.href === pathname || (n.href !== '/admin' && pathname.startsWith(n.href)))?.label ?? 'Admin'
 
-      {/* ── Sidebar ── */}
-      <aside style={{
-        width: 220, background: DARK,
-        display: 'flex', flexDirection: 'column',
-        position: 'fixed', top: 0, left: 0, bottom: 0,
-        zIndex: 50,
-      }}>
-        {/* Logo */}
+  return (
+    <div className={`admin-shell${navOpen ? ' admin-nav-open' : ''}`}>
+      {navOpen && (
+        <div
+          className="admin-sidebar-backdrop"
+          aria-hidden
+          onClick={() => setNavOpen(false)}
+        />
+      )}
+
+      <aside className="admin-sidebar">
         <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <img src="/amana-logo-header.png" alt="AMANA" style={{ height: 44, width: 'auto', objectFit: 'contain' }}/>
           <div style={{
@@ -116,14 +124,14 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
           {NAV.map(({ href, label, icon }) => {
             const isActive = pathname === href || (href !== '/admin' && pathname.startsWith(href))
             return (
               <a
                 key={href}
                 href={href}
+                onClick={() => setNavOpen(false)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 10,
                   padding: '9px 12px', borderRadius: 8,
@@ -144,28 +152,25 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           })}
         </nav>
 
-        {/* Footer — Conseiller + Déconnexion */}
         <div style={{ padding: '12px 10px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: 4 }}>
           <a href="/conseiller" style={{
             display: 'flex', alignItems: 'center', gap: 10,
             padding: '9px 12px', borderRadius: 8, textDecoration: 'none',
             color: 'rgba(255,255,255,0.4)', fontSize: 12,
             fontFamily: "'Inter', system-ui, sans-serif",
-            transition: 'color 0.15s',
           }}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M2 12V7L7 2L12 7V12H9V9H5V12H2Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
             </svg>
             Espace conseiller
           </a>
-          <button onClick={handleLogout} style={{
+          <button type="button" onClick={handleLogout} style={{
             display: 'flex', alignItems: 'center', gap: 10,
             padding: '9px 12px', borderRadius: 8,
             background: 'none', border: 'none',
             color: 'rgba(255,255,255,0.35)', fontSize: 12,
             fontFamily: "'Inter', system-ui, sans-serif",
             cursor: 'pointer', textAlign: 'left',
-            transition: 'color 0.15s',
           }}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M5 1H2a1 1 0 00-1 1v9a1 1 0 001 1h3M9 9.5L12 6.5M12 6.5L9 3.5M12 6.5H5"
@@ -176,32 +181,37 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         </div>
       </aside>
 
-      {/* ── Contenu principal ── */}
-      <main style={{ marginLeft: 220, flex: 1, minHeight: '100vh' }}>
-        {/* Topbar */}
-        <div style={{
-          background: 'white', borderBottom: '1px solid #e8e4dc',
-          padding: '0 32px', height: 56,
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          position: 'sticky', top: 0, zIndex: 40,
-        }}>
-          <div style={{ fontSize: 13, color: '#6d7368', fontFamily: "'Inter', system-ui, sans-serif" }}>
-            {NAV.find(n => n.href === pathname || (n.href !== '/admin' && pathname.startsWith(n.href)))?.label ?? 'Admin'}
+      <div className="admin-main">
+        <div className="admin-topbar">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            <button
+              type="button"
+              className="admin-menu-btn"
+              aria-label="Ouvrir le menu"
+              onClick={() => setNavOpen(true)}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+                <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </button>
+            <div style={{ fontSize: 13, color: '#6d7368', fontFamily: "'Inter', system-ui, sans-serif", overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {pageLabel}
+            </div>
           </div>
           <div style={{
             fontSize: 11, color: FOREST, fontWeight: 600,
             fontFamily: "'Inter', system-ui, sans-serif",
             background: 'rgba(68,75,63,0.06)', padding: '4px 10px', borderRadius: 20,
-            letterSpacing: '0.08em', textTransform: 'uppercase',
+            letterSpacing: '0.08em', textTransform: 'uppercase', flexShrink: 0,
           }}>
             Admin
           </div>
         </div>
 
-        <div style={{ padding: '32px' }}>
+        <div className="admin-content">
           {children}
         </div>
-      </main>
+      </div>
     </div>
   )
 }

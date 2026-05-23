@@ -1,11 +1,17 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import FooterLegal from '@/components/footer-legal'
 import AuthSessionBootstrap from '@/components/auth-session-bootstrap'
 
 export const metadata: Metadata = {
   title: 'AMANA Patrimoine — Gestion de patrimoine islamique',
   description: 'Cabinet de conseil en gestion de patrimoine spécialisé dans les solutions financières conformes aux principes islamiques.',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 }
 
 export default function RootLayout({
