@@ -15,8 +15,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      env_file:
-        - .env.production
       args:
         # NEXT_PUBLIC_* inlinés au build (sinon undefined côté client).
         NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
