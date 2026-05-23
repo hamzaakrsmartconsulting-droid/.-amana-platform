@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
   const { data: docs, error: docErr } = await supabase
     .from('documents')
-    .select('id, conseiller_id, dossier_id, type, filename, storage_path')
+    .select('id, conseiller_id, dossier_id, type, filename, storage_path, project_id')
     .eq('yousign_signature_request_id', sigReqId)
 
   if (docErr || !docs || docs.length === 0) {

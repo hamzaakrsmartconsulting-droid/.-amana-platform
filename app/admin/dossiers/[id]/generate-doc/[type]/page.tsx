@@ -11,7 +11,7 @@
 'use client'
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
   SUPPORTS_CATALOG,
@@ -237,7 +237,12 @@ export default function GenerateDocPage() {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams<{ id: string; type: string }>()
+  const searchParams = useSearchParams()
   const dossierId = params.id
+  // Si on est arrivé depuis le 2e Kanban (pipeline souscriptions
+  // complémentaires), un project_id est passé en query. Le doc généré sera
+  // alors rattaché à ce project et n'apparaîtra que dans la fiche project.
+  const projectId = searchParams?.get('project_id') ?? null
   const dossiersBasePath = pathname?.startsWith('/conseiller')
     ? '/conseiller/dossiers'
     : '/admin/dossiers'
@@ -472,7 +477,11 @@ export default function GenerateDocPage() {
       const r = await fetch('/api/documents/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: docType, dossier_id: dossierId }),
+        body: JSON.stringify({
+          type: docType,
+          dossier_id: dossierId,
+          project_id: projectId,
+        }),
       })
       const data = await r.json()
       if (!r.ok) {
@@ -480,7 +489,11 @@ export default function GenerateDocPage() {
         if (r.status === 422 && data.missingInputs) return
         return
       }
-      router.push(`${dossiersBasePath}/${dossierId}?generated=${docType}`)
+      if (projectId) {
+        router.push(`/admin/projects/${projectId}?generated=${docType}`)
+      } else {
+        router.push(`${dossiersBasePath}/${dossierId}?generated=${docType}`)
+      }
     } catch (e) {
       setError('Erreur réseau lors de la génération')
       console.error(e)

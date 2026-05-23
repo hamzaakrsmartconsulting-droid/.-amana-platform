@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { profileDisplayName } from '@/lib/profiles/display-name'
 
 const FOREST = '#3a4d39'
 const GOLD   = '#c9a55a'
@@ -12,6 +13,8 @@ type Role = typeof ROLES[number]
 interface UserRow {
   id:         string
   full_name:  string | null
+  prenom:     string | null
+  nom:        string | null
   role:       Role
   created_at: string
   tenant_id:  string | null
@@ -25,6 +28,7 @@ const ROLE_COLOR: Record<Role, string> = {
 
 export default function AdminUsersPage() {
   const [users,   setUsers]   = useState<UserRow[]>([])
+  const [nameByUserId, setNameByUserId] = useState<Map<string, { prenom: string; nom: string }>>(new Map())
   const [loading, setLoading] = useState(true)
   const [search,  setSearch]  = useState('')
   const [saving,  setSaving]  = useState<string | null>(null)
@@ -36,12 +40,41 @@ export default function AdminUsersPage() {
 
   async function loadUsers() {
     setLoading(true)
-    const { data } = await supabase
-      .from('profiles')
-      .select('id, full_name, role, created_at, tenant_id')
-      .order('created_at', { ascending: false })
-    setUsers((data ?? []) as UserRow[])
+    const [{ data: profiles }, { data: sessions }] = await Promise.all([
+      supabase
+        .from('profiles')
+        .select('id, full_name, prenom, nom, role, created_at, tenant_id')
+        .order('created_at', { ascending: false }),
+      supabase
+        .from('onboarding_sessions')
+        .select('finalized_user_id, prenom, nom')
+        .not('finalized_user_id', 'is', null),
+    ])
+
+    const fromOnboarding = new Map<string, { prenom: string; nom: string }>()
+    for (const s of sessions ?? []) {
+      if (!s.finalized_user_id || !s.prenom?.trim() || !s.nom?.trim()) continue
+      fromOnboarding.set(s.finalized_user_id, {
+        prenom: s.prenom.trim(),
+        nom: s.nom.trim(),
+      })
+    }
+    setNameByUserId(fromOnboarding)
+    setUsers((profiles ?? []) as UserRow[])
     setLoading(false)
+  }
+
+  function displayName(user: UserRow): string {
+    const fromProfile = profileDisplayName(user)
+    if (fromProfile !== 'Sans nom') return fromProfile
+    const fromSession = nameByUserId.get(user.id)
+    if (fromSession) {
+      return profileDisplayName({
+        prenom: fromSession.prenom,
+        nom: fromSession.nom,
+      })
+    }
+    return 'Sans nom'
   }
 
   async function changeRole(userId: string, newRole: Role) {
@@ -60,9 +93,17 @@ export default function AdminUsersPage() {
     setTimeout(() => setMsg(''), 3000)
   }
 
-  const filtered = users.filter(u =>
-    !search || (u.full_name ?? '').toLowerCase().includes(search.toLowerCase()) || u.id.includes(search)
-  )
+  const filtered = users.filter(u => {
+    if (!search) return true
+    const q = search.toLowerCase()
+    return (
+      displayName(u).toLowerCase().includes(q) ||
+      (u.full_name ?? '').toLowerCase().includes(q) ||
+      (u.prenom ?? '').toLowerCase().includes(q) ||
+      (u.nom ?? '').toLowerCase().includes(q) ||
+      u.id.includes(search)
+    )
+  })
 
   return (
     <div>
@@ -126,7 +167,7 @@ export default function AdminUsersPage() {
             {/* Nom */}
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: FOREST, fontFamily: "'Inter', system-ui, sans-serif" }}>
-                {user.full_name ?? 'Sans nom'}
+                {displayName(user)}
               </div>
               <div style={{ fontSize: 11, color: '#9aaa99', marginTop: 2, fontFamily: "'Inter', system-ui, sans-serif" }}>
                 {user.id.slice(0, 8)}…

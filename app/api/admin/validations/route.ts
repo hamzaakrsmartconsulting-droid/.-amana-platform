@@ -23,6 +23,41 @@ const GATE_TYPES = [
   'succession_validation',
 ] as const
 
+// Stages minimum requis pour qu'un verrou soit pertinent à afficher.
+// Un verrou créé par erreur sur un dossier trop en amont ne sera pas affiché.
+//
+// IMPORTANT : pour les gates "contenu de document" (lm_send, ra_*, preco, etc.)
+// on inclut TOUTES les étapes intermédiaires entre kyc_complet et actif
+// (der_envoye, der_signe, lm_envoyee, lm_signee, bilan_genere). Sinon un
+// document généré par auto-pack-sign (Mass) reste pending mais invisible
+// dans /admin/validations parce que le pipeline est déjà passé en der_envoye.
+const POST_KYC_STAGES = [
+  'kyc_complet',
+  'der_envoye',
+  'der_signe',
+  'lm_envoyee',
+  'lm_signee',
+  'bilan_genere',
+  'souscription',
+  'actif',
+  'suivi',
+  'bloque',
+]
+
+const GATE_MIN_STAGES: Record<string, string[]> = {
+  kyc_validation:           ['nouveau', 'criblage', 'kyc_a_faire', 'kyc_invite', 'kyc_attente'],
+  profil_risque_validation: [...POST_KYC_STAGES, 'archive'],
+  lm_send:                  POST_KYC_STAGES,
+  ra_recommandations:       POST_KYC_STAGES,
+  ra_synthese:              POST_KYC_STAGES,
+  ra_frais_exante:          POST_KYC_STAGES,
+  ra_bulletin_send:         POST_KYC_STAGES,
+  bilan_annuel_validation:  ['actif', 'suivi'],
+  preco_validation:         POST_KYC_STAGES,
+  zakat_validation:         ['actif', 'suivi'],
+  succession_validation:    POST_KYC_STAGES,
+}
+
 function svc() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -98,14 +133,32 @@ export async function GET() {
     return NextResponse.json({ error: dErr.message }, { status: 500 })
   }
 
-  const gates: Record<string, typeof allGateRows> = {}
-  for (const g of allGateRows ?? []) {
+  // Construire un index stage par dossier_id pour le filtre
+  const stageByDossier: Record<string, string> = {}
+  for (const d of dossierRows ?? []) {
+    stageByDossier[d.id] = d.pipeline_stage ?? ''
+  }
+
+  // Filtrer les gates : ne garder que celles cohérentes avec le stage actuel du dossier
+  const filteredGates = (allGateRows ?? []).filter(g => {
+    const allowedStages = GATE_MIN_STAGES[g.gate_type]
+    if (!allowedStages) return true // gate inconnue → toujours afficher
+    const stage = stageByDossier[g.dossier_id] ?? ''
+    return allowedStages.includes(stage)
+  })
+
+  const gates: Record<string, typeof filteredGates> = {}
+  for (const g of filteredGates) {
     gates[g.dossier_id] = gates[g.dossier_id] ?? []
     gates[g.dossier_id].push(g)
   }
 
+  // Ne retourner que les dossiers qui ont encore des gates après filtrage
+  const dossierIdsWithGates = new Set(Object.keys(gates))
+  const filteredDossiers = (dossierRows ?? []).filter(d => dossierIdsWithGates.has(d.id))
+
   return NextResponse.json({
-    dossiers: dossierRows ?? [],
+    dossiers: filteredDossiers,
     gates,
   })
 }

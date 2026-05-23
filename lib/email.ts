@@ -1,6 +1,7 @@
 // lib/email.ts
 // Service d'envoi d'emails transactionnels via Resend ou SMTP.
 import 'server-only'
+import { getClientAppBaseUrl } from '@/lib/app-url'
 // Templates AMANA réutilisables (KYC validé / rejeté, projet actif).
 //
 // IMPORTANT : le domaine d'envoi DOIT être vérifié dans Resend
@@ -13,7 +14,7 @@ const FROM =
   process.env.EMAIL_FROM ??
   process.env.RESEND_FROM ??
   'Amana Patrimoine <noreply@amana-patrimoine.fr>'
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://amana-patrimoine.fr'
+const BASE_URL = getClientAppBaseUrl()
 
 type EmailPayload = { to: string; subject: string; html: string }
 
@@ -228,6 +229,58 @@ export function emailKycRejete(prenom: string) {
   }
 }
 
+export function emailKycSoumisAdmin(clientNom: string, dossierId: string, adminUrl: string) {
+  return {
+    subject: `[AMANA] KYC soumis — ${clientNom} est prêt pour validation`,
+    html: base(`
+<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:22px;margin:0 0 16px;">KYC soumis par un client</h2>
+<p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 12px;">
+  Le client <strong style="color:#3a4d39;">${clientNom}</strong> vient de soumettre son dossier KYC complet.
+  Il est maintenant en attente de votre validation pour passer à l'étape <strong>KYC complet</strong>.
+</p>
+<table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
+  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Dossier ID</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:14px;color:#3a4d39;">${dossierId}</td></tr>
+</table>
+<a href="${adminUrl}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Valider le KYC →</a>
+<p style="color:#6b7f6a;font-size:13px;margin:24px 0 0;">Retrouvez tous les KYC en attente sur <a href="${BASE_URL}/admin/validations" style="color:#3a4d39;">la page de validations admin</a>.</p>
+`),
+  }
+}
+
+/**
+ * Notif admin : un client actif vient de soumettre une nouvelle souscription
+ * (pipeline additionnel — projects.pipeline_stage = 'nouveau').
+ */
+export function emailProjectSoumisAdmin(
+  clientNom: string,
+  productNom: string,
+  montantEur: number,
+  projectId: string,
+  adminUrl: string,
+) {
+  return {
+    subject: `[AMANA] Nouvelle souscription — ${clientNom} · ${productNom}`,
+    html: base(`
+<h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:22px;margin:0 0 16px;">Nouvelle souscription complémentaire</h2>
+<p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 12px;">
+  Le client <strong style="color:#3a4d39;">${clientNom}</strong> (déjà actif) vient de soumettre une nouvelle demande de souscription.
+  Elle apparaît dans le <strong>pipeline additionnel</strong> en étape <strong>Nouveau</strong> et attend la génération des documents (LM / RA / Bilan).
+</p>
+<table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 16px;width:100%;box-sizing:border-box;">
+  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Produit</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#3a4d39;font-weight:600;padding-bottom:10px;">${productNom}</td></tr>
+  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Montant</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:15px;color:#3a4d39;font-weight:600;padding-bottom:10px;">${montantEur.toLocaleString('fr-FR')} €</td></tr>
+  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:4px;">Project ID</td></tr>
+  <tr><td style="font-family:Georgia,serif;font-size:13px;color:#3a4d39;">${projectId}</td></tr>
+</table>
+<a href="${adminUrl}" style="display:inline-block;padding:13px 28px;background:#c9a55a;color:white;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Ouvrir le pipeline →</a>
+<p style="color:#6b7f6a;font-size:13px;margin:24px 0 0;">Toutes les souscriptions en cours sont visibles sur <a href="${BASE_URL}/admin/pipeline" style="color:#3a4d39;">la page Pipeline admin</a>.</p>
+`),
+  }
+}
+
 export function emailValidationRequired(gateName: string, dossierNom: string, url: string) {
   return {
     subject: `[AMANA] Action requise — ${gateName} · ${dossierNom}`,
@@ -425,22 +478,22 @@ export function emailPackReglementairePretASigner(
   }
 }
 
-/** Envoyé dès que le dossier passe à l'étape pipeline « souscription ». */
-export function emailBienvenueSouscription(prenom: string) {
+/** Envoyé quand le dossier passe de « souscription » à « actif » (souscription confirmée). */
+export function emailBienvenueClientActif(prenom: string) {
   return {
-    subject: 'Bienvenue — Votre parcours de souscription AMANA Patrimoine',
+    subject: 'Bienvenue — Votre relation client AMANA Patrimoine est active',
     html: base(`
 <h2 style="font-family:Georgia,serif;color:#3a4d39;font-size:24px;margin:0 0 16px;">Bienvenue, ${prenom} !</h2>
 <p style="color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 16px;">
-  Vos documents réglementaires ont bien été signés. Votre dossier entre désormais en phase de <strong>souscription</strong> chez AMANA Patrimoine.
+  Votre souscription a bien été enregistrée. Votre dossier est désormais <strong>actif</strong> chez AMANA Patrimoine : vous êtes officiellement accompagné par notre équipe.
 </p>
 <table style="background:#f8f4ec;border-radius:10px;padding:16px 20px;margin:0 0 24px;width:100%;box-sizing:border-box;">
-  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:8px;font-weight:600;">Prochaines étapes</td></tr>
+  <tr><td style="font-size:13px;color:#6b7f6a;padding-bottom:8px;font-weight:600;">À partir de maintenant</td></tr>
   <tr><td style="color:#3a4d39;font-size:14px;line-height:1.8;">
     <ul style="margin:0;padding-left:20px;">
-      <li>Votre conseiller finalise la mise en place des solutions retenues.</li>
-      <li>Vous serez recontacté si des informations complémentaires sont nécessaires.</li>
-      <li>L'activation de votre relation client sera confirmée par votre équipe AMANA.</li>
+      <li>Accédez à votre espace client pour suivre vos documents et votre parcours.</li>
+      <li>Votre conseiller reste votre interlocuteur privilégié pour toute question.</li>
+      <li>Le suivi patrimonial et réglementaire se poursuit selon votre offre AMANA.</li>
     </ul>
   </td></tr>
 </table>

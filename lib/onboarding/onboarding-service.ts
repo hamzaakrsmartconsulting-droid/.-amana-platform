@@ -6,6 +6,7 @@
 // authentifié dans Supabase. La sécurité repose sur le session_token.
 
 import { createClient as createServiceClient } from '@supabase/supabase-js'
+import { buildFullName } from '@/lib/profiles/display-name'
 import { normalizePhoneForYousign } from '@/lib/yousign/phone'
 import { routeToOffer, type OffreAmana, type RouteOfferOutput } from './route-offer'
 
@@ -346,45 +347,37 @@ export async function finalizeOnboarding(params: {
     return { ok: false, error: 'Session incomplète, étapes 1-4 requises (téléphone inclus)' }
   }
 
-  // 1. Créer ou récupérer l'utilisateur Supabase Auth (magic link)
+  // 1. Créer ou récupérer l'utilisateur Supabase Auth
   //
-  // IMPORTANT : la colonne `email` est dans auth.users, PAS dans
-  // public.profiles (chez AMANA, profiles ne contient que id + role +
-  // colonnes métier). Pour vérifier l'existence d'un user par email, on
-  // utilise auth.admin.listUsers() puis on filtre côté app.
-  // C'est inefficient pour des millions d'users mais OK en MVP (<10k users).
+  // IMPORTANT : on utilise `createUser({ email_confirm: true })` au lieu de
+  // `inviteUserByEmail`. Raisons :
+  //   - inviteUserByEmail envoie un email Supabase d'invitation NON désiré
+  //     (on a déjà notre propre email AMANA "Bienvenue + DER en PJ").
+  //   - L'invite-token Supabase coexiste mal avec le magic-link généré juste
+  //     après par triggerPostFinalizeOnboarding : le 2e lien apparaît comme
+  //     "expiré" côté client (token mal utilisé / user non confirmé).
+  //   - createUser({ email_confirm: true }) crée un user *confirmé* sans
+  //     envoyer aucun email, ce qui permet à generateLink('magiclink') de
+  //     produire un lien valide immédiatement utilisable.
   let userId: string | null = null
 
-  // Tentative directe d'invitation : si email déjà utilisé, on récupère
-  // l'user existant via listUsers().
-  // Note : Supabase envoie automatiquement le magic link par email — on n'a
-  // pas besoin de récupérer action_link côté serveur. Le typage de
-  // inviteUserByEmail varie selon les versions du SDK ; on s'appuie
-  // uniquement sur invited.user.id qui est stable.
-  const { data: invited, error: inviteErr } = await supabase.auth.admin.inviteUserByEmail(
-    session.email,
-    {
-      data: {
-        prenom: session.prenom,
-        nom: session.nom,
-        source: 'funnel_onboarding',
-        offre_amana: session.offre_aiguillee,
-      },
-    }
-  )
+  const { data: created, error: createErr } = await supabase.auth.admin.createUser({
+    email: session.email,
+    email_confirm: true,
+    user_metadata: {
+      prenom: session.prenom,
+      nom: session.nom,
+      source: 'funnel_onboarding',
+      offre_amana: session.offre_aiguillee,
+    },
+  })
 
-  if (invited?.user) {
-    // Nouveau user créé — Supabase Auth a déjà envoyé l'email magic link
-    userId = invited.user.id
+  if (created?.user) {
+    userId = created.user.id
 
-    // Créer le profil correspondant (PAS de colonne email — c'est dans auth.users)
-    await supabase.from('profiles').insert({
-      id: userId,
-      role: 'client',
-    })
   } else if (
-    inviteErr &&
-    /already|exists|registered/i.test(inviteErr.message ?? '')
+    createErr &&
+    /already|exists|registered|duplicate/i.test(createErr.message ?? '')
   ) {
     // User existe déjà, le retrouver via listUsers
     // Note : listUsers paginé, on parcourt jusqu'à trouver l'email.
@@ -414,14 +407,14 @@ export async function finalizeOnboarding(params: {
         error: 'Email signalé existant par auth mais introuvable via listUsers',
       }
     }
-    // S'assurer que le profil existe (idempotent — INSERT ON CONFLICT DO NOTHING)
-    await supabase
-      .from('profiles')
-      .upsert({ id: userId, role: 'client' }, { onConflict: 'id' })
+
+    // User existant : s'assurer qu'il est confirmé pour que le magic link
+    // qui sera généré ensuite soit valide. updateUserById est idempotent.
+    await supabase.auth.admin.updateUserById(userId, { email_confirm: true })
   } else {
     return {
       ok: false,
-      error: `Invitation échouée : ${inviteErr?.message ?? 'erreur inconnue'}`,
+      error: `Création utilisateur échouée : ${createErr?.message ?? 'erreur inconnue'}`,
     }
   }
 
@@ -429,6 +422,23 @@ export async function finalizeOnboarding(params: {
   if (!userId) {
     return { ok: false, error: 'Erreur logique interne : userId indéterminé' }
   }
+
+  const prenom = session.prenom.trim()
+  const nom = session.nom.trim()
+  const full_name = buildFullName(prenom, nom)
+
+  await supabase.from('profiles').upsert(
+    {
+      id: userId,
+      role: 'client',
+      prenom,
+      nom,
+      full_name,
+      email: session.email.trim().toLowerCase(),
+      offre_amana: session.offre_aiguillee,
+    },
+    { onConflict: 'id' }
+  )
 
   // 2. Créer le dossier
   const { data: dossier, error: dossErr } = await supabase

@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { downloadSignedDocument } from '@/lib/yousign/yousign-service'
 import { triggerPostDocumentSigned } from '@/lib/workflow/auto-trigger'
 import { transitionDossierStageService } from '@/lib/workflow/workflow-service'
+import { transitionProjectStageService } from '@/lib/workflow/project-workflow-service'
 
 export type YousignDocRow = {
   id: string
@@ -13,6 +14,12 @@ export type YousignDocRow = {
   type: string
   filename: string
   storage_path: string
+  /**
+   * Si non null : ce document est rattaché à une souscription complémentaire
+   * (pipeline projets — 2e Kanban). La signature déclenche alors la transition
+   * du pipeline projet, pas du pipeline dossier.
+   */
+  project_id?: string | null
 }
 
 /** Pack signé en une procédure → passage souscription (sans bulletin V7). */
@@ -73,14 +80,21 @@ export async function markDocumentsSigned(
 
 /**
  * Transitions pipeline après signature complète d'une procédure.
- * L'email de bienvenue souscription est envoyé par transitionDossierStageService.
+ * L'email de bienvenue client actif (souscription → actif) est envoyé par transitionDossierStageService.
+ *
+ * Deux branches selon le scope des documents signés :
+ *   1. Docs rattachés à un `project_id` (pipeline 2 — souscriptions
+ *      complémentaires) → transition du PROJET vers `signes`. Le pipeline
+ *      dossier (pipeline 1) n'est PAS touché.
+ *   2. Docs liés au dossier global (pipeline 1) → comportement historique
+ *      (pack → souscription, lm seule → ..., etc.).
  */
 export async function applyPostYousignSignedWorkflow(params: {
   supabase: SupabaseClient
   docs: YousignDocRow[]
   sigReqId: string
   now?: string
-}): Promise<{ pack: boolean; dossier_id: string | null }> {
+}): Promise<{ pack: boolean; dossier_id: string | null; project_id?: string | null }> {
   const { supabase, docs, sigReqId } = params
   const now = params.now ?? new Date().toISOString()
   const docTypes = docs.map(d => d.type)
@@ -93,6 +107,45 @@ export async function applyPostYousignSignedWorkflow(params: {
 
   await markDocumentsSigned(supabase, sigReqId, now)
   await storeSignedPdfForProcedure(supabase, sigReqId, docs)
+
+  // Si tous les docs partagent un même project_id → on est dans le pipeline 2
+  // (souscriptions complémentaires). On déclenche la transition du projet
+  // vers `signes` et on s'arrête là (pas de toucher au pipeline dossier).
+  const projectIds = Array.from(
+    new Set(docs.map(d => d.project_id ?? null).filter((v): v is string => !!v)),
+  )
+  const allDocsTargetSameProject =
+    projectIds.length === 1 && docs.every(d => d.project_id === projectIds[0])
+
+  if (allDocsTargetSameProject) {
+    const projectId = projectIds[0]
+    const tr = await transitionProjectStageService({
+      projectId,
+      toStage: 'signes',
+      triggeredBy: 'webhook_yousign',
+      triggerContext: { docs_signed: docTypes, sig_req_id: sigReqId },
+      notes: `Pack ${docTypes.join('+')} signé (Yousign) — souscription en attente de transmission`,
+      // bypassMatrix car on peut arriver depuis `docs_a_generer` ou
+      // `lm_ra_envoyes` selon que l'admin a déplacé manuellement la carte
+      // avant l'envoi du pack.
+      bypassMatrix: true,
+    })
+    if (!tr.ok) {
+      console.error(
+        '[yousign-signed-handler] Transition project → signes échouée',
+        tr.error,
+      )
+    } else {
+      console.info(
+        '[yousign-signed-handler] Project signé — transition pipeline 2',
+        projectId,
+        tr.from,
+        '→',
+        tr.to,
+      )
+    }
+    return { pack: true, dossier_id: dossierId, project_id: projectId }
+  }
 
   if (isMultiDocSubscriptionPack(docTypes)) {
     await transitionDossierStageService({

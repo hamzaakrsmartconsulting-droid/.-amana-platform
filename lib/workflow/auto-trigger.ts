@@ -17,6 +17,7 @@ import {
 } from './workflow-service'
 import { generateDerForDossierAdmin } from '@/lib/documents/generate-pdf'
 import { sendEmailWithAttachment, emailDerRemis } from '@/lib/email'
+import { getClientAppBaseUrl } from '@/lib/app-url'
 
 function svc() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -90,15 +91,19 @@ export async function triggerPostFinalizeOnboarding(params: {
     return { ok: false, actions_taken: [], errors: ['Dossier introuvable'] }
   }
 
-  const tr = await transitionDossierStageService({
+  // Criblage automatique : nouveau → criblage (s'arrête là)
+  // Le dossier reste en `criblage` jusqu'à ce que le client soumette son KYC.
+  // La transition criblage → kyc_attente est déclenchée par /api/profile/submit
+  // au moment où le client soumet effectivement son dossier KYC.
+  const trCriblage = await transitionDossierStageService({
     dossierId: params.dossierId,
     toStage: 'criblage',
     triggeredBy: 'funnel_onboarding',
     triggerContext: { offre: params.offre },
-    notes: 'Transition automatique après finalisation funnel public',
+    notes: 'Transition automatique après finalisation funnel public — en attente du KYC client',
   })
-  if (!tr.ok) {
-    result.errors.push(`Transition criblage : ${tr.error}`)
+  if (!trCriblage.ok) {
+    result.errors.push(`Transition criblage : ${trCriblage.error}`)
     result.ok = false
   } else {
     result.actions_taken.push('Transition → criblage')
@@ -108,10 +113,10 @@ export async function triggerPostFinalizeOnboarding(params: {
   await supabase.from('compliance_alerts').insert({
     conseiller_id: dossier.conseiller_id,
     dossier_id: params.dossierId,
-    severity: 'warning',
+    severity: 'info',
     category: 'criblage',
-    titre: `Pré-criblage à effectuer — ${dossier.prenom} ${dossier.nom}`,
-    description: `Nouveau dossier créé via funnel public, offre ${params.offre}. Effectuer le pré-criblage PEP/sanctions/source funds via Raqîb avant d'avancer.`,
+    titre: `Pré-criblage à vérifier — ${dossier.prenom} ${dossier.nom}`,
+    description: `Dossier en attente de soumission KYC client (offre ${params.offre}). Vérifier PEP/sanctions via Raqîb en arrière-plan.`,
   })
   result.actions_taken.push('Alerte criblage créée')
 
@@ -148,13 +153,13 @@ export async function triggerPostFinalizeOnboarding(params: {
             .download(derResult.doc.storage_path)
 
           // Générer un magic-link (invite link) valide pour ce client
-          const baseUrl = process.env.AMANA_BASE_URL ?? 'http://localhost:3000'
+          const baseUrl = getClientAppBaseUrl()
           const { data: linkData } = await supabase.auth.admin.generateLink({
             type: 'magiclink',
             email: dossier.email_client,
             options: {
               // /auth/callback échange le code et redirige vers /onboarding (client)
-              redirectTo: `${baseUrl}/auth/callback?next=/onboarding`,
+              redirectTo: `${baseUrl}/auth/callback?next=/dashboard`,
             },
           })
           const magicLink =

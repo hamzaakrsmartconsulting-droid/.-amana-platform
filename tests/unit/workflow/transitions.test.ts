@@ -62,6 +62,9 @@ describe('Pipeline transitions matrix', () => {
     it('suivi → actif (revenir actif)', () => {
       expect(isTransitionAllowed('suivi', 'actif')).toBe(true)
     })
+    it('actif → souscription (correction pipeline)', () => {
+      expect(isTransitionAllowed('actif', 'souscription')).toBe(true)
+    })
   })
 
   describe('passages en bloqué', () => {

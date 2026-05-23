@@ -60,7 +60,7 @@ const ALLOWED_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
   lm_signee: ['bilan_genere', 'souscription', 'bloque', 'archive'],
   bilan_genere: ['souscription', 'bloque', 'archive'],
   souscription: ['actif', 'bilan_genere', 'bloque', 'archive'],
-  actif: ['suivi', 'bloque', 'archive'],
+  actif: ['souscription', 'suivi', 'bloque', 'archive'],
   suivi: ['actif', 'bloque', 'archive'],
   bloque: PIPELINE_STAGES_ORDER,
   archive: [],
@@ -73,8 +73,16 @@ export function isTransitionAllowed(
   return ALLOWED_TRANSITIONS[from]?.includes(to) ?? false
 }
 
-/** Cibles proposées dans le Kanban admin (hors bloqué / archivé). */
+// Stages gérés automatiquement — pas de déplacement manuel depuis le Kanban.
+// - criblage / kyc_attente : transitions pilotées par /api/profile/submit et
+//   /api/admin/kyc-validate.
+// - kyc_complet : transition vers der_envoye pilotée par auto-pack-sign (Mass)
+//   ou auto-der (Patrimoniale/Premium) après validation admin du KYC.
+const AUTOMATED_STAGES: PipelineStage[] = ['criblage', 'kyc_attente', 'kyc_complet']
+
+/** Cibles proposées dans le Kanban admin (hors bloqué / archivé / stages auto). */
 export function getManualPipelineTargets(from: PipelineStage): PipelineStage[] {
+  if (AUTOMATED_STAGES.includes(from)) return []
   return (ALLOWED_TRANSITIONS[from] ?? []).filter(
     (t) => t !== from && t !== 'bloque' && t !== 'archive',
   )

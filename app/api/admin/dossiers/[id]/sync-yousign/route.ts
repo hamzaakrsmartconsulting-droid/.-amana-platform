@@ -51,7 +51,7 @@ export async function POST(
 
   const { data: pendingDocs, error: docsErr } = await admin
     .from('documents')
-    .select('id, conseiller_id, dossier_id, type, filename, storage_path, yousign_signature_request_id, yousign_status')
+    .select('id, conseiller_id, dossier_id, type, filename, storage_path, yousign_signature_request_id, yousign_status, project_id')
     .eq('dossier_id', dossierId)
     .eq('yousign_status', 'pending')
     .not('yousign_signature_request_id', 'is', null)

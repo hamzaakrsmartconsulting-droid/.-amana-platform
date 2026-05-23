@@ -4,11 +4,16 @@
 // 1. kyc.statut = 'soumis'
 // 2. dossier.pipeline_stage = 'kyc_attente'
 // 3. validation_gates: kyc_validation pending
+// 4. Email de notification au conseiller/admin
 
 import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
+import { sendEmail, emailKycSoumisAdmin } from '@/lib/email'
+import { getClientAppBaseUrl } from '@/lib/app-url'
+import { transitionDossierStageService } from '@/lib/workflow/workflow-service'
+import type { PipelineStage } from '@/lib/workflow/pipeline-stages'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -64,27 +69,40 @@ export async function POST() {
 
     if (existingDossier) {
       dossierId = existingDossier.id
-      // Passer en kyc_attente uniquement si le dossier n'est pas déjà plus avancé
-      const stagesBefore = [
-        'lead', 'contact_pris', 'kyc_invite', 'kyc_a_faire', 'nouveau',
-        'criblage', 'actif', 'onboarding_complet',
-      ]
-      if (stagesBefore.includes(existingDossier.pipeline_stage ?? '')) {
-        await admin.from('dossiers').update({
-          nom:       kyc.nom   ?? undefined,
-          prenom:    kyc.prenom ?? undefined,
-          statut:    'actif',
-          pipeline_stage: 'kyc_attente',
-          pipeline_stage_updated_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }).eq('id', existingDossier.id)
-      } else if (existingDossier.pipeline_stage !== 'kyc_attente') {
-        // Déjà plus avancé — on met quand même à jour nom/prénom
-        await admin.from('dossiers').update({
-          nom:    kyc.nom    ?? undefined,
-          prenom: kyc.prenom ?? undefined,
-          updated_at: new Date().toISOString(),
-        }).eq('id', existingDossier.id)
+      const currentStage = (existingDossier.pipeline_stage ?? 'nouveau') as PipelineStage
+
+      // Toujours mettre à jour nom/prénom + statut côté CRM
+      await admin.from('dossiers').update({
+        nom:       kyc.nom   ?? undefined,
+        prenom:    kyc.prenom ?? undefined,
+        statut:    'actif',
+        updated_at: new Date().toISOString(),
+      }).eq('id', existingDossier.id)
+
+      // Transition du pipeline : seulement si encore en amont du KYC.
+      // Cas normal post-funnel : currentStage === 'criblage' → kyc_attente.
+      // Edge case : currentStage === 'nouveau' → on passe d'abord par criblage.
+      // Si déjà kyc_attente ou plus avancé, on ne touche pas au stage.
+      if (currentStage === 'nouveau') {
+        await transitionDossierStageService({
+          dossierId: existingDossier.id,
+          toStage: 'criblage',
+          triggeredBy: 'funnel_onboarding',
+          notes: 'Pré-criblage déclenché par soumission KYC client (rattrapage)',
+        })
+      }
+
+      if (currentStage === 'nouveau' || currentStage === 'criblage') {
+        const tr = await transitionDossierStageService({
+          dossierId: existingDossier.id,
+          toStage: 'kyc_attente',
+          triggeredBy: 'manual',
+          triggerContext: { source: 'profile_submit', kyc_id: kyc.id },
+          notes: 'KYC soumis par le client — en attente de validation conseiller',
+        })
+        if (!tr.ok) {
+          console.error('[profile/submit] transition criblage→kyc_attente échouée :', tr.error)
+        }
       }
     }
   }
@@ -119,6 +137,34 @@ export async function POST() {
       email_client: emailClient,
     },
   })
+
+  // 6. Notifier le conseiller/admin par email
+  if (dossierId) {
+    try {
+      // Récupérer le conseiller du dossier
+      const { data: dossier } = await admin
+        .from('dossiers')
+        .select('conseiller_id, prenom, nom')
+        .eq('id', dossierId)
+        .maybeSingle()
+
+      if (dossier?.conseiller_id) {
+        const { data: conseillerAuth } = await admin.auth.admin.getUserById(dossier.conseiller_id)
+        const conseillerEmail = conseillerAuth?.user?.email
+
+        if (conseillerEmail) {
+          const clientNom = [kyc.prenom, kyc.nom].filter(Boolean).join(' ') || emailClient || 'Client'
+          const adminUrl = `${getClientAppBaseUrl()}/admin/validations`
+          await sendEmail({
+            to: conseillerEmail,
+            ...emailKycSoumisAdmin(clientNom, dossierId, adminUrl),
+          }).catch(err => console.error('[profile/submit] email notif conseiller', err))
+        }
+      }
+    } catch (err) {
+      console.error('[profile/submit] notification conseiller error', err)
+    }
+  }
 
   return NextResponse.json({ ok: true, dossier_id: dossierId })
 }

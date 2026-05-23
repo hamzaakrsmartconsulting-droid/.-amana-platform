@@ -17,32 +17,44 @@ import 'server-only'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { sendEmail, emailBienvenueSouscription } from '@/lib/email'
+import { sendEmail, emailBienvenueClientActif } from '@/lib/email'
 import {
   getManualPipelineTargets,
   isTransitionAllowed,
   type PipelineStage,
 } from '@/lib/workflow/pipeline-stages'
 
-async function notifySouscriptionWelcome(
+async function loadDossierEmailContext(
   supabase: SupabaseClient,
   dossierId: string,
-): Promise<void> {
+): Promise<{ email: string; prenom: string } | null> {
   const { data: dossier } = await supabase
     .from('dossiers')
     .select('email_client, prenom')
     .eq('id', dossierId)
     .maybeSingle()
 
-  if (!dossier?.email_client) return
+  if (!dossier?.email_client) return null
+  return {
+    email: dossier.email_client,
+    prenom: dossier.prenom?.trim() || 'cher client',
+  }
+}
+
+async function notifyActifWelcome(
+  supabase: SupabaseClient,
+  dossierId: string,
+): Promise<void> {
+  const ctx = await loadDossierEmailContext(supabase, dossierId)
+  if (!ctx) return
 
   try {
     await sendEmail({
-      to: dossier.email_client,
-      ...emailBienvenueSouscription(dossier.prenom ?? 'cher client'),
+      to: ctx.email,
+      ...emailBienvenueClientActif(ctx.prenom),
     })
   } catch (err) {
-    console.error('[workflow] email bienvenue souscription', dossierId, err)
+    console.error('[workflow] email bienvenue client actif', dossierId, err)
   }
 }
 
@@ -165,8 +177,8 @@ export async function transitionDossierStage(params: {
     },
   })
 
-  if (params.toStage === 'souscription') {
-    void notifySouscriptionWelcome(supabase, params.dossierId)
+  if (params.toStage === 'actif' && fromStage === 'souscription') {
+    void notifyActifWelcome(supabase, params.dossierId)
   }
 
   return { ok: true, from: fromStage, to: params.toStage }
@@ -246,8 +258,8 @@ export async function transitionDossierStageService(params: {
     },
   })
 
-  if (params.toStage === 'souscription') {
-    void notifySouscriptionWelcome(supabase, params.dossierId)
+  if (params.toStage === 'actif' && fromStage === 'souscription') {
+    void notifyActifWelcome(supabase, params.dossierId)
   }
 
   return { ok: true, from: fromStage, to: params.toStage }

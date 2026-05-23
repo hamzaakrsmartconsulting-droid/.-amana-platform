@@ -98,9 +98,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
-  let body: { type?: string; dossier_id?: string }
+  let body: { type?: string; dossier_id?: string; project_id?: string | null }
   try {
-    body = (await request.json()) as { type?: string; dossier_id?: string }
+    body = (await request.json()) as { type?: string; dossier_id?: string; project_id?: string | null }
   } catch {
     return NextResponse.json({ error: 'Body JSON invalide' }, { status: 400 })
   }
@@ -108,6 +108,7 @@ export async function POST(request: NextRequest) {
   if (!body.dossier_id) {
     return NextResponse.json({ error: 'dossier_id requis' }, { status: 400 })
   }
+  const projectId = body.project_id ?? null
   if (!body.type || !SUPPORTED_TYPES.includes(body.type as SupportedType)) {
     return NextResponse.json(
       {
@@ -193,19 +194,38 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Avancer le pipeline automatiquement selon le type de document généré
-  const nextStage = DOC_NEXT_STAGE[docType]
-  if (nextStage) {
-    void transitionDossierStageService({
-      dossierId: body.dossier_id!,
-      toStage: nextStage,
-      triggeredBy: 'agent_sajl',
-      triggerContext: { document_type: docType, generated_by: auth.userId },
-      notes: `Document ${docType.toUpperCase()} généré via wizard — transition automatique`,
-      bypassMatrix: false,
-    }).catch(err => {
-      console.error('[generate route] auto-transition pipeline échouée', err)
+  // Si le doc est généré dans le cadre d'une souscription complémentaire
+  // (pipeline projets), on l'attache au project. On NE déclenche PAS
+  // l'auto-transition du pipeline dossier (pipeline 1) : c'est le pipeline
+  // projet (pipeline 2) qui gouverne ce flow.
+  if (projectId) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY!
+    const svc = createServiceClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
     })
+    const { error: linkErr } = await svc
+      .from('documents')
+      .update({ project_id: projectId })
+      .eq('id', result.doc.id)
+    if (linkErr) {
+      console.error('[generate route] échec liaison document → project', linkErr)
+    }
+  } else {
+    // Cas standard (onboarding pipeline 1) : on avance le stage dossier.
+    const nextStage = DOC_NEXT_STAGE[docType]
+    if (nextStage) {
+      void transitionDossierStageService({
+        dossierId: body.dossier_id!,
+        toStage: nextStage,
+        triggeredBy: 'agent_sajl',
+        triggerContext: { document_type: docType, generated_by: auth.userId },
+        notes: `Document ${docType.toUpperCase()} généré via wizard — transition automatique`,
+        bypassMatrix: false,
+      }).catch(err => {
+        console.error('[generate route] auto-transition pipeline échouée', err)
+      })
+    }
   }
 
   // Audit log
@@ -241,6 +261,7 @@ export async function POST(request: NextRequest) {
     metadata: {
       type: body.type,
       dossier_id: body.dossier_id,
+      project_id: projectId,
       filename: result.doc.filename,
       inputs_keys: Object.keys(inputs),
       template_version: templateVersion[docType],

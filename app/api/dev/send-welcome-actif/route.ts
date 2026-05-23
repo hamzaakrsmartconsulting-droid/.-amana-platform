@@ -1,6 +1,6 @@
-// Dev only — envoie l'email de bienvenue souscription pour prévisualisation.
+// Dev only — envoie l'email de bienvenue client actif pour prévisualisation.
 import { NextResponse } from 'next/server'
-import { sendEmail, emailBienvenueSouscription } from '@/lib/email'
+import { sendEmail, emailBienvenueClientActif } from '@/lib/email'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   try {
     await sendEmail({
       to,
-      ...emailBienvenueSouscription(prenom),
+      ...emailBienvenueClientActif(prenom),
     })
     return NextResponse.json({
       ok: true,
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Erreur envoi'
-    console.error('[dev/send-welcome-souscription]', err)
+    console.error('[dev/send-welcome-actif]', err)
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
