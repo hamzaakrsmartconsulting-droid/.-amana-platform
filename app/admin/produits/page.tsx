@@ -11,6 +11,7 @@ interface Produit {
   id:                   string
   nom:                  string
   type:                 string
+  categorie?:           string
   slug:                 string
   gestionnaire:         string
   description:          string | null
@@ -102,10 +103,10 @@ export default function AdminProduitsPage() {
 
     let error
     if (payload.id) {
-      const { id, created_at, ...rest } = payload as Produit & { categorie: string }
+      const { id, created_at, ...rest } = payload as Produit
       ;({ error } = await supabase.from('products').update(rest).eq('id', id))
     } else {
-      const { id: _id, created_at: _ca, ...rest } = payload as Partial<Produit> & { categorie: string }
+      const { id: _id, created_at: _ca, ...rest } = payload
       ;({ error } = await supabase.from('products').insert(rest))
     }
 
