@@ -235,15 +235,18 @@ export default function AdminValidationsPage() {
         })
       }
 
-      // V3 approuvé — déclencher auto-lm via proxy admin (secret géré côté serveur)
+      // V3 approuvé — auto-lm seulement si pas de LM déjà générée (Mass : génération manuelle + send-docs)
       if (gateType === 'lm_send' && decision === 'approved') {
-        void fetch('/api/admin/trigger-auto-lm', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dossier_id: dossierId }),
-        }).then(r => r.json()).then(d => {
-          if (!d.ok) console.warn('[V3] auto-lm result:', d)
-        }).catch(() => {/* non bloquant */})
+        const hasLm = docs.some(d => d.dossier_id === dossierId && d.type === 'lm')
+        if (!hasLm) {
+          void fetch('/api/admin/trigger-auto-lm', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dossier_id: dossierId }),
+          }).then(r => r.json()).then(d => {
+            if (!d.ok) console.warn('[V3] auto-lm result:', d)
+          }).catch(() => {/* non bloquant */})
+        }
       }
 
       // V4 approuvé
@@ -264,15 +267,18 @@ export default function AdminValidationsPage() {
         })
       }
 
-      // V6 approuvé — déclencher auto-ra (RA final). V7 uniquement après génération bulletin.
+      // V6 approuvé — auto-ra seulement si pas de RA déjà généré (Mass : envoi Yousign via send-docs)
       if (gateType === 'ra_frais_exante' && decision === 'approved') {
-        void fetch('/api/admin/trigger-auto-ra', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dossier_id: dossierId }),
-        }).then(r => r.json()).then(d => {
-          if (!d.ok) console.warn('[V6] trigger-auto-ra result:', d)
-        }).catch(() => {/* non bloquant */})
+        const hasRa = docs.some(d => d.dossier_id === dossierId && d.type === 'ra')
+        if (!hasRa) {
+          void fetch('/api/admin/trigger-auto-ra', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dossier_id: dossierId }),
+          }).then(r => r.json()).then(d => {
+            if (!d.ok) console.warn('[V6] trigger-auto-ra result:', d)
+          }).catch(() => {/* non bloquant */})
+        }
       }
 
       // V7 approuvé — déclencher auto-bulletin (Bulletin souscription → Yousign)

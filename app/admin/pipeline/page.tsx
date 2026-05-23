@@ -55,6 +55,9 @@ const COLUMN_STAGE_KEYS: Record<string, string[]> = {
   lm_envoyee: ['lm_envoyee', 'der_envoye', 'der_signe', 'bilan_genere', 'lm_signee'],
 }
 
+/** Étapes de la colonne LM/RA/KYC/Bilan — pas de validation ni déplacement depuis le Kanban. */
+const LM_RA_KANBAN_COLUMN_STAGES = new Set(COLUMN_STAGE_KEYS.lm_envoyee)
+
 const STAGES_SIDE: Array<{ key: string; label: string; color: string }> = [
   { key: 'bloque', label: 'Bloqué', color: '#dc2626' },
   { key: 'archive', label: 'Archivé', color: '#6b7280' },
@@ -320,7 +323,12 @@ export default function AdminPipelinePage() {
 
 // Pour chaque étape du pipeline, quel document proposer en génération rapide
 const STAGE_QUICK_DOC: Record<string, { type: string; label: string }[]> = {
-  kyc_complet:  [{ type: 'bilan', label: 'Bilan' }, { type: 'der', label: 'DER' }],
+  kyc_complet:  [
+    { type: 'der', label: 'DER' },
+    { type: 'lm', label: 'LM' },
+    { type: 'ra', label: 'RA' },
+    { type: 'bilan', label: 'Bilan' },
+  ],
   bilan_genere: [{ type: 'preco', label: 'Préco' }, { type: 'bilan', label: 'Bilan' }, { type: 'ra', label: 'RA' }],
   der_envoye:   [{ type: 'lm', label: 'LM' }, { type: 'ra', label: 'RA' }],
   der_signe:    [{ type: 'lm', label: 'LM' }, { type: 'ra', label: 'RA' }],
@@ -364,10 +372,14 @@ function DossierCard({
   const daysSince = Math.floor(
     (Date.now() - dateUpdated.getTime()) / (1000 * 60 * 60 * 24)
   )
-  const quickDocs = STAGE_QUICK_DOC[dossier.pipeline_stage] ?? []
+  const inLmRaColumn = LM_RA_KANBAN_COLUMN_STAGES.has(dossier.pipeline_stage)
+  const quickDocs = inLmRaColumn
+    ? []
+    : (STAGE_QUICK_DOC[dossier.pipeline_stage] ?? [])
   const isSouscription = dossier.pipeline_stage === 'souscription'
   const stageLabel =
     PIPELINE_STAGE_LABEL[stage] ?? dossier.pipeline_stage
+  const showManualMove = !inLmRaColumn && manualTargets.length > 0
 
   async function transitionTo(
     e: MouseEvent,
@@ -470,7 +482,7 @@ function DossierCard({
           ))}
         </div>
       )}
-      {manualTargets.length > 0 && (
+      {showManualMove && (
         <div className="space-y-1.5 border-t border-amana-grey-light px-2 py-1.5">
           {isSouscription && (
             <button
@@ -509,6 +521,11 @@ function DossierCard({
             </button>
           </div>
         </div>
+      )}
+      {inLmRaColumn && (
+        <p className="border-t border-amana-grey-light px-2 py-1.5 text-[10px] text-amana-grey">
+          Docs, validations et Yousign : fiche dossier + menu Validations
+        </p>
       )}
     </div>
   )

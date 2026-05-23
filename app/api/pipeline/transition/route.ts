@@ -10,6 +10,15 @@ import {
   type TriggeredBy,
 } from '@/lib/workflow/workflow-service'
 
+/** Colonne Kanban LM/RA/KYC/Bilan — pas de déplacement manuel depuis le board. */
+const LM_RA_KANBAN_COLUMN_STAGES = new Set<PipelineStage>([
+  'lm_envoyee',
+  'der_envoye',
+  'der_signe',
+  'bilan_genere',
+  'lm_signee',
+])
+
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
@@ -52,6 +61,36 @@ export async function POST(request: NextRequest) {
       { ok: false, error: 'dossier_id et to_stage requis' },
       { status: 400 }
     )
+  }
+
+  if (body.trigger_context?.source === 'pipeline_kanban') {
+    const cookieStore = await cookies()
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() { return cookieStore.getAll() },
+          setAll() {},
+        },
+      },
+    )
+    const { data: dossier } = await supabase
+      .from('dossiers')
+      .select('pipeline_stage')
+      .eq('id', body.dossier_id)
+      .maybeSingle()
+    const current = dossier?.pipeline_stage as PipelineStage | undefined
+    if (current && LM_RA_KANBAN_COLUMN_STAGES.has(current)) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            'Déplacement Kanban désactivé pour la colonne LM/RA/KYC/Bilan. Utilisez la fiche dossier ou les transitions automatiques (Yousign, validations).',
+        },
+        { status: 403 },
+      )
+    }
   }
 
   const result = await transitionDossierStage({

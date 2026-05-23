@@ -76,9 +76,8 @@ export function isTransitionAllowed(
 // Stages gérés automatiquement — pas de déplacement manuel depuis le Kanban.
 // - criblage / kyc_attente : transitions pilotées par /api/profile/submit et
 //   /api/admin/kyc-validate.
-// - kyc_complet : transition vers der_envoye pilotée par auto-pack-sign (Mass)
-//   ou auto-der (Patrimoniale/Premium) après validation admin du KYC.
-const AUTOMATED_STAGES: PipelineStage[] = ['criblage', 'kyc_attente', 'kyc_complet']
+// - kyc_complet : Mohamed génère DER/LM/RA puis déplace manuellement vers lm_envoyee.
+const AUTOMATED_STAGES: PipelineStage[] = ['criblage', 'kyc_attente']
 
 /** Cibles proposées dans le Kanban admin (hors bloqué / archivé / stages auto). */
 export function getManualPipelineTargets(from: PipelineStage): PipelineStage[] {

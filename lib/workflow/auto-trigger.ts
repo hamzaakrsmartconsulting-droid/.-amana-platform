@@ -261,7 +261,8 @@ export async function triggerPostScreening(params: {
 // =====================================================================
 export async function triggerPostKycValidated(params: {
   dossierId: string
-  autoSendDerForMass?: boolean // défaut true
+  /** Mass : pack DER+LM+RA+Yousign auto — désactivé (Mohamed génère puis envoie via admin). */
+  autoSendDerForMass?: boolean // défaut false
 }): Promise<TriggerResult> {
   const result: TriggerResult = { ok: true, actions_taken: [], errors: [] }
   const supabase = svc()
@@ -290,11 +291,10 @@ export async function triggerPostKycValidated(params: {
   result.actions_taken.push('Transition → kyc_complet')
   result.next_stage = 'kyc_complet'
 
-  // Pour Mass : déclencher auto-pack-sign (DER + LM + RA en 1 Yousign)
-  // skip_email=true → l'appelant (kyc-validate) enverra un email combiné unique
+  // Mass (optionnel) : pack DER+LM+RA+Yousign — désactivé par défaut ; flux manuel admin.
   if (
     dossier.offre_amana_cible === 'mass' &&
-    (params.autoSendDerForMass ?? true) &&
+    params.autoSendDerForMass === true &&
     dossier.email_client
   ) {
     const packResult = await callInternalRoute({

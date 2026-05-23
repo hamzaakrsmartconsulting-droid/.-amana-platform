@@ -130,13 +130,29 @@ export async function POST(request: NextRequest) {
     )
     const { data: dossier } = await supabase
       .from('dossiers')
-      .select('conseiller_id')
+      .select('conseiller_id, pipeline_stage')
       .eq('id', body.dossier_id)
       .maybeSingle()
     if (!dossier) {
       return NextResponse.json({ error: 'Dossier introuvable' }, { status: 404 })
     }
     effectiveConseillerId = dossier.conseiller_id
+  }
+
+  // Stage actuel (admin + conseiller) pour éviter les transitions auto prématurées
+  let pipelineStage: PipelineStage | null = null
+  {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY!
+    const svc = createServiceClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    const { data: stageRow } = await svc
+      .from('dossiers')
+      .select('pipeline_stage')
+      .eq('id', body.dossier_id)
+      .maybeSingle()
+    pipelineStage = (stageRow?.pipeline_stage as PipelineStage) ?? null
   }
 
   const docType = body.type as SupportedType
@@ -213,7 +229,9 @@ export async function POST(request: NextRequest) {
     }
   } else {
     // Cas standard (onboarding pipeline 1) : on avance le stage dossier.
-    const nextStage = DOC_NEXT_STAGE[docType]
+    // En kyc_complet : Mohamed génère DER/LM/RA puis déplace le Kanban manuellement.
+    const nextStage =
+      pipelineStage === 'kyc_complet' ? undefined : DOC_NEXT_STAGE[docType]
     if (nextStage) {
       void transitionDossierStageService({
         dossierId: body.dossier_id!,

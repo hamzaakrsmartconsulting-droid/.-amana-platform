@@ -13,6 +13,8 @@ import {
   GATE_LABEL_FR,
   requireApprovedGate,
 } from '@/lib/workflow/validation-gates'
+import { transitionDossierStageService } from '@/lib/workflow/workflow-service'
+import { sendEmail, emailPackReglementairePretASigner } from '@/lib/email'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -49,7 +51,7 @@ export async function POST(
   // Récupérer le dossier
   const { data: dossier } = await admin
     .from('dossiers')
-    .select('id, prenom, nom, email_client, telephone')
+    .select('id, prenom, nom, email_client, telephone, pipeline_stage')
     .eq('id', dossierId)
     .maybeSingle()
 
@@ -170,6 +172,31 @@ export async function POST(
         updated_at: new Date().toISOString(),
       })
       .eq('id', doc.dbId)
+  }
+
+  // Pipeline : pack envoyé → der_envoye (depuis kyc_complet ou colonne LM/RA)
+  const stage = dossier.pipeline_stage as string | null
+  if (stage === 'kyc_complet' || stage === 'lm_envoyee') {
+    void transitionDossierStageService({
+      dossierId,
+      toStage: 'der_envoye',
+      triggeredBy: 'manual',
+      triggerContext: {
+        via: 'send-docs',
+        signature_request_id: yousignResult.signature_request_id,
+      },
+      notes: 'Pack réglementaire envoyé via Yousign (admin)',
+    }).catch(err => console.error('[send-docs] transition der_envoye', err))
+  }
+
+  if (yousignResult.signing_url && dossier.email_client) {
+    void sendEmail({
+      to: dossier.email_client,
+      ...emailPackReglementairePretASigner(
+        dossier.prenom ?? 'cher client',
+        yousignResult.signing_url,
+      ),
+    }).catch(err => console.error('[send-docs] email pack signature', err))
   }
 
   // Audit log

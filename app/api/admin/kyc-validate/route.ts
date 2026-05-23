@@ -10,7 +10,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { triggerPostKycValidated, preFillBilanFromKyc } from '@/lib/workflow/auto-trigger'
 import { setGatePendingAfterDocumentGeneration } from '@/lib/workflow/validation-gates'
 import { generateLcbftForDossier, generatePpeAnnexeForDossier, generateKycFicheForDossier } from '@/lib/documents/generate-pdf'
-import { sendEmail, emailKycValide, emailKycValideEtPackPretASigner } from '@/lib/email'
+import { sendEmail, emailKycValide } from '@/lib/email'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
   // Déclencher la transition kyc_complet via auto-trigger
   const result = await triggerPostKycValidated({
     dossierId: body.dossier_id,
-    autoSendDerForMass: true,
+    autoSendDerForMass: false,
   })
 
   // V2 — gate bilan / profil risque dès KYC validé (visible dans Validations avant génération PDF)
@@ -87,22 +87,12 @@ export async function POST(request: NextRequest) {
   void preFillBilanFromKyc(body.dossier_id)
     .catch(err => console.error('[kyc-validate] preFillBilanFromKyc error', err))
 
-  // Notifier le client :
-  // - Offre Mass avec signing_url → 1 email combiné "KYC validé + pack à signer"
-  // - Autres offres ou pas de signing_url → email KYC validé standard
+  // Notifier le client (KYC validé — pack LM/RA/Yousign envoyé plus tard par Mohamed)
   if (dossier.email_client) {
-    const signingUrl = result.signing_url
-    if (dossier.offre_amana_cible === 'mass' && signingUrl) {
-      void sendEmail({
-        to: dossier.email_client,
-        ...emailKycValideEtPackPretASigner(dossier.prenom ?? 'cher client', signingUrl),
-      }).catch(err => console.error('[kyc-validate] email combiné KYC+pack', err))
-    } else {
-      void sendEmail({
-        to: dossier.email_client,
-        ...emailKycValide(dossier.prenom ?? 'cher client'),
-      }).catch(err => console.error('[kyc-validate] email client KYC validé', err))
-    }
+    void sendEmail({
+      to: dossier.email_client,
+      ...emailKycValide(dossier.prenom ?? 'cher client'),
+    }).catch(err => console.error('[kyc-validate] email client KYC validé', err))
   }
 
   // Spec étape 3 — générer la Fiche KYC complétée (PDF AMANA officiel)
