@@ -55,6 +55,22 @@ function toSlug(s: string) {
     .replace(/^-|-$/g, '')
 }
 
+/** DB `categorie` (NOT NULL) — distinct du champ UI `type`. */
+const TYPE_TO_CATEGORIE: Record<string, string> = {
+  scpi: 'scpi',
+  assurance_vie: 'assurance_vie',
+  capitalisation: 'assurance_vie',
+  cto: 'compte_titre',
+  retraite: 'per',
+  pee: 'autre',
+  don: 'autre',
+  immobilier: 'immobilier',
+}
+
+function typeToCategorie(type: string | undefined): string {
+  return TYPE_TO_CATEGORIE[type ?? ''] ?? 'autre'
+}
+
 export default function AdminProduitsPage() {
   const [produits, setProduits] = useState<Produit[]>([])
   const [loading,  setLoading]  = useState(true)
@@ -80,16 +96,17 @@ export default function AdminProduitsPage() {
     if (!editing) return
     setSaving(true)
 
-    // Auto-slug si vide
     const payload = { ...editing }
     if (!payload.slug && payload.nom) payload.slug = toSlug(payload.nom)
+    payload.categorie = typeToCategorie(payload.type)
 
     let error
     if (payload.id) {
-      const { id, created_at, ...rest } = payload as Produit
+      const { id, created_at, ...rest } = payload as Produit & { categorie: string }
       ;({ error } = await supabase.from('products').update(rest).eq('id', id))
     } else {
-      ;({ error } = await supabase.from('products').insert(payload))
+      const { id: _id, created_at: _ca, ...rest } = payload as Partial<Produit> & { categorie: string }
+      ;({ error } = await supabase.from('products').insert(rest))
     }
 
     if (error) {
