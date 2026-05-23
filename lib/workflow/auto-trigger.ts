@@ -18,6 +18,7 @@ import {
 import { generateDerForDossierAdmin } from '@/lib/documents/generate-pdf'
 import { sendEmailWithAttachment, emailDerRemis } from '@/lib/email'
 import { getClientAppBaseUrl } from '@/lib/app-url'
+import { sanitizeSupabaseMagicLink } from '@/lib/auth/magic-link'
 
 function svc() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -169,11 +170,18 @@ export async function triggerPostFinalizeOnboarding(params: {
             )
           }
           const fallbackAuthUrl = `${baseUrl}/auth?next=${encodeURIComponent(postLoginPath)}`
-          let magicLink = linkData?.properties?.action_link ?? fallbackAuthUrl
-          if (/0\.0\.0\.0|localhost|127\.0\.0\.1/i.test(magicLink)) {
-            console.error('[auto-trigger] magic link host invalide, repli /auth', magicLink)
-            magicLink = fallbackAuthUrl
-          }
+          const rawActionLink = linkData?.properties?.action_link ?? fallbackAuthUrl
+          const magicLink = sanitizeSupabaseMagicLink(
+            rawActionLink,
+            baseUrl,
+            postLoginPath,
+          )
+          console.info('[auto-trigger] DER magic link', {
+            baseUrl,
+            redirectTo,
+            hadActionLink: Boolean(linkData?.properties?.action_link),
+            sanitized: magicLink !== rawActionLink,
+          })
 
           if (fileBlob) {
             const pdfBuffer = Buffer.from(await fileBlob.arrayBuffer())
