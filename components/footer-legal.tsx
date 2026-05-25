@@ -1,3 +1,5 @@
+import AmanaLogo from '@/components/amana-logo'
+
 // TODO: Définir NEXT_PUBLIC_ORIAS_NUM dans .env.local et Vercel
 // Exemple: NEXT_PUBLIC_ORIAS_NUM=12345678
 const ORIAS_NUM = process.env.NEXT_PUBLIC_ORIAS_NUM ?? '00000000'
@@ -20,14 +22,7 @@ export default function FooterLegal() {
           gap: '12px',
           marginBottom: '16px',
         }}>
-          <span style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '15px',
-            color: 'rgba(248,244,236,0.5)',
-            letterSpacing: '0.06em',
-          }}>
-            AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
-          </span>
+          <AmanaLogo href="/" height={36} />
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             {[
               { label: 'Mentions légales', href: '/mentions-legales' },
