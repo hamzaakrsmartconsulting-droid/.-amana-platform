@@ -2,9 +2,7 @@
 // Sprint Agents IA v18 · 30 avril 2026
 
 import Link from 'next/link'
-
-const CALENDLY_URL =
-  process.env.NEXT_PUBLIC_CALENDLY_URL ?? 'https://calendly.com/amana-patrimoine/visio'
+import { CALENDLY_BOOKING_URL } from '@/lib/calendly-url'
 
 export default function OnboardResultPatrimoniale() {
   return (
@@ -49,7 +47,7 @@ export default function OnboardResultPatrimoniale() {
                   prépare votre Bilan Mizan personnalisé.
                 </p>
                 <a
-                  href={CALENDLY_URL}
+                  href={CALENDLY_BOOKING_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-2 inline-block rounded bg-amana-forest px-4 py-2 text-sm font-semibold text-white hover:bg-amana-dark"

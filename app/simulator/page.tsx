@@ -4,6 +4,7 @@ import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import AmanaLogo from '@/components/amana-logo'
 
 const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
@@ -156,18 +157,7 @@ export default function SimulatorPage() {
           flexShrink: 0,
         }}
       >
-        <a
-          href="/"
-          style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: '20px',
-            color: CREAM,
-            letterSpacing: '0.06em',
-            textDecoration: 'none',
-          }}
-        >
-          AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
-        </a>
+        <AmanaLogo href="/" height={40} />
         <span style={{ color: 'rgba(248,244,236,0.5)', fontSize: '13px' }}>
           Étape {s.step} / 6
         </span>

@@ -2,10 +2,7 @@
 // Sprint Agents IA v18 · 30 avril 2026
 
 import Link from 'next/link'
-
-const CALENDLY_PREMIUM_URL =
-  process.env.NEXT_PUBLIC_CALENDLY_PREMIUM_URL ??
-  'https://calendly.com/amana-patrimoine/premium-1h'
+import { CALENDLY_BOOKING_URL } from '@/lib/calendly-url'
 
 export default function OnboardResultPremium() {
   return (
@@ -80,7 +77,7 @@ export default function OnboardResultPremium() {
             AMANA Premium est adapté pour vous.
           </p>
           <a
-            href={CALENDLY_PREMIUM_URL}
+            href={CALENDLY_BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-block rounded bg-amana-forest px-6 py-3 text-sm font-semibold text-white hover:bg-amana-dark"

@@ -10,6 +10,7 @@ import { useEffect, useState, type ChangeEvent } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader from '@/components/amana-header'
+import { CALENDLY_BOOKING_URL } from '@/lib/calendly-url'
 
 const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
@@ -844,7 +845,7 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
-            <a href="https://calendly.com/amana-patrimoine/30min" target="_blank" rel="noopener noreferrer" style={{
+            <a href={CALENDLY_BOOKING_URL} target="_blank" rel="noopener noreferrer" style={{
               display: 'inline-block', marginTop: 18,
               padding: '10px 22px', background: GOLD, color: 'white',
               borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600,

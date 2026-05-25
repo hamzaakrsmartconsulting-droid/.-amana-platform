@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
+import AmanaLogo from '@/components/amana-logo'
 
 const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
@@ -13,16 +14,6 @@ const REDIRECT: Record<string, string> = {
   admin: '/admin',
   conseiller: '/conseiller',
   client: '/dashboard',
-}
-
-function Logo({ height = 96 }: { height?: number }) {
-  return (
-    <img
-      src="/amana-logo-header.png"
-      alt="AMANA Patrimoine"
-      style={{ height, width: 'auto', objectFit: 'contain', display: 'block' }}
-    />
-  )
 }
 
 type Mode = 'login' | 'signup'
@@ -381,7 +372,7 @@ function AuthPageInner() {
             <ellipse cx="235" cy="130" rx="38" ry="17" transform="rotate(-19 235 130)" fill="white" />
           </svg>
           <a href="/" style={{ textDecoration: 'none', lineHeight: 0, display: 'block' }}>
-            <Logo height={96} />
+            <AmanaLogo height={96} />
           </a>
           <div>
             <div

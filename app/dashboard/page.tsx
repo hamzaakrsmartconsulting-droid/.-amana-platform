@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AmanaHeader, { UserAvatar } from '@/components/amana-header'
+import { CALENDLY_BOOKING_URL } from '@/lib/calendly-url'
 
 const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
@@ -405,7 +406,9 @@ export default function DashboardPage() {
             </div>
           </div>
           <a
-            href="/conseiller"
+            href={CALENDLY_BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               display: 'inline-block', padding: '10px 18px',
               background: GOLD, color: 'white',

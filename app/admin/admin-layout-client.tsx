@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import AmanaLogo from '@/components/amana-logo'
 
 const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
@@ -114,7 +115,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
       <aside className="admin-sidebar">
         <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <img src="/amana-logo-header.png" alt="AMANA" style={{ height: 44, width: 'auto', objectFit: 'contain' }}/>
+          <AmanaLogo height={44} />
           <div style={{
             marginTop: 8, fontSize: 9, fontWeight: 700,
             color: GOLD, letterSpacing: '0.18em', textTransform: 'uppercase',

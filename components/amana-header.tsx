@@ -3,17 +3,9 @@
 import React from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import AmanaLogo from '@/components/amana-logo'
 
 const FOREST = '#444b3f'
-const GOLD   = '#c9a55a'
-
-const Logo = () => (
-  <img
-    src="/amana-logo-header.png"
-    alt="AMANA Patrimoine"
-    style={{ height: 56, width: 'auto', objectFit: 'contain', display: 'block' }}
-  />
-)
 
 interface AmanaHeaderProps {
   backHref?:     string
@@ -67,9 +59,7 @@ export default function AmanaHeader({
       </div>
 
       {/* Center */}
-      <a href="/dashboard" style={{ textDecoration: 'none', lineHeight: 0 }}>
-        <Logo />
-      </a>
+      <AmanaLogo href="/dashboard" height={48} />
 
       {/* Right */}
       <div style={{ minWidth: 80, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12 }}>

@@ -1,3 +1,5 @@
+import AmanaLogo from '@/components/amana-logo'
+
 const FOREST = '#444b3f'
 const GOLD = '#c9a55a'
 const CREAM = '#f8f4ec'
@@ -8,9 +10,7 @@ export default function Home() {
 
       {/* Header */}
       <div className="home-nav" style={{ background: '#353b32', padding: '0 52px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
-        <span style={{ fontFamily: 'Georgia, serif', fontSize: '20px', color: CREAM, letterSpacing: '0.06em' }}>
-          AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
-        </span>
+        <AmanaLogo href="/" height={44} />
         <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <a href="/catalogue" style={{ color: 'rgba(248,244,236,0.7)', fontSize: '14px', textDecoration: 'none' }}>Nos produits</a>
           <a href="/onboard" style={{ color: 'rgba(248,244,236,0.7)', fontSize: '14px', textDecoration: 'none' }}>Simulateur</a>
@@ -169,9 +169,7 @@ export default function Home() {
 
       {/* Footer */}
       <div style={{ background: '#353b32', padding: '32px 52px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-        <span style={{ fontFamily: 'Georgia, serif', fontSize: '16px', color: 'rgba(248,244,236,0.5)', letterSpacing: '0.06em' }}>
-          AMANA <span style={{ color: GOLD }}>PATRIMOINE</span>
-        </span>
+        <AmanaLogo href="/" height={36} />
         <div style={{ display: 'flex', gap: '24px' }}>
           <a href="/catalogue" style={{ fontSize: '13px', color: 'rgba(248,244,236,0.4)', textDecoration: 'none' }}>Produits</a>
           <a href="/onboard" style={{ fontSize: '13px', color: 'rgba(248,244,236,0.4)', textDecoration: 'none' }}>Simulateur</a>

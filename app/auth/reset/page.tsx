@@ -2,19 +2,12 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import AmanaLogo from '@/components/amana-logo'
 
 const FOREST = '#444b3f'
 const GOLD   = '#c9a55a'
 const CREAM  = '#f8f4ec'
 const DARK   = '#353b32'
-
-const Logo = () => (
-  <img
-    src="/amana-logo-header.png"
-    alt="AMANA Patrimoine"
-    style={{ height: 80, width: 'auto', objectFit: 'contain', display: 'block' }}
-  />
-)
 
 export default function AuthResetPage() {
   const [email,   setEmail]   = useState('')
@@ -67,7 +60,7 @@ export default function AuthResetPage() {
           </svg>
 
           <a href="/" style={{ textDecoration: 'none', lineHeight: 0 }}>
-            <Logo />
+            <AmanaLogo height={80} />
           </a>
 
           <div>
