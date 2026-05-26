@@ -14,7 +14,7 @@ test.describe('Funnel public — tunnel Mass', () => {
     await page.goto('/onboard')
 
     // Étape 1 — Objectifs
-    await expect(page.getByRole('heading', { name: /Quel est votre objectif/i })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /Quels sont vos objectifs/i })).toBeVisible()
     await page.getByLabel(/Préparer ma retraite/).check()
     await page.getByRole('button', { name: /Continuer/i }).click()
 

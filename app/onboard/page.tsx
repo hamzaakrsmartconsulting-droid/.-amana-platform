@@ -17,11 +17,16 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { normalizePhoneForYousign } from '@/lib/yousign/phone'
+import {
+  ONBOARDING_OBJECTIF_OPTIONS,
+  type OnboardingObjectifCode,
+} from '@/lib/onboarding/objectifs'
 
 type Step = 1 | 2 | 3 | 4 | 5
 
 type Step1Data = {
-  objectif_principal: string
+  objectifs_principaux: OnboardingObjectifCode[]
+  objectif_autre_precision: string
   horizon_annees: number
   capacite_pertes: 'faible' | 'moyenne' | 'elevee'
 }
@@ -74,7 +79,8 @@ export default function OnboardPage() {
 
   // États locaux pour chaque étape
   const [step1, setStep1] = useState<Step1Data>({
-    objectif_principal: '',
+    objectifs_principaux: [],
+    objectif_autre_precision: '',
     horizon_annees: 10,
     capacite_pertes: 'moyenne',
   })
@@ -112,6 +118,8 @@ export default function OnboardPage() {
   const initSession = async () => {
     setSessionLoading(true)
     setError(null)
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), 15_000)
     try {
       const utm = new URLSearchParams(window.location.search)
       const r = await fetch('/api/onboard/start', {
@@ -122,6 +130,7 @@ export default function OnboardPage() {
           utm_medium: utm.get('utm_medium') ?? undefined,
           utm_campaign: utm.get('utm_campaign') ?? undefined,
         }),
+        signal: controller.signal,
       })
       const d = (await r.json()) as { ok?: boolean; session_token?: string; error?: string }
       if (!r.ok || !d.session_token) {
@@ -137,16 +146,25 @@ export default function OnboardPage() {
       console.error(e)
       setSessionToken(null)
       setError(
-        'Impossible de joindre le serveur ou Supabase. Vérifiez votre connexion, que Docker tourne si vous êtes en local, puis rechargez la page.'
+        e instanceof Error && e.name === 'AbortError'
+          ? 'Délai dépassé. Vérifiez que le serveur Next.js et Supabase tournent, puis cliquez sur Réessayer.'
+          : 'Impossible de joindre le serveur ou Supabase. Vérifiez votre connexion, que Docker tourne si vous êtes en local, puis rechargez la page.'
       )
     } finally {
+      window.clearTimeout(timeout)
       setSessionLoading(false)
     }
   }
 
   const submitStep1 = async (e: FormEvent) => {
     e.preventDefault()
-    if (!step1.objectif_principal) return
+    if (step1.objectifs_principaux.length === 0) return
+    if (
+      step1.objectifs_principaux.includes('autre') &&
+      step1.objectif_autre_precision.trim().length < 2
+    ) {
+      return
+    }
     if (!sessionToken) {
       setError(
         'Session non initialisée. Vérifiez que Supabase est démarré, puis cliquez sur « Réessayer » ou rechargez la page.'
@@ -359,44 +377,86 @@ function Step1({
   sessionLoading: boolean
   showSessionHint: boolean
 }) {
-  const objectifs = [
-    { value: 'preparer_retraite', label: 'Préparer ma retraite' },
-    { value: 'transmettre_patrimoine', label: 'Transmettre à mes proches' },
-    { value: 'optimiser_fiscalite', label: 'Optimiser ma fiscalité' },
-    { value: 'epargner_projet', label: 'Épargner pour un projet' },
-    { value: 'investir_immo', label: 'Investir en immobilier' },
-    { value: 'gerer_heritage', label: 'Gérer un héritage reçu' },
-    { value: 'autre', label: 'Autre' },
-  ]
+  const selected = new Set(value.objectifs_principaux)
+  const showAutreField = selected.has('autre')
+
+  const toggleObjectif = (code: OnboardingObjectifCode) => {
+    const next = new Set(value.objectifs_principaux)
+    if (next.has(code)) {
+      next.delete(code)
+    } else {
+      next.add(code)
+    }
+    onChange({
+      ...value,
+      objectifs_principaux: [...next],
+      objectif_autre_precision: next.has('autre') ? value.objectif_autre_precision : '',
+    })
+  }
+
+  const canSubmit =
+    value.objectifs_principaux.length > 0 &&
+    (!showAutreField || value.objectif_autre_precision.trim().length >= 2)
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-amana-forest">Quel est votre objectif principal ?</h2>
-        <p className="mt-1 text-sm text-amana-grey">Une seule réponse — vous pourrez préciser plus tard.</p>
+        <h2 className="text-xl font-bold text-amana-forest">Quels sont vos objectifs ?</h2>
+        <p className="mt-1 text-sm text-amana-grey">
+          Plusieurs réponses possibles — vous pourrez préciser plus tard.
+        </p>
       </div>
 
       <div className="space-y-2">
-        {objectifs.map((o) => (
-          <label
-            key={o.value}
-            className={`block cursor-pointer rounded border p-3 ${
-              value.objectif_principal === o.value
-                ? 'border-amana-forest bg-amana-cream'
-                : 'border-amana-grey-light'
-            }`}
-          >
-            <input
-              type="radio"
-              name="objectif"
-              value={o.value}
-              checked={value.objectif_principal === o.value}
-              onChange={() => onChange({ ...value, objectif_principal: o.value })}
-              className="mr-2"
-            />
-            {o.label}
-          </label>
-        ))}
+        {ONBOARDING_OBJECTIF_OPTIONS.map((o) => {
+          const isAutre = o.value === 'autre'
+          const isChecked = selected.has(o.value)
+          return (
+            <div key={o.value} className="space-y-2">
+              <label
+                className={`block cursor-pointer rounded border p-3 ${
+                  isChecked
+                    ? 'border-amana-forest bg-amana-cream'
+                    : 'border-amana-grey-light'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  name="objectif"
+                  value={o.value}
+                  checked={isChecked}
+                  onChange={() => toggleObjectif(o.value)}
+                  className="mr-2"
+                />
+                {o.label}
+              </label>
+              {isAutre && isChecked && (
+                <div className="rounded border border-amana-forest/30 bg-amana-cream/50 px-3 py-3">
+                  <label
+                    htmlFor="objectif-autre-precision"
+                    className="block text-sm font-semibold text-amana-forest"
+                  >
+                    Précisez votre objectif *
+                  </label>
+                  <input
+                    id="objectif-autre-precision"
+                    type="text"
+                    value={value.objectif_autre_precision}
+                    onChange={(e) =>
+                      onChange({ ...value, objectif_autre_precision: e.target.value })
+                    }
+                    placeholder="Ex. financer les études de mes enfants"
+                    className="mt-2 w-full rounded border border-amana-grey-light bg-white p-2 text-sm"
+                    required
+                    minLength={2}
+                    maxLength={500}
+                    autoFocus
+                  />
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       <div>
@@ -434,17 +494,30 @@ function Step1({
       </div>
 
       {showSessionHint && !sessionReady && !sessionLoading && (
+        <p className="text-center text-xs text-amber-800">
+          Connexion au service en attente — cliquez sur « Réessayer » en haut de page si le bouton reste
+          inactif.
+        </p>
+      )}
+
+      {showAutreField && value.objectif_autre_precision.trim().length < 2 && (
         <p className="text-center text-xs text-amana-grey">
-          Une fois la connexion au service prête, le bouton ci-dessous s’activera.
+          Renseignez le champ « Précisez votre objectif » pour continuer.
         </p>
       )}
 
       <button
         type="submit"
-        disabled={loading || sessionLoading || !sessionReady || !value.objectif_principal}
+        disabled={loading || sessionLoading || !sessionReady || !canSubmit}
         className="w-full rounded bg-amana-forest p-3 font-semibold text-white hover:bg-amana-dark disabled:opacity-50"
       >
-        {loading ? 'Sauvegarde…' : sessionLoading ? 'Préparation…' : 'Continuer'}
+        {loading
+          ? 'Sauvegarde…'
+          : sessionLoading
+            ? 'Préparation…'
+            : !sessionReady
+              ? 'En attente du service…'
+              : 'Continuer'}
       </button>
     </form>
   )

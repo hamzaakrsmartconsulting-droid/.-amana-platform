@@ -9,6 +9,12 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { buildFullName } from '@/lib/profiles/display-name'
 import { normalizePhoneForYousign } from '@/lib/yousign/phone'
 import { routeToOffer, type OffreAmana, type RouteOfferOutput } from './route-offer'
+import {
+  formatObjectifsSummary,
+  normalizeStep1Objectifs,
+  primaryObjectifCode,
+  type OnboardingObjectifCode,
+} from './objectifs'
 
 function serviceSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -20,14 +26,8 @@ function serviceSupabase() {
 }
 
 export type OnboardingStep1 = {
-  objectif_principal:
-    | 'preparer_retraite'
-    | 'transmettre_patrimoine'
-    | 'optimiser_fiscalite'
-    | 'epargner_projet'
-    | 'investir_immo'
-    | 'gerer_heritage'
-    | 'autre'
+  objectifs_principaux: OnboardingObjectifCode[]
+  objectif_autre_precision?: string
   horizon_annees: number
   capacite_pertes: 'faible' | 'moyenne' | 'elevee'
 }
@@ -95,6 +95,8 @@ export type OnboardingSession = {
   offre_score: unknown
   // Step 1
   objectif_principal: string | null
+  objectifs_principaux: string[] | null
+  objectif_autre_precision: string | null
   horizon_annees: number | null
   capacite_pertes: string | null
   // Step 2
@@ -179,11 +181,17 @@ export async function saveStep1(
   sessionToken: string,
   data: OnboardingStep1
 ): Promise<{ ok: true; session: OnboardingSession } | { ok: false; error: string }> {
+  const parsed = normalizeStep1Objectifs(data)
+  if (!parsed.ok) return { ok: false, error: parsed.error }
+
+  const primary = primaryObjectifCode(parsed.codes)
   const supabase = serviceSupabase()
   const { data: row, error } = await supabase
     .from('onboarding_sessions')
     .update({
-      objectif_principal: data.objectif_principal,
+      objectifs_principaux: parsed.codes,
+      objectif_autre_precision: parsed.autrePrecision,
+      objectif_principal: primary,
       horizon_annees: data.horizon_annees,
       capacite_pertes: data.capacite_pertes,
       current_step: 2,
@@ -451,7 +459,7 @@ export async function finalizeOnboarding(params: {
       telephone: session.telephone,
       statut: 'prospect',
       offre_amana_cible: session.offre_aiguillee,
-      notes: `Créé via funnel public /onboard. Aiguillage automatique : ${session.offre_aiguillee}.\nSensibilité Sharia : ${session.sensibilite_sharia}.\nObjectif : ${session.objectif_principal} (horizon ${session.horizon_annees} ans).`,
+      notes: `Créé via funnel public /onboard. Aiguillage automatique : ${session.offre_aiguillee}.\nSensibilité Sharia : ${session.sensibilite_sharia}.\nObjectifs : ${formatObjectifsSummary(session.objectifs_principaux ?? (session.objectif_principal ? [session.objectif_principal] : []), session.objectif_autre_precision)} (horizon ${session.horizon_annees} ans).`,
     })
     .select('id')
     .single()
@@ -461,7 +469,24 @@ export async function finalizeOnboarding(params: {
 
   // 3. Pré-remplir les facts à partir des réponses
   const facts: Array<{ fact_key: string; fact_value: string }> = []
-  if (session.objectif_principal) facts.push({ fact_key: 'objectif_principal', fact_value: session.objectif_principal })
+  const objectifCodes =
+    session.objectifs_principaux?.length
+      ? session.objectifs_principaux
+      : session.objectif_principal
+        ? [session.objectif_principal]
+        : []
+  const objectifsSummary = formatObjectifsSummary(objectifCodes, session.objectif_autre_precision)
+  if (objectifsSummary) {
+    facts.push({ fact_key: 'objectifs_principaux', fact_value: objectifsSummary })
+  }
+  const primaryObj = objectifCodes[0]
+  if (primaryObj) facts.push({ fact_key: 'objectif_principal', fact_value: primaryObj })
+  if (session.objectif_autre_precision?.trim()) {
+    facts.push({
+      fact_key: 'objectif_autre_precision',
+      fact_value: session.objectif_autre_precision.trim(),
+    })
+  }
   if (session.horizon_annees != null) facts.push({ fact_key: 'horizon_placement_annees', fact_value: String(session.horizon_annees) })
   if (session.capacite_pertes) facts.push({ fact_key: 'profil_risque', fact_value: session.capacite_pertes })
   if (session.patrimoine_net_eur != null) facts.push({ fact_key: 'patrimoine_total_eur', fact_value: String(session.patrimoine_net_eur) })
