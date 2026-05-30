@@ -3,15 +3,16 @@
 
 import Link from 'next/link'
 import { CALENDLY_BOOKING_URL } from '@/lib/calendly-url'
+import AmanaLogo from '@/components/amana-logo'
 
 export default function OnboardResultPremium() {
   return (
-    <div className="min-h-screen bg-amana-cream">
+    <div className="min-h-screen bg-amana-cream font-sans">
       <div className="mx-auto max-w-2xl p-6">
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-amana-forest">
-            AMANA Patrimoine
-          </h1>
+          <div className="flex justify-center">
+            <AmanaLogo height={72} href="/" variant="dark" />
+          </div>
         </header>
 
         <main className="rounded-lg border border-amana-grey-light bg-white p-6 shadow-sm">
@@ -86,9 +87,13 @@ export default function OnboardResultPremium() {
           </a>
 
           <p className="mt-6 text-xs text-amana-grey">
-            En attendant, vous avez reçu un email de confirmation contenant un
-            lien pour accéder à votre espace AMANA. Vous pourrez y déposer
-            documents et notes en amont du rdv pour optimiser notre échange.
+            Votre espace AMANA est créé : connectez-vous avec l&apos;email et le
+            mot de passe choisis lors de l&apos;inscription via{' '}
+            <Link href="/auth" className="underline">
+              la page de connexion
+            </Link>
+            . Vous pourrez y déposer documents et notes en amont du rdv pour
+            optimiser notre échange.
           </p>
         </main>
 

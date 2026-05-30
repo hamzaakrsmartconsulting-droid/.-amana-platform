@@ -76,6 +76,15 @@ export function isValidOnboardingPhone(telephone: string): boolean {
   return normalizePhoneForYousign(telephone) !== undefined
 }
 
+const MIN_PASSWORD_LENGTH = 8
+
+export function validateOnboardingPassword(password: string): string | null {
+  if (!password || password.length < MIN_PASSWORD_LENGTH) {
+    return `Le mot de passe doit contenir au moins ${MIN_PASSWORD_LENGTH} caractères`
+  }
+  return null
+}
+
 export type OnboardingMeta = {
   user_agent?: string
   ip_address?: string
@@ -324,6 +333,10 @@ export async function saveStep4(
 
 export async function finalizeOnboarding(params: {
   sessionToken: string
+  password: string
+  consentRgpd: boolean
+  consentCgu: boolean
+  consentCommunication?: boolean
   conseillerIdAssigned: string // ID du conseiller (Mohamed) à qui le dossier est attribué
 }): Promise<
   | { ok: true; user_id: string; dossier_id: string; offre: OffreAmana }
@@ -355,29 +368,33 @@ export async function finalizeOnboarding(params: {
     return { ok: false, error: 'Session incomplète, étapes 1-4 requises (téléphone inclus)' }
   }
 
-  // 1. Créer ou récupérer l'utilisateur Supabase Auth
-  //
-  // IMPORTANT : on utilise `createUser({ email_confirm: true })` au lieu de
-  // `inviteUserByEmail`. Raisons :
-  //   - inviteUserByEmail envoie un email Supabase d'invitation NON désiré
-  //     (on a déjà notre propre email AMANA "Bienvenue + DER en PJ").
-  //   - L'invite-token Supabase coexiste mal avec le magic-link généré juste
-  //     après par triggerPostFinalizeOnboarding : le 2e lien apparaît comme
-  //     "expiré" côté client (token mal utilisé / user non confirmé).
-  //   - createUser({ email_confirm: true }) crée un user *confirmé* sans
-  //     envoyer aucun email, ce qui permet à generateLink('magiclink') de
-  //     produire un lien valide immédiatement utilisable.
+  const passwordError = validateOnboardingPassword(params.password)
+  if (passwordError) return { ok: false, error: passwordError }
+  if (!params.consentRgpd || !params.consentCgu) {
+    return {
+      ok: false,
+      error: 'Vous devez accepter la politique de confidentialité et les CGU.',
+    }
+  }
+
+  const userMetadata = {
+    prenom: session.prenom,
+    nom: session.nom,
+    source: 'funnel_onboarding',
+    offre_amana: session.offre_aiguillee,
+    consent_rgpd: true,
+    consent_cgu: true,
+    consent_communication: Boolean(params.consentCommunication),
+  }
+
+  // 1. Créer ou récupérer l'utilisateur Supabase Auth (email confirmé + mot de passe)
   let userId: string | null = null
 
   const { data: created, error: createErr } = await supabase.auth.admin.createUser({
     email: session.email,
+    password: params.password,
     email_confirm: true,
-    user_metadata: {
-      prenom: session.prenom,
-      nom: session.nom,
-      source: 'funnel_onboarding',
-      offre_amana: session.offre_aiguillee,
-    },
+    user_metadata: userMetadata,
   })
 
   if (created?.user) {
@@ -416,9 +433,11 @@ export async function finalizeOnboarding(params: {
       }
     }
 
-    // User existant : s'assurer qu'il est confirmé pour que le magic link
-    // qui sera généré ensuite soit valide. updateUserById est idempotent.
-    await supabase.auth.admin.updateUserById(userId, { email_confirm: true })
+    await supabase.auth.admin.updateUserById(userId, {
+      email_confirm: true,
+      password: params.password,
+      user_metadata: userMetadata,
+    })
   } else {
     return {
       ok: false,

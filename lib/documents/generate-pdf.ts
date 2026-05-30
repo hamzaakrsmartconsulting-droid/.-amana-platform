@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { renderToBuffer, type DocumentProps } from '@react-pdf/renderer'
-import { DerTemplate, type DerTemplateProps } from '@/lib/documents/templates/der-template'
+import { renderDerPdfFromTemplate, TEMPLATE_VERSION as DER_TEMPLATE_VERSION } from '@/lib/documents/der-pdf-template'
 import { LmTemplate, type LmTemplateProps } from '@/lib/documents/templates/lm-template'
 import { RaTemplate, type RaTemplateProps } from '@/lib/documents/templates/ra-template'
 import {
@@ -188,6 +188,100 @@ async function buildClientFromDossier(dossierId: string, conseillerId: string) {
   return dossier
 }
 
+async function buildDerPdfBuffer(params: {
+  prenom: string
+  nom: string
+  dossierId: string
+  offre?: string | null
+}): Promise<Buffer> {
+  return renderDerPdfFromTemplate({
+    prenom: params.prenom,
+    nom: params.nom,
+    dossierId: params.dossierId,
+    offre: params.offre,
+    generationDate: frenchDate(),
+  })
+}
+
+function derMetadata(prenom: string, nom: string): Record<string, unknown> {
+  return {
+    dossier_nom_client: `${prenom} ${nom}`,
+    template_version: DER_TEMPLATE_VERSION,
+    inputs_keys: [],
+  }
+}
+
+async function renderDerAndUpload(params: {
+  conseillerId: string
+  dossierId: string
+  prenom: string
+  nom: string
+  offre?: string | null
+}): Promise<GenerateDocumentResult> {
+  let pdfBuffer: Buffer
+  try {
+    pdfBuffer = await buildDerPdfBuffer(params)
+  } catch (err) {
+    console.error('[generate-pdf] erreur rendu DER PDF template', err)
+    return {
+      ok: false,
+      error: `Erreur génération PDF : ${err instanceof Error ? err.message : 'inconnue'}`,
+    }
+  }
+  const safeFilename = `DER_${params.prenom}_${params.nom}_${Date.now()}.pdf`.replace(/[^a-zA-Z0-9_.-]/g, '_')
+  const result = await uploadAndRegisterDocument({
+    conseillerId: params.conseillerId,
+    dossierId: params.dossierId,
+    type: 'der',
+    pdfBuffer,
+    filename: safeFilename,
+    metadata: { ...derMetadata(params.prenom, params.nom), generation_date: new Date().toISOString() },
+  })
+  if (result.ok) {
+    try {
+      await applyGateAfterDocumentGenerated(params.dossierId, 'der')
+    } catch (err) {
+      console.error('[generate-pdf] gate pending (der)', err)
+      return {
+        ok: false,
+        error:
+          err instanceof Error
+            ? `PDF créé mais verrou admin non enregistré : ${err.message}`
+            : 'PDF créé mais verrou admin non enregistré',
+      }
+    }
+  }
+  return result
+}
+
+async function renderDerAndUploadAdmin(params: {
+  conseillerId: string
+  dossierId: string
+  prenom: string
+  nom: string
+  offre?: string | null
+}): Promise<GenerateDocumentResult> {
+  let pdfBuffer: Buffer
+  try {
+    pdfBuffer = await buildDerPdfBuffer(params)
+  } catch (err) {
+    console.error('[generate-pdf] erreur rendu DER admin PDF template', err)
+    return {
+      ok: false,
+      error: `Erreur génération PDF : ${err instanceof Error ? err.message : 'inconnue'}`,
+    }
+  }
+  const safeFilename = `DER_${params.prenom}_${params.nom}_${Date.now()}.pdf`.replace(/[^a-zA-Z0-9_.-]/g, '_')
+  return uploadAndRegisterDocumentAdmin({
+    conseillerId: params.conseillerId,
+    dossierId: params.dossierId,
+    type: 'der',
+    pdfBuffer,
+    filename: safeFilename,
+    metadata: { ...derMetadata(params.prenom, params.nom), generation_date: new Date().toISOString() },
+  })
+}
+
 // =====================================================================
 // DER / LM / RA / Bilan / Préco / Zakat — inchangés (cf. v3.3)
 // =====================================================================
@@ -198,18 +292,12 @@ export async function generateDerForDossier(
 ): Promise<GenerateDocumentResult> {
   const dossier = await buildClientFromDossier(dossierId, conseillerId)
   if (!dossier) return { ok: false, error: 'Dossier introuvable ou accès refusé' }
-  const props: DerTemplateProps = {
-    client: { prenom: dossier.prenom, nom: dossier.nom, email: dossier.email_client, telephone: dossier.telephone },
-    generationDate: frenchDate(),
-    dossierId,
-  }
-  return renderAndUpload({
+  return renderDerAndUpload({
     conseillerId,
     dossierId,
-    type: 'der',
-    filename: `DER_${dossier.prenom}_${dossier.nom}_${Date.now()}.pdf`,
-    element: React.createElement(DerTemplate, props),
-    metadata: { dossier_nom_client: `${dossier.prenom} ${dossier.nom}`, template_version: 'der-v2', inputs_keys: [] },
+    prenom: dossier.prenom,
+    nom: dossier.nom,
+    offre: dossier.offre_amana_cible,
   })
 }
 
@@ -237,33 +325,12 @@ export async function generateDerForDossierAdmin(
 
   if (!dossier) return { ok: false, error: 'Dossier introuvable (service role)' }
 
-  let pdfBuffer: Buffer
-  try {
-    const props: DerTemplateProps = {
-      client: { prenom: dossier.prenom, nom: dossier.nom, email: dossier.email_client, telephone: dossier.telephone },
-      generationDate: frenchDate(),
-      dossierId,
-    }
-    const elementCast = React.createElement(DerTemplate, props) as unknown as React.ReactElement<DocumentProps>
-    pdfBuffer = await renderToBuffer(elementCast)
-  } catch (err) {
-    console.error('[generate-pdf] erreur rendu DER admin', err)
-    return { ok: false, error: `Erreur rendu PDF : ${err instanceof Error ? err.message : 'inconnue'}` }
-  }
-
-  const safeFilename = `DER_${dossier.prenom}_${dossier.nom}_${Date.now()}.pdf`.replace(/[^a-zA-Z0-9_.-]/g, '_')
-  return uploadAndRegisterDocumentAdmin({
+  return renderDerAndUploadAdmin({
     conseillerId,
     dossierId,
-    type: 'der',
-    pdfBuffer,
-    filename: safeFilename,
-    metadata: {
-      dossier_nom_client: `${dossier.prenom} ${dossier.nom}`,
-      template_version: 'der-v2',
-      inputs_keys: [],
-      generation_date: new Date().toISOString(),
-    },
+    prenom: dossier.prenom,
+    nom: dossier.nom,
+    offre: dossier.offre_amana_cible,
   })
 }
 

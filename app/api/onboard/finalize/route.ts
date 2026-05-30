@@ -17,7 +17,13 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
-  let body: { session_token?: string } = {}
+  let body: {
+    session_token?: string
+    password?: string
+    consent_rgpd?: boolean
+    consent_cgu?: boolean
+    consent_communication?: boolean
+  } = {}
   try {
     body = await request.json()
   } catch {
@@ -26,6 +32,18 @@ export async function POST(request: NextRequest) {
   if (!body.session_token) {
     return NextResponse.json(
       { ok: false, error: 'session_token requis' },
+      { status: 400 }
+    )
+  }
+  if (!body.password?.trim()) {
+    return NextResponse.json(
+      { ok: false, error: 'Mot de passe requis' },
+      { status: 400 }
+    )
+  }
+  if (!body.consent_rgpd || !body.consent_cgu) {
+    return NextResponse.json(
+      { ok: false, error: 'Consentements RGPD et CGU requis' },
       { status: 400 }
     )
   }
@@ -45,6 +63,10 @@ export async function POST(request: NextRequest) {
   try {
     const result = await finalizeOnboarding({
       sessionToken: body.session_token,
+      password: body.password,
+      consentRgpd: body.consent_rgpd,
+      consentCgu: body.consent_cgu,
+      consentCommunication: body.consent_communication,
       conseillerIdAssigned: defaultConseillerId,
     })
     if (!result.ok) {

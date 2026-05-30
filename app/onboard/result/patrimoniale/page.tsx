@@ -3,15 +3,16 @@
 
 import Link from 'next/link'
 import { CALENDLY_BOOKING_URL } from '@/lib/calendly-url'
+import AmanaLogo from '@/components/amana-logo'
 
 export default function OnboardResultPatrimoniale() {
   return (
-    <div className="min-h-screen bg-amana-cream">
+    <div className="min-h-screen bg-amana-cream font-sans">
       <div className="mx-auto max-w-2xl p-6">
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-amana-forest">
-            AMANA Patrimoine
-          </h1>
+          <div className="flex justify-center">
+            <AmanaLogo height={72} href="/" variant="dark" />
+          </div>
         </header>
 
         <main className="rounded-lg border border-amana-grey-light bg-white p-6 shadow-sm">
@@ -62,11 +63,15 @@ export default function OnboardResultPatrimoniale() {
               </span>
               <div>
                 <p className="font-semibold">
-                  Vérifiez votre boîte email pour activer votre espace
+                  Connectez-vous à votre espace AMANA
                 </p>
                 <p className="text-amana-grey">
-                  Connectez-vous à votre espace AMANA pour télécharger le DER
-                  signé électroniquement, votre Bilan Mizan et votre Préco.
+                  Utilisez l&apos;email et le mot de passe choisis lors de
+                  l&apos;inscription pour accéder à votre{' '}
+                  <Link href="/dashboard" className="font-semibold text-amana-forest underline">
+                    espace client
+                  </Link>{' '}
+                  (DER, Bilan Mizan, Préco).
                 </p>
               </div>
             </li>

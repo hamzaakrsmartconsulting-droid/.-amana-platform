@@ -2,15 +2,16 @@
 // Sprint Agents IA v18 · 30 avril 2026
 
 import Link from 'next/link'
+import AmanaLogo from '@/components/amana-logo'
 
 export default function OnboardResultMass() {
   return (
-    <div className="min-h-screen bg-amana-cream">
+    <div className="min-h-screen bg-amana-cream font-sans">
       <div className="mx-auto max-w-2xl p-6">
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-amana-forest">
-            AMANA Patrimoine
-          </h1>
+          <div className="flex justify-center">
+            <AmanaLogo height={72} href="/" variant="dark" />
+          </div>
         </header>
 
         <main className="rounded-lg border border-amana-grey-light bg-white p-6 shadow-sm">
@@ -39,11 +40,15 @@ export default function OnboardResultMass() {
                 1
               </span>
               <div>
-                <p className="font-semibold">Vérifiez votre boîte email</p>
+                <p className="font-semibold">Accédez à votre espace</p>
                 <p className="text-amana-grey">
-                  Vous allez recevoir un lien sécurisé pour vous connecter à
-                  votre espace AMANA. Cliquez sur ce lien depuis votre
-                  ordinateur.
+                  Vous êtes connecté avec l&apos;email et le mot de passe choisis.
+                  Rendez-vous sur votre{' '}
+                  <Link href="/dashboard" className="font-semibold text-amana-forest underline">
+                    espace client
+                  </Link>{' '}
+                  pour commencer. Un email de bienvenue avec votre DER peut aussi
+                  vous parvenir sous quelques minutes.
                 </p>
               </div>
             </li>

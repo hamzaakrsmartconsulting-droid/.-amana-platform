@@ -13,9 +13,11 @@
 
 'use client'
 
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import AmanaLogo from '@/components/amana-logo'
+import { createClient } from '@/lib/supabase/client'
 import { normalizePhoneForYousign } from '@/lib/yousign/phone'
 import {
   ONBOARDING_OBJECTIF_OPTIONS,
@@ -61,6 +63,35 @@ type Step4Data = {
   nom: string
   email: string
   telephone: string
+  password: string
+  confirmPassword: string
+  consentRgpd: boolean
+  consentCgu: boolean
+  consentCom: boolean
+}
+
+const MIN_PASSWORD_LENGTH = 8
+
+function isStep4PasswordValid(value: Step4Data): boolean {
+  return (
+    value.password.length >= MIN_PASSWORD_LENGTH &&
+    value.password === value.confirmPassword
+  )
+}
+
+function isStep4ConsentsValid(value: Step4Data): boolean {
+  return value.consentRgpd && value.consentCgu
+}
+
+function isStep4Ready(value: Step4Data): boolean {
+  return (
+    !!value.prenom.trim() &&
+    !!value.nom.trim() &&
+    !!value.email.trim() &&
+    !!normalizePhoneForYousign(value.telephone) &&
+    isStep4PasswordValid(value) &&
+    isStep4ConsentsValid(value)
+  )
 }
 
 type AiguillageResult = {
@@ -108,6 +139,11 @@ export default function OnboardPage() {
     nom: '',
     email: '',
     telephone: '',
+    password: '',
+    confirmPassword: '',
+    consentRgpd: false,
+    consentCgu: false,
+    consentCom: false,
   })
 
   // Initialiser la session au chargement
@@ -244,27 +280,61 @@ export default function OnboardPage() {
       setError('Session perdue. Rechargez la page pour recommencer.')
       return
     }
+    if (step4.password.length < MIN_PASSWORD_LENGTH) {
+      setError(`Le mot de passe doit contenir au moins ${MIN_PASSWORD_LENGTH} caractères.`)
+      return
+    }
+    if (step4.password !== step4.confirmPassword) {
+      setError('Les mots de passe ne correspondent pas.')
+      return
+    }
+    if (!step4.consentRgpd || !step4.consentCgu) {
+      setError('Vous devez accepter la politique de confidentialité et les CGU.')
+      return
+    }
     setLoading(true)
     setError(null)
     try {
       const r = await fetch('/api/onboard/step', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ step: 4, session_token: sessionToken, data: step4 }),
+        body: JSON.stringify({
+          step: 4,
+          session_token: sessionToken,
+          data: {
+            prenom: step4.prenom,
+            nom: step4.nom,
+            email: step4.email,
+            telephone: step4.telephone,
+          },
+        }),
       })
       const d = await r.json()
       if (!d.ok) throw new Error(d.error || 'Erreur')
 
-      // Finaliser
       const fr = await fetch('/api/onboard/finalize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_token: sessionToken }),
+        body: JSON.stringify({
+          session_token: sessionToken,
+          password: step4.password,
+          consent_rgpd: step4.consentRgpd,
+          consent_cgu: step4.consentCgu,
+          consent_communication: step4.consentCom,
+        }),
       })
       const fd = await fr.json()
       if (!fd.ok) throw new Error(fd.error || 'Erreur finalisation')
 
-      // Redirection selon l'offre
+      const supabase = createClient()
+      const { error: signInErr } = await supabase.auth.signInWithPassword({
+        email: step4.email.trim().toLowerCase(),
+        password: step4.password,
+      })
+      if (signInErr) {
+        console.warn('[onboard] auto-login après finalisation', signInErr.message)
+      }
+
       router.push(`/onboard/result/${fd.offre}`)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur réseau')
@@ -274,11 +344,13 @@ export default function OnboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-amana-cream">
+    <div className="min-h-screen bg-amana-cream font-sans">
       <div className="mx-auto max-w-2xl p-6">
         <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-amana-forest">AMANA Patrimoine</h1>
-          <p className="mt-2 text-sm text-amana-grey">
+          <div className="flex justify-center">
+            <AmanaLogo height={72} href="/" variant="dark" />
+          </div>
+          <p className="mt-3 text-sm text-amana-grey">
             Gestion de patrimoine spécialisée en finance islamique
           </p>
         </header>
@@ -821,13 +893,14 @@ function Step4({
           Créons votre espace AMANA
         </h2>
         <p className="mt-1 text-sm text-amana-grey">
-          Vous recevrez un email de connexion sécurisé. Aucun mot de passe à mémoriser.
+          Choisissez un mot de passe pour accéder à votre espace AMANA à tout moment.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Prénom *">
+        <Field label="Prénom *" htmlFor="onboard-prenom">
           <input
+            id="onboard-prenom"
             type="text"
             value={value.prenom}
             onChange={(e) => onChange({ ...value, prenom: e.target.value })}
@@ -835,8 +908,9 @@ function Step4({
             required
           />
         </Field>
-        <Field label="Nom *">
+        <Field label="Nom *" htmlFor="onboard-nom">
           <input
+            id="onboard-nom"
             type="text"
             value={value.nom}
             onChange={(e) => onChange({ ...value, nom: e.target.value })}
@@ -844,17 +918,20 @@ function Step4({
             required
           />
         </Field>
-        <Field label="Email *">
+        <Field label="Email *" htmlFor="onboard-email">
           <input
+            id="onboard-email"
             type="email"
             value={value.email}
             onChange={(e) => onChange({ ...value, email: e.target.value })}
             className="w-full rounded border border-amana-grey-light p-2 text-sm"
             required
+            autoComplete="email"
           />
         </Field>
-        <Field label="Téléphone *">
+        <Field label="Téléphone *" htmlFor="onboard-telephone">
           <input
+            id="onboard-telephone"
             type="tel"
             value={value.telephone}
             onChange={(e) => onChange({ ...value, telephone: e.target.value })}
@@ -865,23 +942,74 @@ function Step4({
             autoComplete="tel"
           />
         </Field>
+        <Field label="Mot de passe *" htmlFor="onboard-password">
+          <input
+            id="onboard-password"
+            type="password"
+            value={value.password}
+            onChange={(e) => onChange({ ...value, password: e.target.value })}
+            className="w-full rounded border border-amana-grey-light p-2 text-sm"
+            placeholder="8 caractères minimum"
+            required
+            minLength={MIN_PASSWORD_LENGTH}
+            autoComplete="new-password"
+          />
+        </Field>
+        <Field label="Confirmer le mot de passe *" htmlFor="onboard-confirm-password">
+          <input
+            id="onboard-confirm-password"
+            type="password"
+            value={value.confirmPassword}
+            onChange={(e) => onChange({ ...value, confirmPassword: e.target.value })}
+            className="w-full rounded border border-amana-grey-light p-2 text-sm"
+            placeholder="Retapez votre mot de passe"
+            required
+            minLength={MIN_PASSWORD_LENGTH}
+            autoComplete="new-password"
+          />
+        </Field>
       </div>
 
-      <p className="text-xs text-amana-grey">
-        En continuant vous acceptez nos{' '}
-        <Link href="/cgu" className="underline">CGU</Link> et notre{' '}
-        <Link href="/rgpd" className="underline">politique RGPD</Link>. Vos données seront utilisées pour vous accompagner dans votre projet patrimonial. Aucune communication marketing tierce.
-      </p>
+      {value.confirmPassword.length > 0 && value.password !== value.confirmPassword && (
+        <p className="text-xs text-red-700">Les mots de passe ne correspondent pas.</p>
+      )}
+
+      <div className="flex flex-col gap-3">
+        <ConsentCheckbox
+          checked={value.consentRgpd}
+          onChange={(consentRgpd) => onChange({ ...value, consentRgpd })}
+          label={
+            <>
+              <Link href="/confidentialite" className="font-semibold text-amana-forest underline">
+                Politique de confidentialité
+              </Link>{' '}
+              et traitement RGPD. <span className="text-red-700">*</span>
+            </>
+          }
+        />
+        <ConsentCheckbox
+          checked={value.consentCgu}
+          onChange={(consentCgu) => onChange({ ...value, consentCgu })}
+          label={
+            <>
+              <Link href="/cgu" className="font-semibold text-amana-forest underline">
+                Conditions générales d&apos;utilisation
+              </Link>
+              . <span className="text-red-700">*</span>
+            </>
+          }
+        />
+        <ConsentCheckbox
+          checked={value.consentCom}
+          onChange={(consentCom) => onChange({ ...value, consentCom })}
+          label="Recevoir les actualités AMANA (facultatif)."
+          optional
+        />
+      </div>
 
       <button
         type="submit"
-        disabled={
-          loading ||
-          !value.prenom.trim() ||
-          !value.nom.trim() ||
-          !value.email.trim() ||
-          !normalizePhoneForYousign(value.telephone)
-        }
+        disabled={loading || !isStep4Ready(value)}
         className="w-full rounded bg-amana-forest p-3 font-semibold text-white hover:bg-amana-dark disabled:opacity-50"
       >
         {loading ? 'Création de votre espace…' : 'Créer mon espace AMANA'}
@@ -893,12 +1021,48 @@ function Step4({
 // =====================================================================
 // Helpers UI
 // =====================================================================
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  htmlFor,
+  children,
+}: {
+  label: string
+  htmlFor?: string
+  children: ReactNode
+}) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-amana-forest">{label}</label>
+      <label htmlFor={htmlFor} className="block text-sm font-semibold text-amana-forest">
+        {label}
+      </label>
       <div className="mt-1">{children}</div>
     </div>
+  )
+}
+
+function ConsentCheckbox({
+  checked,
+  onChange,
+  label,
+  optional,
+}: {
+  checked: boolean
+  onChange: (checked: boolean) => void
+  label: ReactNode
+  optional?: boolean
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="mt-0.5 h-4 w-4 shrink-0 accent-amana-forest"
+      />
+      <span className={`text-xs leading-relaxed ${optional ? 'text-amana-grey' : 'text-amana-dark'}`}>
+        {label}
+      </span>
+    </label>
   )
 }
 

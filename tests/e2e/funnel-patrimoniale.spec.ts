@@ -31,6 +31,11 @@ test.describe('Funnel public — tunnel Patrimoniale', () => {
     await page.getByLabel('Prénom *').fill('TestPatri')
     await page.getByLabel('Nom *').fill('AmanaE2E')
     await page.getByLabel('Email *').fill(testEmail)
+    await page.getByLabel('Téléphone *').fill('0612345678')
+    await page.getByLabel('Mot de passe *').fill('TestAmana1!')
+    await page.getByLabel('Confirmer le mot de passe *').fill('TestAmana1!')
+    await page.getByLabel(/Politique de confidentialité/i).check()
+    await page.getByLabel(/Conditions générales/i).check()
     await page.getByRole('button', { name: /Créer mon espace/i }).click()
 
     await expect(page).toHaveURL(/\/onboard\/result\/patrimoniale/, {
@@ -62,6 +67,11 @@ test.describe('Funnel public — tunnel Patrimoniale', () => {
     await page.getByLabel('Prénom *').fill('TestSCI')
     await page.getByLabel('Nom *').fill('AmanaE2E')
     await page.getByLabel('Email *').fill(testEmail)
+    await page.getByLabel('Téléphone *').fill('0612345678')
+    await page.getByLabel('Mot de passe *').fill('TestAmana1!')
+    await page.getByLabel('Confirmer le mot de passe *').fill('TestAmana1!')
+    await page.getByLabel(/Politique de confidentialité/i).check()
+    await page.getByLabel(/Conditions générales/i).check()
     await page.getByRole('button', { name: /Créer mon espace/i }).click()
 
     await expect(page).toHaveURL(/\/onboard\/result\/patrimoniale/, {

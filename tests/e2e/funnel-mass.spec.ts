@@ -40,6 +40,11 @@ test.describe('Funnel public — tunnel Mass', () => {
     await page.getByLabel('Prénom *').fill('TestMass')
     await page.getByLabel('Nom *').fill('AmanaE2E')
     await page.getByLabel('Email *').fill(testEmail)
+    await page.getByLabel('Téléphone *').fill('0612345678')
+    await page.getByLabel('Mot de passe *').fill('TestAmana1!')
+    await page.getByLabel('Confirmer le mot de passe *').fill('TestAmana1!')
+    await page.getByLabel(/Politique de confidentialité/i).check()
+    await page.getByLabel(/Conditions générales/i).check()
     await page.getByRole('button', { name: /Créer mon espace/i }).click()
 
     // Redirection vers /onboard/result/mass

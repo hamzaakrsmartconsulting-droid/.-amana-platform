@@ -261,7 +261,7 @@ export async function POST(request: NextRequest) {
     }
   )
   const templateVersion: Record<SupportedType, string> = {
-    der: 'der-v2',
+    der: 'der-v3-pdf-vdef',
     lm: 'lm-v2',
     ra: 'ra-v2',
     bilan: 'bilan-v1',
