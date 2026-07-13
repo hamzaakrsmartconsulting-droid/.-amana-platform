@@ -63,6 +63,17 @@ const NAV = [
     ),
   },
   {
+    href: '/admin/documents',
+    label: 'Documents clients',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 2h7l3 3v9H3V2z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+        <path d="M10 2v3h3" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+        <path d="M6 7h4M6 9.5h4M6 12h2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
     href: '/admin/contenus',
     label: 'Contenus légaux',
     icon: (
